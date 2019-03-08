@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import utils
 from Camera import Camera
 
 app = Flask(__name__)
+app.config.from_object('config')
 
 @app.route("/")
 def hello():
@@ -24,6 +25,11 @@ def get_device_info():
 
     cam = Camera(ip, port)
     return jsonify(cam.get_device_info())
+
+
+@app.route('/snapshots/<path:filename>')
+def get_snapshot(filename):
+    return send_from_directory(app.config['SNAPSHOTS_STATIC_PATH'], filename)
 
 
 if __name__ == '__main__':

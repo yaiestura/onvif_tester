@@ -29,6 +29,7 @@ class Camera(ONVIFCamera):
             "Hardware ID": device_info.HardwareId,
 
             "snapshot_url": self.get_public_snapshot_uri(),
+            "stream_url": self.get_public_stream_url(),
             "ip": self.ip,
             "port": self.port
         }
@@ -88,7 +89,7 @@ class Camera(ONVIFCamera):
             except Exception as e:
                 print('get_public_snapshot_uri: request error: ', e)
                 
-                
+
         # try to get snapshot from stream
         private_stream_url = self.get_private_stream_url()
 

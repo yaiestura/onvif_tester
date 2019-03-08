@@ -1,0 +1,1 @@
+SNAPSHOTS_STATIC_PATH = "snapshots"
