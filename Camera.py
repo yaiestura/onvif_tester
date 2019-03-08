@@ -85,7 +85,7 @@ class Camera(ONVIFCamera):
                     filename = 'snapshots/' + self.ip + ":" + str(self.port) + '.jpg'
                     with open(filename, 'wb') as snapshot:
                         snapshot.write(r.content)
-                    return filename
+                    return "/" + filename
             except Exception as e:
                 print('get_public_snapshot_uri: request error: ', e)
                 
@@ -108,7 +108,7 @@ class Camera(ONVIFCamera):
             with open(filename, 'wb') as snapshot:
                 snapshot.write(image)
 
-            return filename
+            return "/" + filename
 
         return None
 
