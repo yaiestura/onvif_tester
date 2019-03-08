@@ -1,5 +1,8 @@
+import io
+import time
 from onvif import ONVIFCamera
 import requests 
+import rtsp
 
 
 class Camera(ONVIFCamera):
@@ -58,6 +61,12 @@ class Camera(ONVIFCamera):
 
         try:
             uri = media_service.GetStreamUri(obj).Uri
+            print(uri)
+
+            if len(self.user + self.password) > 0:
+                uri = uri[:7] + self.user + ':' + self.password + "@" + uri[7:]
+                print(uri)
+
         except Exception as e:
             pass
 
@@ -68,19 +77,48 @@ class Camera(ONVIFCamera):
         private_uri = self.get_private_snapshot_url()
 
         if private_uri is not None:
-            r = requests.get(private_uri, auth=(self.user, self.password))
-            
-            if r.ok:
-                filename = 'snapshots/' + self.ip + ":" + str(self.port) + '.jpg'
-                with open(filename, 'wb') as snapshot:
-                    snapshot.write(r.content)
-                return filename
+            try:
+                r = requests.get(private_uri, auth=(self.user, self.password))
 
+                if r.ok:
+                    filename = 'snapshots/' + self.ip + ":" + str(self.port) + '.jpg'
+                    with open(filename, 'wb') as snapshot:
+                        snapshot.write(r.content)
+                    return filename
+            except Exception as e:
+                print('get_public_snapshot_uri: request error: ', e)
+                
+                
         # try to get snapshot from stream
         private_stream_url = self.get_private_stream_url()
 
         if private_stream_url is not None:
-            pass
+            client = rtsp.Client(rtsp_server_uri=private_stream_url, verbose=False)
+            image = client.read()
+
+            if image is not None:
+                imgByteArr = io.BytesIO()
+                image.save(imgByteArr, format='jpeg')
+                image = imgByteArr.getvalue()
+
+            client.close()
+            filename = 'snapshots/' + self.ip + ":" + str(self.port) + '.jpg'
+
+            with open(filename, 'wb') as snapshot:
+                snapshot.write(image)
+
+            return filename
+
+        return None
+
+
+    def get_public_stream_url(self):
+        if self.get_private_stream_url() is not None:
+            return '/api/livestream?ip='+self.ip+"&port="+str(self.port)
+        return None
+
+
+
 
 
 
