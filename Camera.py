@@ -115,7 +115,7 @@ class Camera(ONVIFCamera):
 
     def get_public_stream_url(self):
         if self.get_private_stream_url() is not None:
-            return '/api/livestream?ip='+self.ip+"&port="+str(self.port)
+            return '/livestream?ip='+self.ip+"&port="+str(self.port)
         return None
 
 
