@@ -61,6 +61,6 @@ class Imaging_Test:
         token = self.media.GetProfiles()[0]._token
         response = self.media.GetSnapshotUri({'ProfileToken': token}).Uri
 
-tester = Imaging_Test('192.168.15.43', 80, 'admin', 'Supervisor')
-tests = [func for func in dir(Imaging_Test) if callable(getattr(Imaging_Test, func)) and not func.startswith("__")]
-print tests
+#tester = Imaging_Test('192.168.15.43', 80, 'admin', 'Supervisor')
+#tests = [func for func in dir(Imaging_Test) if callable(getattr(Imaging_Test, func)) and not func.startswith("__")]
+#print tests

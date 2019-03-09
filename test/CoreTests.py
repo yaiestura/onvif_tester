@@ -1,12 +1,10 @@
+from onvif import ONVIFCamera
+from utils.probe_match import probe_match
+
+
 class CoreTests:
 	def __init__(self, camera):
 		self.camera = camera
-		
-import csv
-import socket
-from flask import jsonify
-from onvif import ONVIFCamera
-from utils.probe_match import probe_match
 
 
 class Core_Test:
