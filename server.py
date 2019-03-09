@@ -1,6 +1,6 @@
 import utils
 from core import Camera
-from test import Core_Tests
+from test.CoreTests import Core_Test
 
 from flask import (
     Flask, request, jsonify, 
@@ -30,7 +30,7 @@ def core_test(method_name):
         except AttributeError:
             return jsonify(error = "Sorry, " + method_name + " method doesn't exist")
         except:
-return jsonify(error = "ONVIFError, " + method_name + " method does not respond. You may check VPN Connection")
+            return jsonify(error = "ONVIFError, " + method_name + " method does not respond. You may check VPN Connection")
 
 '''
 Devices API

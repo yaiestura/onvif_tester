@@ -5,7 +5,6 @@ class CoreTests:
 import csv
 from flask import jsonify
 from onvif import ONVIFCamera
-from Naked.toolshed.shell import execute_js
 
 
 class Core_Test:
@@ -89,32 +88,33 @@ class Core_Test:
         except:
             receiver = 'Not Supported'
 
-        return {id: 0, name: 'GetSupportedServices', service: 'Core',
-            result: {[works: True, extension: None, response: {
+        return {'id': 0, 'name': 'GetSupportedServices', 'service': 'Core',
+            'result': {'works': True, 'extension': None, 'response':
+            {
                 'Devicemgmt': dmgmt,
                 'Media': media,
-                'Imaging': imaging
-                'Analytics': analytics
-                'PTZ': ptz
-                'DeviceIO': io
-                'Events': events
-                'Replay': replay
-                'Recording': recording
-                'Search': search
-                'Pullpoint': pullpoint
-                'Receiver' receiver
-            }]}}
+                'Imaging': imaging,
+                'Analytics': analytics,
+                'PTZ': ptz,
+                'DeviceIO': io,
+                'Events': events,
+                'Replay': replay,
+                'Recording': recording,
+                'Search': search,
+                'Pullpoint': pullpoint,
+                'Receiver': receiver 
+            }}}
         
 
     def GetCapabilities(self):
         capabilities = self.cam.devicemgmt.GetCapabilities()
         if (len(capabilities) > 0):
-            return {id: 1, name: 'GetCapabilities', service: 'Core',
-            result: {[works: True, extension: None, response: str(capabilities)]}}
+            return {'id': 1, 'name': 'GetCapabilities', 'service': 'Core',
+            'result': {'works': True, 'extension': None, 'response': str(capabilities)}}
         else:
-            return {id: 1, name: 'GetCapabilities', service: 'Core',
-            result: {[works: False, extension: 'The DUT did not send GetCapabilitiesResponse message',
-            response: str(capabilities)]}}
+            return {'id': 1, 'name': 'GetCapabilities', 'service': 'Core',
+            'result': {'works': False, 'extension': 'The DUT did not send GetCapabilitiesResponse message',
+            'response': str(capabilities)}}
 
     def GetDiscoveryMode(self):
         request = self.cam.devicemgmt.GetDiscoveryMode()
