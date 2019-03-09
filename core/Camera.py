@@ -29,6 +29,7 @@ class Camera(ONVIFCamera):
             "Firmware Version": device_info.FirmwareVersion,
             "Serial Number": device_info.SerialNumber,
             "Hardware ID": device_info.HardwareId,
+            "Supported Devices": self.get_supported_services(),
 
             "snapshot_url": self.get_public_snapshot_uri(),
             "stream_url": self.get_public_stream_url(),
@@ -120,6 +121,9 @@ class Camera(ONVIFCamera):
         return None
 
 
+    def get_supported_services(self):
+        return list(map(lambda x: x.split('/')[-2], self.devicemgmt.GetServices({'IncludeCapability': False})))
+   
 
 
 
