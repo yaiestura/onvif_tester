@@ -29,9 +29,9 @@ class Camera(ONVIFCamera):
             "Firmware Version": device_info.FirmwareVersion,
             "Serial Number": device_info.SerialNumber,
             "Hardware ID": device_info.HardwareId,
-            "Supported Devices": self.get_supported_services(),
+            "Supported Services": self.get_supported_services(),
 
-            "snapshot_url": self.get_public_snapshot_uri(),
+            "snapshot_url": self.get_public_snapshot_url(),
             "stream_url": self.get_public_stream_url(),
             "ip": self.ip,
             "port": self.port
@@ -65,11 +65,8 @@ class Camera(ONVIFCamera):
 
         try:
             uri = media_service.GetStreamUri(obj).Uri
-            print(uri)
-
             if len(self.user + self.password) > 0:
                 uri = uri[:7] + self.user + ':' + self.password + "@" + uri[7:]
-                print(uri)
 
         except Exception as e:
             pass
@@ -77,7 +74,7 @@ class Camera(ONVIFCamera):
         return uri
 
 
-    def get_public_snapshot_uri(self):
+    def get_public_snapshot_url(self):
         private_uri = self.get_private_snapshot_url()
         if private_uri is not None:
             try:
@@ -89,7 +86,7 @@ class Camera(ONVIFCamera):
                         snapshot.write(r.content)
                     return "/" + filename
             except Exception as e:
-                print('get_public_snapshot_uri: request error: ', e)
+                print('get_public_snapshot_url: request error: ', e)
                 
 
         # try to get snapshot from stream
