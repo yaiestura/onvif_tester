@@ -110,11 +110,11 @@ class Core_Test:
         capabilities = self.cam.devicemgmt.GetCapabilities()
         if (len(capabilities) > 0):
             return {id: 1, name: 'GetCapabilities', service: 'Core',
-            result: {[works: True, extension: None, response: capabilities]}}
+            result: {[works: True, extension: None, response: str(capabilities)]}}
         else:
             return {id: 1, name: 'GetCapabilities', service: 'Core',
             result: {[works: False, extension: 'The DUT did not send GetCapabilitiesResponse message',
-            response: capabilities]}}
+            response: str(capabilities)]}}
 
     def GetDiscoveryMode(self):
         request = self.cam.devicemgmt.GetDiscoveryMode()
