@@ -2,6 +2,7 @@ from onvif import ONVIFCamera
 import random
 import string
 import datetime
+import requests
 
 
 class Events_Test:
@@ -16,9 +17,39 @@ class Events_Test:
 
     def GetEventProperties(self):
         properties = self.event_service.GetEventProperties()
-        if (len(properties) > 0):
+        topic = str(properties.TopicNamespaceLocation[0])
+        status_code = requests.get(topic).status_code
+        if(len(properties) > 0):
             return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
             'result': {'supported': True, 'extension': None, 'response': str(properties)}}
+        elif((len(properties) > 0) and (status_code != 200)):
+            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+            'result': {'supported': True, 'extension': 'DUT does not return a valid topic namespace. Status Code != 200',
+			'response': str(properties)}}
+        elif((len(properties) > 0) and (len(properties.TopicExpressionDialect) < 2)):
+            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+            'result': {'supported': True, 'extension': 'None or only one Mandatory TopicExpressionDialects are supported by the DUT',
+			'response': str(properties)}}
+        elif((len(properties) > 0) and (len(properties.TopicExpressionDialect) < 2) and (status_code != 200)):
+            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+            'result': {'supported': True, 'extension': 'None or only one Mandatory TopicExpressionDialects are supported by the DUT. DUT does not return a valid topic namespace.',
+			'response': str(properties)}}
+        elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect) < 1)):
+            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+            'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT. None or only one Mandatory TopicExpressionDialects are supported by the DUT.',
+			'response': str(properties)}}
+        elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect) < 1) and (status_code != 200)):
+            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+            'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT. None or only one Mandatory TopicExpressionDialects are supported by the DUT. DUT does not return a valid topic namespace.',
+			'response': str(properties)}}
+        elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect) < 1) and (len(properties.TopicExpressionDialect) < 2)):
+            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+            'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT',
+			'response': str(properties)}}
+        elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect)) < 1 and (len(properties.TopicExpressionDialect)) < 2 and (status_code != 200)):
+            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+            'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT. DUT does not return a valid topic namespace.',
+			'response': str(properties)}}
         else:
             return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
             'result': {'supported': False, 'extension': 'The DUT did not send a GetEventPropertiesResponse message',

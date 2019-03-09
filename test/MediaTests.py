@@ -109,14 +109,3 @@ class Media_Test:
 			return 'GetAudioOutputConfigurations works', configs
 		else:
 			return 'GetAudioOutputConfigurations does not work', configs
-	
-Inst = Media_Test('192.168.15.54', 8080, 'admin', 'Supervisor')
-print Inst.CreateProfile()
-print Inst.GetProfiles()
-print Inst.GetUri()
-print Inst.DeleteProfile()
-print Inst.AddAudioDecoderConfiguration()
-print Inst.AddVideoSourceConfiguration()
-print Inst.GetVideoSourceConfiguration()
-print Inst.GetAudioDecoderConfigurations()
-print Inst.GetAudioOutputConfigurations()
