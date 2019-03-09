@@ -1,9 +1,14 @@
-from flask import Flask, request, jsonify, send_from_directory, Response
 import utils
-from Camera import Camera
+from core import Camera
+
+from flask import (
+    Flask, request, jsonify, 
+    send_from_directory, Response)
+
 
 app = Flask(__name__)
 app.config.from_object('config')
+
 
 @app.route("/")
 def hello():
@@ -22,14 +27,14 @@ def get_devices_list():
 def get_device_info():
     ip = request.args.get('ip')
     port = int(request.args.get('port'))
-
     cam = Camera(ip, port)
     return jsonify(cam.get_device_info())
 
 
 @app.route('/snapshots/<path:filename>')
 def get_snapshot(filename):
-    return send_from_directory(app.config['SNAPSHOTS_STATIC_PATH'], filename)
+    return send_from_directory(
+        app.config['SNAPSHOTS_STATIC_PATH'], filename)
 
 
 @app.route('/livestream')

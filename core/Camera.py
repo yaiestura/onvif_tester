@@ -4,6 +4,8 @@ from onvif import ONVIFCamera
 import requests 
 import rtsp
 
+gen_timestamp = lambda: time.strftime("_%d-%m-%Y_%H:%M:%S", time.localtime())
+
 
 class Camera(ONVIFCamera):
     def __init__(self, ip, port, user='admin', password='Supervisor'):
@@ -76,13 +78,12 @@ class Camera(ONVIFCamera):
 
     def get_public_snapshot_uri(self):
         private_uri = self.get_private_snapshot_url()
-
         if private_uri is not None:
             try:
                 r = requests.get(private_uri, auth=(self.user, self.password))
 
                 if r.ok:
-                    filename = 'snapshots/' + self.ip + ":" + str(self.port) + '.jpg'
+                    filename = 'snapshots/' + self.ip + ":" + str(self.port) + gen_timestamp() + '.jpg'
                     with open(filename, 'wb') as snapshot:
                         snapshot.write(r.content)
                     return "/" + filename
@@ -103,7 +104,7 @@ class Camera(ONVIFCamera):
                 image = imgByteArr.getvalue()
 
             client.close()
-            filename = 'snapshots/' + self.ip + ":" + str(self.port) + '.jpg'
+            filename = 'snapshots/' + self.ip + ":" + str(self.port) + gen_timestamp() + '.jpg'
 
             with open(filename, 'wb') as snapshot:
                 snapshot.write(image)
