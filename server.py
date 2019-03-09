@@ -1,6 +1,7 @@
 import utils
 from core import Camera
 from test.CoreTests import Core_Test
+from test.EventsTests import Events_Test
 
 from flask import (
     Flask, request, jsonify, 
@@ -11,11 +12,11 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 
-@app.route("/")
+@app.route('/')
 def hello():
-    return "Hello World!"
+    return 'Hello World!'
 
-@app.route("/api/<method_name>", methods=['GET'])
+@app.route('/api/core_test/<method_name>', methods=['GET'])
 def core_test(method_name):
     if request.method == 'GET':
         ip = request.args.get('ip')
@@ -23,14 +24,31 @@ def core_test(method_name):
         try:
             cam = Core_Test(ip, port, 'admin', 'Supervisor')
         except:
-            return jsonify(error = "ONVIFError, " + method_name + " method does not respond. You may check VPN Connection")
+            return jsonify(error = 'ONVIFError, ' + method_name + ' method does not respond')
         try:
             method = getattr(cam, method_name)
             return jsonify(response = method())
         except AttributeError:
-            return jsonify(error = "Sorry, " + method_name + " method doesn't exist")
+            return jsonify(error = 'Sorry, ' + method_name + ' method does not exist')
         except:
-            return jsonify(error = "ONVIFError, " + method_name + " method does not respond. You may check VPN Connection")
+            return jsonify(error = 'ONVIFError, ' + method_name + ' method does not respond')
+
+@app.route('/api/events_test/<method_name>', methods=['GET'])
+def events_test(method_name):
+    if request.method == 'GET':
+        ip = request.args.get('ip')
+        port = int(request.args.get('port'))
+        try:
+            cam = Events_Test(ip, port, 'admin', 'Supervisor')
+        except:
+            return jsonify(error = 'ONVIFError, ' + method_name + ' method does not respond')
+        try:
+            method = getattr(cam, method_name)
+            return jsonify(response = method())
+        except AttributeError:
+            return jsonify(error = 'Sorry, ' + method_name + ' method does not exist')
+        except:
+            return jsonify(error = 'ONVIFError, ' + method_name + ' method does not respond')
 
 '''
 Devices API
@@ -64,8 +82,5 @@ def livestream():
             mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-
-
 if __name__ == '__main__':
     app.run(debug=True)
-

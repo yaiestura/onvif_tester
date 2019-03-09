@@ -3,8 +3,10 @@ class CoreTests:
 		self.camera = camera
 		
 import csv
+import socket
 from flask import jsonify
 from onvif import ONVIFCamera
+from utils.probe_match import probe_match
 
 
 class Core_Test:
@@ -88,8 +90,8 @@ class Core_Test:
         except:
             receiver = 'Not Supported'
 
-        return {'id': 0, 'name': 'GetSupportedServices', 'service': 'Core',
-            'result': {'works': True, 'extension': None, 'response':
+        return {'test_id': 0, 'name': 'GetSupportedServices', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response':
             {
                 'Devicemgmt': dmgmt,
                 'Media': media,
@@ -109,19 +111,24 @@ class Core_Test:
     def GetCapabilities(self):
         capabilities = self.cam.devicemgmt.GetCapabilities()
         if (len(capabilities) > 0):
-            return {'id': 1, 'name': 'GetCapabilities', 'service': 'Core',
-            'result': {'works': True, 'extension': None, 'response': str(capabilities)}}
+            return {'test_id': 1, 'name': 'GetCapabilities', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(capabilities)}}
         else:
-            return {'id': 1, 'name': 'GetCapabilities', 'service': 'Core',
-            'result': {'works': False, 'extension': 'The DUT did not send GetCapabilitiesResponse message',
+            return {'test_id': 1, 'name': 'GetCapabilities', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetCapabilitiesResponse message',
             'response': str(capabilities)}}
 
     def GetDiscoveryMode(self):
         request = self.cam.devicemgmt.GetDiscoveryMode()
         if (request):
-             return request + ' GetDiscoveryMode works'
+            return {'test_id': 2, 'name': 'GetDiscoveryMode', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'This operation got the discovery mode of a device',
+             'response': str(request)}}
+         
         else:
-            return 'GetDiscoveryMode does not work'
+            return {'test_id': 2, 'name': 'GetDiscoveryMode', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetDiscoveryModeResponse message',
+            'response': str(request)}}
 
     def SetDiscoveryMode(self):
         get1 = self.cam.devicemgmt.GetDiscoveryMode()
@@ -130,62 +137,87 @@ class Core_Test:
             get2 = self.cam.devicemgmt.GetDiscoveryMode()
             self.cam.devicemgmt.SetDiscoveryMode({'DiscoveryMode': get1})
             if (get1 != get2 ):
-                return 'Left Discoverable, SetDiscoveryMode works'
+                return {'test_id': 3, 'name': 'SetDiscoveryMode', 'service': 'Core',
+                'result': {'supported': True, 'extension': 'Was Discoverable, Set NonDiscoverable, Left Discoverable',
+                'response': str(set1)}}
             else:
-                return 'SetDiscoveryMode does not work'
+                return {'test_id': 3, 'name': 'SetDiscoveryMode', 'service': 'Core',
+                'result': {'supported': False, 'extension': 'DiscoveryMode was Discoverable, the DUT did not SetDiscoveryMode as NonDiscoverable',
+                'response': str(set1)}}
         elif (get1 == 'NonDiscoverable'):
             set1 = self.cam.devicemgmt.SetDiscoveryMode({'DiscoveryMode': 'Discoverable'})
             get2 = self.cam.devicemgmt.GetDiscoveryMode()
             self.cam.devicemgmt.SetDiscoveryMode({'DiscoveryMode': get1})
             if (get1 != get2):
-                return 'left Nondiscoverable, SetDiscoveryMode works'
+                return {'test_id': 3, 'name': 'SetDiscoveryMode', 'service': 'Core',
+                'result': {'supported': True, 'extension': 'Was NonDiscoverable, Set Discoverable, Left NonDiscoverable',
+                'response': str(set1)}}
             else:
-                return 'SetDiscoveryMode does not work'
+                return {'test_id': 3, 'name': 'SetDiscoveryMode', 'service': 'Core',
+                'result': {'supported': False, 'extension': 'DiscoveryMode was NonDiscoverable, the DUT did not SetDiscoveryMode as Discoverable',
+                'response': str(set1)}}
         else:
-            return 'It seems GetDiscoveryMode does not work'
+            return {'test_id': 3, 'name': 'SetDiscoveryMode', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send SetDiscoveryModeResponse message',
+            'response': str(set1)}}
 
     def GetScopes(self):
         response = self.cam.devicemgmt.GetScopes()
         if (len(response) > 0):
-            #print response
-            return 'GetScopes works'
+            return {'test_id': 4, 'name': 'GetScopes', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(response)}}
         else:
-            return 'GetScopes does not work'
+            return {'test_id': 4, 'name': 'GetScopes', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetScopesResponse message. The DUT scope list does not have one or more mandatory scope entry.',
+            'response': str(response)}}
 
     def AddScopes(self):
-        item = "onvif://www.onvif.org/type/test"
+        item = "onvif://www.onvif.org/add/scope"
         add = self.cam.devicemgmt.AddScopes({'ScopeItem': item})
-        execute_js('start_probe.js')
+        probe_match()
         gett = self.cam.devicemgmt.GetScopes()
         if (gett != []):
             gett = self.cam.devicemgmt.GetScopes()[-1].ScopeItem
-        execute_js('start_probe.js')
+        probe_match()
         self.cam.devicemgmt.RemoveScopes({'ScopeItem': item})
-        if (item == gett):
-            return 'AddScopes works'
+        if (item == gett and add is not None):
+            return {'test_id': 5, 'name': 'AddScopes', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'Added new Configurable Scope: {}'.format(item), 'response': str(add)}}
+        if (item == gett and add is None):
+            return {'test_id': 5, 'name': 'AddScopes', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'Added new Configurable Scope: {}, but DUT did not send a valid AddScopesResponse Message.'.format(item), 'response': str(add)}}
         else:
-            return 'AddScopes does not work'
-
+            return {'test_id': 5, 'name': 'AddScopes', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not add new scope, {}'.format(item), 'response': str(add)}}
+            
     def RemoveScopes(self):
-        item = "onvif://www.onvif.org/type/test"
+        item = "onvif://www.onvif.org/remove/scope"
         add = self.cam.devicemgmt.AddScopes({'ScopeItem': item})
-        # execute_js('start_probe.js')
+        probe_match()
         remove = self.cam.devicemgmt.RemoveScopes({'ScopeItem': item})
-        # execute_js('start_probe.js')
+        probe_match()
         gett = self.cam.devicemgmt.GetScopes()
         if (gett != []):
             gett = self.cam.devicemgmt.GetScopes()[-1].ScopeItem
-        if (item != gett):
-            return 'RemoveScopes works'
+        if (item != gett and remove is not None):
+            return {'test_id': 6, 'name': 'RemoveScopes', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'Removed added Configurable Scope: {}'.format(item), 'response': str(remove)}}
+        if (item != gett and remove is None):
+            return {'test_id': 6, 'name': 'RemoveScopes', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'Removed added Configurable Scope: {}, but DUT did not send a valid RemoveScopesResponse Message.'.format(item), 'response': str(remove)}}    
         else:
-            return 'RemoveScopes does not work'
+            return {'test_id': 6, 'name': 'RemoveScopes', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not removed new scope, {}'.format(item), 'response': str(remove)}}
+      
 
     def GetHostname(self):
         name = self.cam.devicemgmt.GetHostname()
         if (name):
-            return 'GetHostname works'
+            return {'test_id': 7, 'name': 'GetHostname', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(name)}}
         else:
-            return 'GetHostname does not work'
+            return {'test_id': 7, 'name': 'GetHostname', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'DUT did not send GetHostnameResponse message.', 'response': str(name)}}
 
     def SetHostname(self):
         get1 = self.cam.devicemgmt.GetHostname().Name
@@ -194,102 +226,174 @@ class Core_Test:
         get2 = self.cam.devicemgmt.GetHostname().Name
         self.cam.devicemgmt.SetHostname({'Name': get1})
         if (get1 != get2):
-            return 'SetHostname works'
+            return {'test_id': 8, 'name': 'SetHostname', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'The DUT returned "Onvif_test1" as its Hostname after SetHostname.', 'response': str(get2)}}
         else:
-            return 'SetHostname does not work'
+            return {'test_id': 8, 'name': 'SetHostname', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not SetHostname to "Onvif_test1"', 'response': str(set1)}}
 
     def GetNetworkInterfaces(self):
         interfaces = self.cam.devicemgmt.GetNetworkInterfaces()
         if (interfaces != []):
-            return 'GetNetworkInterfaces works'
+            return {'test_id': 9, 'name': 'GetNetworkInterfaces', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(interfaces)}}
         else:
-            return 'GetNetworkInterfaces does not work'
+            return {'test_id': 9, 'name': 'GetNetworkInterfaces', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetNetworkInterfacesResponse message',
+            'response': str(interfaces)}}
 
     def GetDNS(self):
         dns = self.cam.devicemgmt.GetDNS()
         #print dns
-        if (dns != []):
-            return 'GetDNS works'
+        if (len(dns) > 0):
+            return {'test_id': 10, 'name': 'GetDNS', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(dns)}}
         else:
-            return 'GetDNS does not work'
+            return {'test_id': 10, 'name': 'GetDNS', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetDNSResponse message.',
+            'response': str(dns)}}
 
     def GetNetworkProtocols(self):
         protocols = self.cam.devicemgmt.GetNetworkProtocols()
+        protocols_list = []
+        for item in protocols:
+            protocols_list.append(str(item.Name))
+        print protocols_list
         if (protocols != []):
-            return 'GetNetworkProtocols works'
+            return {'test_id': 11, 'name': 'GetNetworkProtocols', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(protocols)}}
+        elif((protocols != []) and ("HTTP" not in protocols_list)):
+            print "omegaggmkfgkfi"
+            return {'test_id': 11, 'name': 'GetNetworkProtocols', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'The DUT did not send correct information in the GetNetworkProtocolsResponse message. Mandatory HTTP protocol is not present on the list.',
+            'response': str(protocols)}}
+        elif((protocols != []) and ("RTSP" not in protocols_list)):
+            return {'test_id': 11, 'name': 'GetNetworkProtocols', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'The DUT did not send correct information in the GetNetworkProtocolsResponse message. RTSP protocol is not present on the list.',
+            'response': str(protocols)}}
         else:
-            return 'GeetNetworkProtocols does not work'
+            return {'test_id': 11, 'name': 'GetNetworkProtocols', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetNetworkProtocolsResponse message',
+            'response': str(protocols)}}
 
     def GetNetworkDefaultGateway(self):
         gateways = self.cam.devicemgmt.GetNetworkDefaultGateway()
-        #print gateways
         if (gateways != []):
-            return 'GetNetworkDefaultGateway works'
+            return {'test_id': 12, 'name': 'GetNetworkDefaultGateway', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(gateways)}}
         else:
-            return 'GetNetworkDefaultGateway does not work'
+            return {'test_id': 12, 'name': 'GetNetworkDefaultGateway', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetNetworkDefaultGatewayResponse message',
+            'response': str(gateways)}}
 
     def SetNetworkDefaultGateway(self): #"192.168.11.1"
         default = str(self.cam.devicemgmt.GetNetworkDefaultGateway().IPv4Address[0])
-        #print default
         new = '10.1.0.1'
         set1 = self.cam.devicemgmt.SetNetworkDefaultGateway({'IPv4Address': new})
-        execute_js('start_probe.js')
         get1 = str(self.cam.devicemgmt.GetNetworkDefaultGateway().IPv4Address[0])
-        execute_js('start_probe.js')
-        self.cam.devicemgmt.SetNetworkDefaultGateway({'IPv4Address': default})
+        set2 = self.cam.devicemgmt.SetNetworkDefaultGateway({'IPv4Address': default})
         if (get1 == new):
-            return 'SetNetworkDefaultGateway works'
+            return {'test_id': 13, 'name': 'SetNetworkDefaultGateway', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'The DUT set new NetworkDefaultGateway IPv4Address as {}'.format(new), 'response': str(set1)}}
         else:
-            return 'SetNetworkDefaultGateway does not work'
-
+            return {'test_id': 13, 'name': 'SetNetworkDefaultGateway', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not set new NetworkDefaultGateway',
+            'response': str(set1)}}
 
     def GetDeviceInformation(self):
         info = self.cam.devicemgmt.GetDeviceInformation()
         if (info != []):
-            return 'GetDeviceInformation works'
+            return {'test_id': 14, 'name': 'GetDeviceInformation', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(info)}}
+        if ((not(hasattr(info, 'Manufacturer'))) or (not(hasattr(info, 'Model'))) or (not(hasattr(info, 'SerialNumber'))) or (not(hasattr(info, 'HardwareId'))) or (not(hasattr(info, 'FirmwareVersion')))):
+            return {'test_id': 14, 'name': 'GetDeviceInformation', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'The DUT did not send one or more mandatory information items in the GetDeviceInformationResponse message',
+            'response': str(info)}}
         else:
-            return 'GetDeviceInformation does not work'
+            return {'test_id': 14, 'name': 'GetDeviceInformation', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetDeviceInformationResponse message',
+            'response': str(info)}}
 
     def GetUsers(self):
         users = self.cam.devicemgmt.GetUsers()
         if (users != []):
-            return 'GetUsers works'
+            return {'test_id': 15, 'name': 'GetUsers', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(users)}}
         else:
-            return 'GetUsers does not work'
+            return {'test_id': 15, 'name': 'GetUsers', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetUsersResponse message.',
+            'response': str(users)}}
+        
+    def CreateUsers(self):
+        i = 0
+        f1 = False
+        set1 = self.cam.devicemgmt.CreateUsers({'User':{'Username': 'lalalal', 'Password': 'lXj2N_iP9=1dD', 'UserLevel': 'User'}})
+        get1 = self.cam.devicemgmt.GetUsers()
+        for i in range(len(get1)):
+            if get1[i].Username == 'lalalal':
+                f1 = True
+        if f1:
+            delete = self.cam.devicemgmt.DeleteUsers({'Username':'lalalal'})
+            return {'test_id': 16, 'name': 'CreateUsers', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'The DUT created an user with {}'.format('Username: lalalal'), 'response': str(set1)}}
+        else:
+            return {'test_id': 16, 'name': 'CreateUsers', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'The DUT could not create a new user', 'response': str(set1)}}
 
     def DeleteUsers(self):
-        set1 = self.cam.devicemgmt.CreateUsers({'Username': 'ONVIFTest', 'Password': 'lalala', 'UserLevel': 'User'})
-        delete = self.cam.devicemgmt.DeleteUsers({'Username':'ONVIFTest'})
-        if (delete != []):
-            return 'DeleteUsers works'
+        i = 0
+        f1 = False
+        set1 = self.cam.devicemgmt.CreateUsers({'User':{'Username': 'lalalal', 'Password': 'lXj2N_iP9=1dD', 'UserLevel': 'User'}})
+        get1 = self.cam.devicemgmt.GetUsers()
+        for i in range(len(get1)):
+            if get1[i].Username == 'lalalal':
+                f1 = True
+        if f1:
+            delete = self.cam.devicemgmt.DeleteUsers({'Username':'lalalal'})
+            return {'test_id': 17, 'name': 'DeleteUsers', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'The DUT deleted created user with {}'.format('Username: lalalal'), 'response': str(delete)}}
         else:
-            return 'DeleteUsers does not work'
+            return {'test_id': 17, 'name': 'DeleteUsers', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not delete created user', 'response': str(delete)}}
 
     def GetNTP(self):
         ntp = self.cam.devicemgmt.GetNTP()
         if (ntp != []):
-            return 'GetNTP works'
+            return {'test_id': 18, 'name': 'GetNTP', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(ntp)}}
         else:
-            return 'GetNTP does not work'
+            return {'test_id': 18, 'name': 'GetNTP', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetNTPResponse message.',
+            'response': str(ntp)}}
 
     def GetServices(self):
-        services = self.cam.devicemgmt.GetServices()
-        if (services != []):
-            return 'GetServices works'
+        services = self.cam.devicemgmt.GetServices({'IncludeCapability': False})
+        cap_services = self.cam.devicemgmt.GetServices({'IncludeCapability': True})
+        if (services != [] and cap_services != []):
+            return {'test_id': 19, 'name': 'GetServices', 'service': 'Core',
+            'result': {'supported': True, 'extension': 'The DUT send a valid response in both cases(IncludeCapability)', 'response': str(services)}}
         else:
-            return 'GetServices does not work'
+            return {'test_id': 19, 'name': 'GetServices', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetServicesResponse message',
+            'response': str(services)}}
 
     def GetSystemDateAndTime(self):
         datetime = self.cam.devicemgmt.GetSystemDateAndTime()
         if (datetime != []):
-            return 'GetSystemDateAndTime works'
+            return {'test_id': 20, 'name': 'GetSystemDateAndTime', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(datetime)}}
         else:
-            return 'GetSystemDateAndTime does not work'
+            return {'test_id': 20, 'name': 'GetSystemDateAndTime', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetSystemDateAndTimeResponse message',
+            'response': str(datetime)}}
 
     def GetSystemUris(self):
         uri = self.cam.devicemgmt.GetSystemUris()
         if (uri != []):
-            return 'GetSystemUris works'
+            return {'test_id': 21, 'name': 'GetSystemUris', 'service': 'Core',
+            'result': {'supported': True, 'extension': None, 'response': str(uri)}}
         else:
-            return 'GetSystemUris does not work'
+            return {'test_id': 21, 'name': 'GetSystemUris', 'service': 'Core',
+            'result': {'supported': False, 'extension': 'The DUT did not send GetSystemUrisResponse message',
+            'response': str(uri)}}
 		
