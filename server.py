@@ -1,5 +1,6 @@
 import utils
 from core import Camera
+from test import Core_Tests
 
 from flask import (
     Flask, request, jsonify, 
@@ -14,6 +15,22 @@ app.config.from_object('config')
 def hello():
     return "Hello World!"
 
+@app.route("/api/<method_name>", methods=['GET'])
+def core_test(method_name):
+    if request.method == 'GET':
+        ip = request.args.get('ip')
+        port = int(request.args.get('port'))
+        try:
+            cam = Core_Test(ip, port, 'admin', 'Supervisor')
+        except:
+            return jsonify(error = "ONVIFError, " + method_name + " method does not respond. You may check VPN Connection")
+        try:
+            method = getattr(cam, method_name)
+            return jsonify(response = method())
+        except AttributeError:
+            return jsonify(error = "Sorry, " + method_name + " method doesn't exist")
+        except:
+return jsonify(error = "ONVIFError, " + method_name + " method does not respond. You may check VPN Connection")
 
 '''
 Devices API

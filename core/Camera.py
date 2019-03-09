@@ -24,17 +24,16 @@ class Camera(ONVIFCamera):
     def get_device_info(self):
         device_info = self.devicemgmt.GetDeviceInformation()
         return {
-            "Manufacturer": device_info.Manufacturer,
-            "Model": device_info.Model,
-            "Firmware Version": device_info.FirmwareVersion,
-            "Serial Number": device_info.SerialNumber,
-            "Hardware ID": device_info.HardwareId,
-            "Supported Services": self.get_supported_services(),
-
-            "snapshot_url": self.get_public_snapshot_url(),
-            "stream_url": self.get_public_stream_url(),
-            "ip": self.ip,
-            "port": self.port
+            'Manufacturer': device_info.Manufacturer,
+            'Model': device_info.Model,
+            'Firmware Version': device_info.FirmwareVersion,
+            'Serial Number': device_info.SerialNumber,
+            'Hardware ID': device_info.HardwareId,
+            'Supported Services': self.get_supported_services(),
+            'snapshot_url': self.get_public_snapshot_url(),
+            'stream_url': self.get_public_stream_url(),
+            'ip': self.ip,
+            'port': self.port
         }
 
 

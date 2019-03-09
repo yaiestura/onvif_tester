@@ -16,7 +16,7 @@ class Core_Test:
         self.passw = passw
         self.cam = ONVIFCamera(self.ip, self.port, self.user, self.passw)
 
-    def DeviceCapabilities(self):
+    def GetSupportedServices(self):
         try:
             devicemgmt_service = self.cam.create_devicemgmt_service()
             dmgmt = 'Supported'
@@ -89,14 +89,32 @@ class Core_Test:
         except:
             receiver = 'Not Supported'
 
-        return 'Devicemgmt ' + dmgmt + ', ' + 'Media ' + media + ', ' + 'Imaging ' + imaging + ', ' + 'Analytics ' + analytics + ', ' + 'PTZ ' + ptz + ', ' + 'DeviceIO ' + io + ', ' + 'Events ' + events + ', ' + 'Replay ' + replay + ', ' + 'Recording ' + recording + ', ' + 'Search ' + search + ', ' + 'Pullpoint ' + pullpoint + ', ' + 'Receiver ' + receiver + '.'        
+        return {id: 0, name: 'GetSupportedServices', service: 'Core',
+            result: {[works: True, extension: None, response: {
+                'Devicemgmt': dmgmt,
+                'Media': media,
+                'Imaging': imaging
+                'Analytics': analytics
+                'PTZ': ptz
+                'DeviceIO': io
+                'Events': events
+                'Replay': replay
+                'Recording': recording
+                'Search': search
+                'Pullpoint': pullpoint
+                'Receiver' receiver
+            }]}}
+        
 
     def GetCapabilities(self):
         capabilities = self.cam.devicemgmt.GetCapabilities()
         if (len(capabilities) > 0):
-            return 'GetCapabilities works'
+            return {id: 1, name: 'GetCapabilities', service: 'Core',
+            result: {[works: True, extension: None, response: capabilities]}}
         else:
-            return 'GetCapabilities does not work'
+            return {id: 1, name: 'GetCapabilities', service: 'Core',
+            result: {[works: False, extension: 'The DUT did not send GetCapabilitiesResponse message',
+            response: capabilities]}}
 
     def GetDiscoveryMode(self):
         request = self.cam.devicemgmt.GetDiscoveryMode()
