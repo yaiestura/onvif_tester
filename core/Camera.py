@@ -122,7 +122,7 @@ class Camera(ONVIFCamera):
 
 
     def get_supported_services(self):
-        return list(map(lambda x: x.split('/')[-2], self.devicemgmt.GetServices({'IncludeCapability': False})))
+        return list(map(lambda x: x.Namespace.split('/')[-2], self.devicemgmt.GetServices({'IncludeCapability': False})))
    
 
 
