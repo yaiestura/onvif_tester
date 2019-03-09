@@ -1,6 +1,7 @@
 import io
 import rtsp
 
+
 def generate_stream(url):
     client = rtsp.Client(rtsp_server_uri=url, verbose=False)
 
