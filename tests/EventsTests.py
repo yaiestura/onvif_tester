@@ -6,13 +6,9 @@ import requests
 
 
 class EventsTests:
-
-    def __init__(self, ip, port, user, passw):
-        self.ip = ip
-        self.port = port
-        self.user = user
-        self.passw = passw
-        self.cam = ONVIFCamera(self.ip, self.port, self.user, self.passw)
+    
+    def __init__(self, cam):
+        self.cam = cam
         self.event_service = self.cam.create_events_service()
 
     def GetEventProperties(self):

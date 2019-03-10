@@ -2,12 +2,9 @@ from onvif import ONVIFCamera
 
 
 class ImagingTests:
-    def __init__(self, ip, port, user, passw):
-        self.ip = ip
-        self.port = port
-        self.user = user
-        self.passw = passw
-        self.cam = ONVIFCamera(self.ip, self.port, self.user, self.passw)
+    
+    def __init__(self, cam):
+        self.cam = cam
         self.media = self.cam.create_media_service()
         self.imaging = self.cam.create_imaging_service()
         self.vstoken = self.media.GetVideoSources()[0]._token
