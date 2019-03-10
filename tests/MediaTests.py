@@ -1,7 +1,7 @@
 from onvif import ONVIFCamera
 import random, string
 
-class Media_Test:
+class MediaTests:
 	def __init__(self,ip,port,user,passw):
 		self.ip = ip
 		self.port = port

@@ -1,9 +1,7 @@
 import utils
 from core import Camera
-from test.CoreTests import CoreTests
-from test.EventsTests import Events_Test
-from test.AnalyticsTests import Analytics_Test
-from test.ImagingTests import Imaging_Test
+from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests
+
 
 from flask import (
     Flask, request, jsonify, 

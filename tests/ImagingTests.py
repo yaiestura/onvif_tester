@@ -1,7 +1,7 @@
 from onvif import ONVIFCamera
 
 
-class Imaging_Test:
+class ImagingTests:
     def __init__(self, ip, port, user, passw):
         self.ip = ip
         self.port = port

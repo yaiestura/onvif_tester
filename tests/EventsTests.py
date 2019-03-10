@@ -5,7 +5,7 @@ import datetime
 import requests
 
 
-class Events_Test:
+class EventsTests:
 
     def __init__(self, ip, port, user, passw):
         self.ip = ip
