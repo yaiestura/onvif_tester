@@ -1,6 +1,6 @@
 import utils
 from core import Camera
-from test.CoreTests import Core_Test
+from test.CoreTests import CoreTests
 from test.EventsTests import Events_Test
 from test.AnalyticsTests import Analytics_Test
 from test.ImagingTests import Imaging_Test
@@ -18,22 +18,25 @@ app.config.from_object('config')
 def hello():
     return 'Hello World!'
 
-@app.route('/api/core_test/<method_name>', methods=['GET'])
-def core_test(method_name):
-    if request.method == 'GET':
-        ip = request.args.get('ip')
-        port = int(request.args.get('port'))
-        try:
-            cam = Core_Test(ip, port, 'admin', 'Supervisor')
-        except:
-            return jsonify(error = 'ONVIFError, ' + method_name + ' method is not supported')
-        try:
-            method = getattr(cam, method_name)
-            return jsonify(response = method())
-        except AttributeError:
-            return jsonify(error = 'Sorry, ' + method_name + ' method does not exist')
-        except:
-            return jsonify(error = 'ONVIFError, ' + method_name + ' method is not supported')
+
+@app.route('/api/core_test/<method_name>')
+@utils.cam_required
+def core_test(*args, **kwargs):
+    cam = kwargs['ctx']['cam']
+    method_name = kwargs['method_name']
+
+    core_tests = CoreTests(cam)
+    method = getattr(core_tests, method_name)
+    return jsonify(response = method())
+    
+    # try:
+    #     method = getattr(core_tests, method_name)
+    #     return jsonify(response = method())
+    # except AttributeError:
+    #     return jsonify(error = 'Sorry, ' + method_name + ' method does not exist')
+    # except Exception  as e:
+
+    #     return jsonify(error = 'ONVIFError, ' + method_name + ' method is not supported.' + e)
 
 @app.route('/api/events_test/<method_name>', methods=['GET'])
 def events_test(method_name):
@@ -101,6 +104,10 @@ def get_device_info(*args, **kwargs):
     return jsonify(cam.get_device_info())
 
 
+
+'''
+Serving data from device
+'''
 @app.route('/snapshots/<path:filename>')
 def get_snapshot(filename):
     return send_from_directory(

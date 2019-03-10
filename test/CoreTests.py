@@ -1,109 +1,46 @@
-from onvif import ONVIFCamera
+from onvif import ONVIFCamera, ONVIFError
 from utils.probe_match import probe_match
 
 
 class CoreTests:
-	def __init__(self, camera):
-		self.camera = camera
-
-
-class Core_Test:
-    def __init__(self, ip, port, user, passw):
-        self.ip = ip
-        self.port = port
-        self.user = user
-        self.passw = passw
-        self.cam = ONVIFCamera(self.ip, self.port, self.user, self.passw)
+    def __init__(self, cam):
+        self.cam = cam
 
     def GetSupportedServices(self):
-        try:
-            devicemgmt_service = self.cam.create_devicemgmt_service()
-            dmgmt = 'Supported'
-        except:
-            dmgmt = 'Not Supported'
+        services_list = [
+            'Devicemgmt', 'Media', 'Imaging', 'Analytics', 
+            'PTZ', 'DeviceIO', 'Events', 'Replay', 
+            'Recording', 'Search', 'Pullpoint', 'Receiver'
+        ]
 
-        try:
-            media_service = self.cam.create_media_service()
-            media = 'Supported'
-        except:
-            media = 'Not Supported'
+        services_status = []
 
-        try:
-            imaging_service = self.cam.create_imaging_service()
-            imaging = 'Supported'
-        except:
-            imaging = 'Not Supported'
+        for service_name in services_list:
+            name = service_name.lower()
+            try:
+                service = self.cam.get_service(name)
+                services_status.append({
+                    "name": service_name,
+                    "supported": service is not None
+                })
+            except ONVIFError as e:
+                services_status.append({
+                    "name": service_name,
+                    "supported": False
+                })
 
-        try:
-            analytics_service = self.cam.create_analytics_service()
-            analytics = 'Supported'
-        except:
-            analytics = 'Not Supported'
+        return {
+            'test_id': 0, # do we really need it?
+            'service': 'Core',
+            'name': 'GetSupportedServices',
+            'result': {
+                'supported': True,
+                'extension': None,
+                'services_status': services_status
+            }
 
-        try:
-            ptz_service = self.cam.create_ptz_service()
-            ptz = 'Supported'
-        except:
-            ptz = 'Not Supported'
+        }
 
-        try:
-            io_service = self.cam.create_deviceio_service()
-            io = 'Supported'
-        except:
-            io = 'Not Supported'
-
-        try:
-            events_service = self.cam.create_events_service()
-            events = 'Supported'
-        except:
-            events = 'Not Supported'
-
-        try:
-            replay_service = self.cam.create_replay_service()
-            replay = 'Supported'
-        except:
-            replay = 'Not Supported'
-
-        try:
-            recording_service = self.cam.create_recording_service()
-            recording = 'Supported'
-        except:
-            recording = 'Not Supported'
-
-        try:
-            search_service = self.cam.create_search_service()
-            search = 'Supported'
-        except:
-            search = 'Not Supported'
-
-        try:
-            pullpoint_service = self.cam.create_pullpoint_service()
-            pullpoint = 'Supported'
-        except:
-            pullpoint = 'Not Supported'
-
-        try:
-            receiver_service = self.cam.create_receiver_service()
-            receiver = 'Supported'
-        except:
-            receiver = 'Not Supported'
-
-        return {'test_id': 0, 'name': 'GetSupportedServices', 'service': 'Core',
-            'result': {'supported': True, 'extension': None, 'response':
-            {
-                'Devicemgmt': dmgmt,
-                'Media': media,
-                'Imaging': imaging,
-                'Analytics': analytics,
-                'PTZ': ptz,
-                'DeviceIO': io,
-                'Events': events,
-                'Replay': replay,
-                'Recording': recording,
-                'Search': search,
-                'Pullpoint': pullpoint,
-                'Receiver': receiver 
-            }}}
         
 
     def GetCapabilities(self):
