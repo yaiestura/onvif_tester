@@ -95,10 +95,9 @@ def get_devices_list():
     
 
 @app.route('/api/device')
-def get_device_info():
-    ip = request.args.get('ip')
-    port = int(request.args.get('port'))
-    cam = Camera(ip, port)
+@utils.cam_required
+def get_device_info(*args, **kwargs):
+    cam = kwargs['ctx']['cam']
     return jsonify(cam.get_device_info())
 
 
@@ -109,10 +108,9 @@ def get_snapshot(filename):
 
 
 @app.route('/livestream')
-def livestream():
-    ip = request.args.get('ip')
-    port = int(request.args.get('port'))
-    cam = Camera(ip, port, 'admin', 'Supervisor')
+@utils.cam_required
+def livestream(*args, **kwargs):
+    cam = kwargs['ctx']['cam']
     url = cam.get_private_stream_url()
     return Response(utils.generate_stream(url),
             mimetype='multipart/x-mixed-replace; boundary=frame')
