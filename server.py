@@ -14,7 +14,6 @@ app.config.from_object('config')
 CORS(app)
 
 
-
 @app.route('/')
 def hello():
     return 'Hello World!'
@@ -22,12 +21,20 @@ def hello():
 
 @app.route('/api/<test_type>_test/<method_name>') 
 @utils.cam_required
-def test(*args, **kwargs):
+def run_test(*args, **kwargs):
     cam = kwargs['ctx']['cam']
     test_type = kwargs['test_type']
     method_name = kwargs['method_name']
     test = Tests()
     return test.service_test(cam, test_type, method_name)
+
+
+@app.route('/api/tests') 
+@utils.cam_required
+def tests(*args, **kwargs):
+    cam = kwargs['ctx']['cam']
+    test = Tests()
+    return jsonify(response = test.avaliable_tests(cam.get_supported_services()))
  
 
 '''
@@ -43,7 +50,6 @@ def get_devices_list():
 def get_device_info(*args, **kwargs):
     cam = kwargs['ctx']['cam']
     return jsonify(cam.get_device_info())
-
 
 
 '''
