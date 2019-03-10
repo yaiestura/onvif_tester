@@ -1,7 +1,7 @@
 import utils
 from core import Camera
 from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests
-
+from flask_cors import CORS
 
 from flask import (
     Flask, request, jsonify, 
@@ -10,6 +10,8 @@ from flask import (
 
 app = Flask(__name__)
 app.config.from_object('config')
+CORS(app)
+
 
 
 @app.route('/')
