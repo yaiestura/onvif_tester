@@ -15,4 +15,5 @@ suds-passworddigest==0.1.2
 urllib3==1.24.1
 Werkzeug==0.14.1
 WSDiscovery==1.1.2
+Flask-Cors==3.0.7
 lib/rtsp-1.1.6
