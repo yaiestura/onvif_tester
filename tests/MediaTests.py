@@ -2,12 +2,8 @@ from onvif import ONVIFCamera
 import random, string
 
 class MediaTests:
-	def __init__(self,ip,port,user,passw):
-		self.ip = ip
-		self.port = port
-		self.user = user
-		self.passw = passw
-		self.cam = ONVIFCamera(self.ip, self.port, self.user, self.passw)
+	def __init__(self, cam):
+		self.cam = cam
 
 	def CreateProfile(self):
 		media = self.cam.create_media_service()

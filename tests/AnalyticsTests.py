@@ -2,12 +2,8 @@ from onvif import ONVIFCamera
 
 
 class AnalyticsTests:
-    def __init__(self, ip, port, user, passw):
-        self.ip = ip
-        self.port = port
-        self.user = user
-        self.passw = passw
-        self.cam = ONVIFCamera(self.ip, self.port, self.user, self.passw)
+    def __init__(self, cam):
+        self.cam = cam
         self.media = self.cam.create_media_service()
         self.analytics = self.cam.create_analytics_service()
         self.analytics_rules = self.cam.create_analytics_rules_service()
