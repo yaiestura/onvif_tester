@@ -9,12 +9,15 @@ from flask import (
     send_from_directory, Response)
 
 
-app = Flask(__name__)
+app = Flask(__name__,
+ static_folder = 'templates/build/static',
+ template_folder="templates/build")
+
 app.config.from_object('config')
 CORS(app)
 
 
-@app.route('/')
+@app.route('/info')
 def index():
     return jsonify(api_avaliable_routes=[
         '/api/<test_type>_test/<method_name>',
@@ -75,6 +78,12 @@ def livestream(*args, **kwargs):
     url = cam.get_private_stream_url()
     return Response(utils.generate_stream(url),
             mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
