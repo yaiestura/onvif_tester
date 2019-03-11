@@ -30,6 +30,7 @@ class Camera(ONVIFCamera):
             'Serial Number': device_info.SerialNumber,
             'Hardware ID': device_info.HardwareId,
             'Supported Services': self.get_supported_services(),
+            'avaliable_tests': self.get_available_tests(),
             'snapshot_url': self.get_public_snapshot_url(),
             'stream_url': self.get_public_stream_url(),
             'ip': self.ip,
@@ -121,7 +122,9 @@ class Camera(ONVIFCamera):
         return list(map(lambda x: x.Namespace.split('/')[-2], self.devicemgmt.GetServices({'IncludeCapability': False})))
    
 
-
+    def get_available_tests(self):
+        test = Tests(self)
+        return test.avaliable_tests()
 
 
 
