@@ -9,3 +9,4 @@ from PullpointTests import PullpointTests
 from RecordingTests import RecordingTests
 from ReplayTests import ReplayTests
 from SearchTests import SearchTests
+from Tests import Tests

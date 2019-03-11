@@ -3,6 +3,7 @@ import time
 from onvif import ONVIFCamera
 import requests 
 import rtsp
+from tests import Tests
 
 gen_timestamp = lambda: time.strftime("_%d-%m-%Y_%H:%M:%S", time.localtime())
 
