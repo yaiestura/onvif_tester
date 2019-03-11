@@ -1,12 +1,12 @@
 import utils
 from core import Camera
-from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests
+from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests, Tests
 from flask_cors import CORS
-from tests.Testing import Tests
+
 
 from flask import (
     Flask, request, jsonify, 
-    send_from_directory, Response)
+    send_from_directory, Response, render_template)
 
 
 app = Flask(__name__,
@@ -82,7 +82,7 @@ def livestream(*args, **kwargs):
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def index(path):
+def spa(path):
     return render_template('index.html')
 
 
