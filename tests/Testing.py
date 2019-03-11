@@ -22,7 +22,7 @@ class Tests(object):
     def service_test(self, test_type, method_name):
 
         if test_type in self.test_types:
-            test = self.test_types[test_type](cam)
+            test = self.test_types[test_type](self.cam)
         else:
             return dict(response = 'Sorry, Service with name {} does not exist.'.format(test_type))
 

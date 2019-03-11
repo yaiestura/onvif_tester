@@ -34,7 +34,7 @@ def run_test(*args, **kwargs):
 def tests(*args, **kwargs):
     cam = kwargs['ctx']['cam']
     test = Tests(cam)
-    return dict(test.avaliable_tests())
+    return jsonify(test.avaliable_tests())
  
 
 '''
