@@ -15,8 +15,15 @@ CORS(app)
 
 
 @app.route('/')
-def hello():
-    return 'Hello World!'
+def index():
+    return jsonify(api_avaliable_routes=[
+        '/api/<test_type>_test/<method_name>',
+        '/api/tests',
+        '/api/devices',
+        '/api/device',
+        '/snapshots/<path:filename>',
+        '/livestream'
+    ])
 
 
 @app.route('/api/<test_type>_test/<method_name>') 
