@@ -4,12 +4,13 @@ import rtsp
 
 def generate_stream(url):
     client = rtsp.Client(rtsp_server_uri=url, verbose=False)
-
     while True:
-        if client.read() is None:
+        img = client.read()
+        if img is None:
             continue
-            
-        img = client.read().resize((640, 480))
+
+        w, h = img.size
+        img = img.resize((640, int(640*h/w)))
         imgByteArr = io.BytesIO()
         img.save(imgByteArr, format='jpeg')
         b_img = imgByteArr.getvalue()
