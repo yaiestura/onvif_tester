@@ -1,4 +1,5 @@
 import io
+import os  
 import time
 from onvif import ONVIFCamera
 import requests 
@@ -76,6 +77,10 @@ class Camera(ONVIFCamera):
 
 
     def get_public_snapshot_url(self):
+        # make sure that snapshots folder is exists
+        if not os.path.isdir('snapshots'):
+            os.makedirs('snapshots')
+
         private_uri = self.get_private_snapshot_url()
         if private_uri is not None:
             try:
