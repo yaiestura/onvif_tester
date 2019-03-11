@@ -125,7 +125,7 @@ class Camera(ONVIFCamera):
 
     def get_available_tests(self):
         test = Tests(self)
-        return test.avaliable_tests()
+        return test.avaliable_tests()['response']
 
 
 
