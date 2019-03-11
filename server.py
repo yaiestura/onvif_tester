@@ -25,16 +25,16 @@ def run_test(*args, **kwargs):
     cam = kwargs['ctx']['cam']
     test_type = kwargs['test_type']
     method_name = kwargs['method_name']
-    test = Tests()
-    return test.service_test(cam, test_type, method_name)
+    test = Tests(cam)
+    return jsonify(test.service_test(test_type, method_name))
 
 
 @app.route('/api/tests') 
 @utils.cam_required
 def tests(*args, **kwargs):
     cam = kwargs['ctx']['cam']
-    test = Tests()
-    return jsonify(response = test.avaliable_tests(cam.get_supported_services()))
+    test = Tests(cam)
+    return dict(test.avaliable_tests())
  
 
 '''
