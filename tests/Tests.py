@@ -41,7 +41,7 @@ class Tests(object):
     def avaliable_tests(self):
         test_descriptions = []
         supported_test_types = self.cam.get_supported_services()
-
+      
         for test_type in supported_test_types:
             if test_type in self.test_types:
                 test = self.test_types[test_type]
