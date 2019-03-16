@@ -1,79 +1,162 @@
 from onvif import ONVIFCamera
 
-class DeviceIOTests:    
+
+class DeviceIOTests:
     def __init__(self, cam):
         self.cam = cam
         self.media = self.cam.create_media_service()
         self.asctoken = self.media.GetProfiles()[0].AudioSourceConfiguration._token
         self.vsctoken = self.media.GetProfiles()[0].VideoSourceConfiguration._token
         self.io = self.cam.create_deviceio_service()
-    
+
     def GetServiceCapabilities(self):
-        capabilities = self.io.GetServiceCapabilities()
-        if ((capabilities is not None) or (len(capabilities) > 0)):
-            return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
-            'result': {'supported': True, 'extension': None, 'response': str(capabilities)}}
-        else:
-            return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
-            'result': {'supported': False, 'extension': 'The DUT did not send GetServiceCapabilitiesResponse message',
-            'response': str(capabilities)}}
+        try:
+            capabilities = self.io.GetServiceCapabilities()
+            if ((capabilities is None) or (len(capabilities) == 0)):
+                return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'The DUT did not send GetServiceCapabilitiesResponse message',
+                'response': str(capabilities)}}
+            else:
+                return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
+                'result': {'supported': True, 'extension': None,
+                'response': str(capabilities)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+            else:
+                return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': str(e)}}
 
     def GetAudioSourceConfiguration(self):
-        response = self.io.GetAudioSourceConfiguration({'AudioSourceToken': self.asctoken})
-        if ((response is not None) or (len(response) > 0)):
-            return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
-            'result': {'supported': True, 'extension': None, 'response': str(response)}}
-        else:
-            return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
-            'result': {'supported': False, 'extension': 'The DUT did not send GetAudioSourceConfigurationResponse message',
-            'response': str(response)}}
+        try:
+            response = self.io.GetAudioSourceConfiguration({'AudioSourceToken': self.asctoken})
+            if ((response is None) or (len(response) == 0)):
+                return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'The DUT did not send GetAudioSourceConfigurationResponse message',
+                'response': str(response)}}
+            else:
+                return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
+                'result': {'supported': True, 'extension': None,
+                'response': str(response)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+            else:
+                return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': str(e)}}
 
     def GetAudioSourceConfigurationOptions(self):
-        response = self.io.GetAudioSourceConfiguration({'AudioSourceToken': self.asctoken})
-        if ((response is not None) or (len(response) > 0)):
-            return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
-            'result': {'supported': True, 'extension': None, 'response': str(response)}}
-        else:
-            return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
-            'result': {'supported': False, 'extension': 'The DUT did not send GetAudioSourceConfigurationOptionsResponse message',
-            'response': str(response)}}
+        try:
+            response = self.io.GetAudioSourceConfiguration({'AudioSourceToken': self.asctoken})
+            if ((response is None) or (len(response) == 0)):
+                return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'The DUT did not send GetAudioSourceConfigurationOptionsResponse message',
+                'response': str(response)}}
+            else:
+                return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
+                'result': {'supported': True, 'extension': None,
+                'response': str(response)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+            else:
+                return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': str(e)}}
 
     def GetAudioSources(self):
-        response = self.io.GetAudioSources()
-        if ((response is not None) or (len(response) > 0)):
-            return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
-            'result': {'supported': True, 'extension': None, 'response': str(response)}}
-        else:
-            return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
-            'result': {'supported': False, 'extension': 'The DUT did not send GetAudioSourcesResponse message',
-            'response': str(response)}}
+        try:
+            response = self.io.GetAudioSources()
+            if ((response is None) or (len(response) == 0)):
+                return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'The DUT did not send GetAudioSourcesResponse message',
+                'response': str(response)}}
+            else:
+                return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
+                'result': {'supported': True, 'extension': None,
+                'response': str(response)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+            else:
+                return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': str(e)}}
 
     def GetDigitalInputs(self):
-        response = self.io.GetDigitalInputs()
-        if ((response is not None) or (len(response) > 0)):
-            return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
-            'result': {'supported': True, 'extension': None, 'response': str(response)}}
-        else:
-            return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
-            'result': {'supported': False, 'extension': 'The DUT did not send GetDigitalInputsResponse message',
-            'response': str(response)}}
+        try:
+            response = self.io.GetDigitalInputs()
+            if ((response is None) or (len(response) == 0)):
+                return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'The DUT did not send GetDigitalInputsResponse message',
+                'response': str(response)}}
+            else:
+                return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
+                'result': {'supported': True, 'extension': None,
+                'response': str(response)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+            else:
+                return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': str(e)}}
 
     def GetRelayOutputs(self):
-        response = self.io.GetRelayOutputs()
-        if ((response is not None) or (len(response) > 0)):
-            return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
-            'result': {'supported': True, 'extension': None, 'response': str(response)}}
-        else:
-            return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
-            'result': {'supported': False, 'extension': 'The DUT did not send GetRelayOutputsResponse message',
-            'response': str(response)}}
+        try:
+            response = self.io.GetRelayOutputs()
+            if ((response is None) or (len(response) == 0)):
+                return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'The DUT did not send GetRelayOutputsResponse message',
+                'response': str(response)}}
+            else:
+                return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
+                'result': {'supported': True, 'extension': None,
+                'response': str(response)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+            else:
+                return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': str(e)}}
 
     def GetSerialPorts(self):
-        response = self.io.GetSerialPorts()
-        if ((response is not None) or (len(response) > 0)):
-            return {'test_id': 5, 'name': 'GetSerialPorts', 'service': 'deviceio',
-            'result': {'supported': True, 'extension': None, 'response': str(response)}}
-        else:
-            return {'test_id': 5, 'name': 'GetSerialPorts', 'service': 'deviceio',
-            'result': {'supported': False, 'extension': 'The DUT did not send GetSerialPortsResponse message',
-            'response': str(response)}}
+        try:
+            response = self.io.GetSerialPorts()
+            if ((response is None) or (len(response) == 0)):
+                return {'test_id': 6, 'name': 'GetSerialPorts', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'The DUT did not send GetSerialPortsResponse message',
+                'response': str(response)}}
+            else:
+               return {'test_id': 6, 'name': 'GetSerialPorts', 'service': 'deviceio',
+               'result': {'supported': True, 'extension': None,
+               'response': str(response)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 6, 'name': 'GetSerialPorts', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+            else:
+                 return {'test_id': 6, 'name': 'GetSerialPorts', 'service': 'deviceio',
+                 'result': {'supported': False, 'extension': str(e)}}
+
+    def GetVideoOutputs(self):
+        try:
+            response = self.io.GetVideoOutputs()
+            if ((response is None) or (len(response) == 0)):
+                return {'test_id': 7, 'name': 'GetVideoOutputs', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'The DUT did not send GetVideoOutputsResponse message',
+                'response': str(response)}}
+            else:
+                return {'test_id': 7, 'name': 'GetVideoOutputs', 'service': 'deviceio',
+                'result': {'supported': True, 'extension': None,
+                'response': str(response)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 7, 'name': 'GetVideoOutputs', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+            else:
+                return {'test_id': 7, 'name': 'GetVideoOutputs', 'service': 'deviceio',
+                'result': {'supported': False, 'extension': str(e)}}
