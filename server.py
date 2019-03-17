@@ -45,7 +45,10 @@ def tests(*args, **kwargs):
     cam = kwargs['ctx']['cam']
     test = Tests(cam)
     return jsonify(test.avaliable_tests())
- 
+
+@app.route('/api/report')
+def report():
+    return None
 
 '''
 Devices API
