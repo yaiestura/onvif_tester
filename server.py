@@ -46,9 +46,11 @@ def tests(*args, **kwargs):
     test = Tests(cam)
     return jsonify(test.avaliable_tests())
 
-@app.route('/api/report')
+@app.route('/api/report', methods=['GET'])
 def report():
-    return None
+    tested_data = request.data
+    print tested_data
+    #generate_report(tested_data)
 
 '''
 Devices API
