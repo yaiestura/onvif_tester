@@ -275,29 +275,13 @@ class CoreTests:
             return {'test_id': 16, 'name': 'CreateUsers', 'service': 'Device',
             'result': {'supported': True, 'extension': 'The DUT could not create a new user', 'response': str(set1)}}
 
-    def DeleteUsers(self):
-        i = 0
-        f1 = False
-        set1 = self.cam.devicemgmt.CreateUsers({'User':{'Username': 'lalalal', 'Password': 'lXj2N_iP9=1dD', 'UserLevel': 'User'}})
-        get1 = self.cam.devicemgmt.GetUsers()
-        for i in range(len(get1)):
-            if get1[i].Username == 'lalalal':
-                f1 = True
-        if f1:
-            delete = self.cam.devicemgmt.DeleteUsers({'Username':'lalalal'})
-            return {'test_id': 17, 'name': 'DeleteUsers', 'service': 'Device',
-            'result': {'supported': True, 'extension': 'The DUT deleted created user with {}'.format('Username: lalalal'), 'response': str(delete)}}
-        else:
-            return {'test_id': 17, 'name': 'DeleteUsers', 'service': 'Device',
-            'result': {'supported': False, 'extension': 'The DUT did not delete created user', 'response': str(delete)}}
-
     def GetNTP(self):
         ntp = self.cam.devicemgmt.GetNTP()
         if (ntp != []):
-            return {'test_id': 18, 'name': 'GetNTP', 'service': 'Device',
+            return {'test_id': 17, 'name': 'GetNTP', 'service': 'Device',
             'result': {'supported': True, 'extension': None, 'response': str(ntp)}}
         else:
-            return {'test_id': 18, 'name': 'GetNTP', 'service': 'Device',
+            return {'test_id': 17, 'name': 'GetNTP', 'service': 'Device',
             'result': {'supported': False, 'extension': 'The DUT did not send GetNTPResponse message.',
             'response': str(ntp)}}
 
@@ -305,30 +289,30 @@ class CoreTests:
         services = self.cam.devicemgmt.GetServices({'IncludeCapability': False})
         cap_services = self.cam.devicemgmt.GetServices({'IncludeCapability': True})
         if (services != [] and cap_services != []):
-            return {'test_id': 19, 'name': 'GetServices', 'service': 'Device',
+            return {'test_id': 18, 'name': 'GetServices', 'service': 'Device',
             'result': {'supported': True, 'extension': 'The DUT send a valid response in both cases(IncludeCapability)', 'response': str(services)}}
         else:
-            return {'test_id': 19, 'name': 'GetServices', 'service': 'Device',
+            return {'test_id': 18, 'name': 'GetServices', 'service': 'Device',
             'result': {'supported': False, 'extension': 'The DUT did not send GetServicesResponse message',
             'response': str(services)}}
 
     def GetSystemDateAndTime(self):
         datetime = self.cam.devicemgmt.GetSystemDateAndTime()
         if (datetime != []):
-            return {'test_id': 20, 'name': 'GetSystemDateAndTime', 'service': 'Device',
+            return {'test_id': 19, 'name': 'GetSystemDateAndTime', 'service': 'Device',
             'result': {'supported': True, 'extension': None, 'response': str(datetime)}}
         else:
-            return {'test_id': 20, 'name': 'GetSystemDateAndTime', 'service': 'Device',
+            return {'test_id': 19, 'name': 'GetSystemDateAndTime', 'service': 'Device',
             'result': {'supported': False, 'extension': 'The DUT did not send GetSystemDateAndTimeResponse message',
             'response': str(datetime)}}
 
     def GetSystemUris(self):
         uri = self.cam.devicemgmt.GetSystemUris()
         if (uri != []):
-            return {'test_id': 21, 'name': 'GetSystemUris', 'service': 'Device',
+            return {'test_id': 20, 'name': 'GetSystemUris', 'service': 'Device',
             'result': {'supported': True, 'extension': None, 'response': str(uri)}}
         else:
-            return {'test_id': 21, 'name': 'GetSystemUris', 'service': 'Device',
+            return {'test_id': 20, 'name': 'GetSystemUris', 'service': 'Device',
             'result': {'supported': False, 'extension': 'The DUT did not send GetSystemUrisResponse message',
             'response': str(uri)}}
 		

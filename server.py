@@ -29,7 +29,7 @@ def index():
     ])
 
 
-@app.route('/api/<test_type>_test/<method_name>') 
+@app.route('/api/<test_type>_test/<method_name>', methods=['POST']) 
 @utils.cam_required
 def run_test(*args, **kwargs):
     cam = kwargs['ctx']['cam']
