@@ -24,10 +24,12 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 1, 'name': 'CreateProfile', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
+                'response': "" }}
             else:
                 return {'test_id': 1, 'name': 'CreateProfile', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e),
+                'response': ""}}
 
     def GetProfiles(self):
         try:
@@ -44,10 +46,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 2, 'name': 'GetProfiles', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 2, 'name': 'GetProfiles', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e),'response': ""}}
 
     def DeleteProfile(self):
         try:
@@ -68,10 +71,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 3, 'name': 'DeleteProfile', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 3, 'name': 'DeleteProfile', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetSnapshotUri(self):
         try:
@@ -88,10 +92,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 4, 'name': 'GetSnapshotUri', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 4, 'name': 'GetSnapshotUri', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
 
     def AddAudioDecoderConfiguration(self):
@@ -115,14 +120,15 @@ class MediaTests:
             return {'test_id': 5, 'name': 'AddAudioDecoderConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'AddAudioDecoderConfiguration does not work, AttributeError',
-            }}
+            'response': ""}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 5, 'name': 'AddAudioDecoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 5, 'name': 'AddAudioDecoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def AddAudioEncoderConfiguration(self):
         try:
@@ -145,14 +151,15 @@ class MediaTests:
             return {'test_id': 6, 'name': 'AddAudioEncoderConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'AddAudioEncoderConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 6, 'name': 'AddAudioEncoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 6, 'name': 'AddAudioEncoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def AddAudioOutputConfiguration(self):
         try:
@@ -175,14 +182,15 @@ class MediaTests:
             return {'test_id': 7, 'name': 'AddAudioOutputConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'AddAudioOutputConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 7, 'name': 'AddAudioOutputConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': ""}}
             else:
                 return {'test_id': 7, 'name': 'AddAudioOutputConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def AddAudioSourceConfiguration(self):
         try:
@@ -205,14 +213,15 @@ class MediaTests:
             return {'test_id': 8, 'name': 'AddAudioSourceConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'AddAudioSourceConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 8, 'name': 'AddAudioSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 8, 'name': 'AddAudioSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def AddMetadataConfiguration(self):
         try:
@@ -235,14 +244,15 @@ class MediaTests:
             return {'test_id': 9, 'name': 'AddMetadataConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'AddMetadataConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 9, 'name': 'AddMetadataConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 9, 'name': 'AddMetadataConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def AddPTZConfiguration(self):
         try:
@@ -265,14 +275,15 @@ class MediaTests:
             return {'test_id': 10, 'name': 'AddPTZConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'AddPTZConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 10, 'name': 'AddPTZConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 10, 'name': 'AddPTZConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def AddVideoAnalyticsConfiguration(self):
         try:
@@ -295,14 +306,15 @@ class MediaTests:
             return {'test_id': 11, 'name': 'AddVideoAnalyticsConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'AddVideoAnalyticsConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 11, 'name': 'AddVideoAnalyticsConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 11, 'name': 'AddVideoAnalyticsConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def AddVideoEncoderConfiguration(self):
         try:
@@ -325,14 +337,15 @@ class MediaTests:
             return {'test_id': 12, 'name': 'AddVideoEncoderConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'AddVideoSourceConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 12, 'name': 'AddVideoEncoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 12, 'name': 'AddVideoEncoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def AddVideoSourceConfiguration(self):
         try:
@@ -355,14 +368,15 @@ class MediaTests:
             return {'test_id': 13, 'name': 'AddVideoSourceConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'AddVideoSourceConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 13, 'name': 'AddVideoSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 13, 'name': 'AddVideoSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetVideoSourceConfiguration(self):
         try:
@@ -380,19 +394,20 @@ class MediaTests:
             return {'test_id': 14, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetVideoSourceConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 14, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetVideoSourceConfiguration may be working, but there is no VideoSourceConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 14, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 14, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioOutputConfigurations(self):
         try:
@@ -410,19 +425,20 @@ class MediaTests:
             return {'test_id': 15, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioOutputConfigurations does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 15, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioOutputConfigurations may be working, but there is no AudioOutputConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 15, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 15, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioDecoderConfigurations(self):
         try:
@@ -440,19 +456,20 @@ class MediaTests:
             return {'test_id': 16, 'name': 'GetAudioDecoderConfigurations', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioDecoderConfigurations does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 16, 'name': 'GetAudioDecoderConfigurations', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioDecoderConfigurations may be working, but there is no AudioDecoderConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 16, 'name': 'GetAudioDecoderConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 16, 'name': 'GetAudioDecoderConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioDecoderConfigurationOptions(self):
         try:
@@ -471,19 +488,20 @@ class MediaTests:
             return {'test_id': 17, 'name': 'GetAudioDecoderConfigurationOptions', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioDecoderConfigurationOptions does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 17, 'name': 'GetAudioDecoderConfigurationOptions', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioDecoderConfigurationOptions may be working, but there is no AudioDecoderConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 17, 'name': 'GetAudioDecoderConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 17, 'name': 'GetAudioDecoderConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioDecoderConfiguration(self):
         try:
@@ -501,19 +519,20 @@ class MediaTests:
             return {'test_id': 18, 'name': 'GetAudioDecoderConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioDecoderConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 18, 'name': 'GetAudioDecoderConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioDecoderConfiguration may be working, but there is no AudioDecoderConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 18, 'name': 'GetAudioDecoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 18, 'name': 'GetAudioDecoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioEncoderConfigurations(self):
         try:
@@ -531,19 +550,20 @@ class MediaTests:
             return {'test_id': 19, 'name': 'GetAudioEncoderConfigurations', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioEncoderConfigurations does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 19, 'name': 'GetAudioEncoderConfigurations', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioEncoderConfigurations may be working, but there is no AudioEncoderConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 19, 'name': 'GetAudioEncoderConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 19, 'name': 'GetAudioEncoderConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioEncoderConfigurationOptions(self):
         try:
@@ -562,19 +582,20 @@ class MediaTests:
             return {'test_id': 20, 'name': 'GetAudioEncoderConfigurationOptions', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioEncoderConfigurationOptions does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 20, 'name': 'GetAudioEncoderConfigurationOptions', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioEncoderConfigurationOptions may be working, but there is no AudioEncoderConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 20, 'name': 'GetAudioEncoderConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 20, 'name': 'GetAudioEncoderConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioEncoderConfiguration(self):
         try:
@@ -592,19 +613,20 @@ class MediaTests:
             return {'test_id': 21, 'name': 'GetAudioEncoderConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioEncoderConfiguration does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 21, 'name': 'GetAudioEncoderConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioEncoderConfiguration may be working, but there is no AudioEncoderConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 21, 'name': 'GetAudioEncoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 21, 'name': 'GetAudioEncoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioOutputConfigurations(self):
         try:
@@ -622,19 +644,20 @@ class MediaTests:
             return {'test_id': 22, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioOutputConfigurations does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 22, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioOutputConfigurations may be working, but there is no AudioOutputConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 22, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 22, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioOutputConfigurationOptions(self):
         try:
@@ -653,19 +676,20 @@ class MediaTests:
             return {'test_id': 23, 'name': 'GetAudioOutputConfigurationOptions', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioOutputConfigurationOptions does not work, AttributeError',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 23, 'name': 'GetAudioOutputConfigurationOptions', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioOutputConfigurationOptions may be working, but there is no AudioOutputConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 23, 'name': 'GetAudioOutputConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 23, 'name': 'GetAudioOutputConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioOutputConfiguration(self):
         try:
@@ -683,19 +707,20 @@ class MediaTests:
             return {'test_id': 24, 'name': 'GetAudioOutputConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioOutputConfiguration does not work',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 24, 'name': 'GetAudioOutputConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'GetAudioOutputConfiguration may be working, but there is no AudioOutputConfigurations availible',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 24, 'name': 'GetAudioOutputConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 24, 'name': 'GetAudioOutputConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioOutputs(self):
         try:
@@ -713,19 +738,20 @@ class MediaTests:
             return {'test_id': 25, 'name': 'GetAudioOutputs', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'The DUT did send GetAudioOutputsResponse message. The DUT scope list does not have one or more mandatory scope entry.',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 25, 'name': 'GetAudioOutputs', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'The DUT did send GetAudioOutputsResponse message, The DUT scope list does not have one or more mandatory scope entry.',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 25, 'name': 'GetAudioOutputs', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 25, 'name': 'GetAudioOutputs', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioSourceConfiguration(self):
         try:
@@ -743,14 +769,15 @@ class MediaTests:
             return {'test_id': 26, 'name': 'GetAudioSourceConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'The DUT scope list does not have one or more mandatory scope entry.',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 26, 'name': 'GetAudioSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 26, 'name': 'GetAudioSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioSourceConfigurationOptions(self):
         try:
@@ -768,14 +795,15 @@ class MediaTests:
             return {'test_id': 27, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'The DUT scope list does not have one or more mandatory scope entry.',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 27, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 27, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioSourceConfigurations(self):
         try:
@@ -791,10 +819,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 28, 'name': 'GetAudioSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 28, 'name': 'GetAudioSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioSources(self):
         try:
@@ -812,19 +841,20 @@ class MediaTests:
             return {'test_id': 29, 'name': 'GetAudioSources', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'The DUT did send GetAudioSourcesResponse message. The DUT scope list does not have one or more mandatory scope entry.',
-            }}
+            'response': "" }}
         except IndexError:
             return {'test_id': 29, 'name': 'GetAudioSources', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'The DUT did send GetAudioSourcesResponse message, The DUT scope list does not have one or more mandatory scope entry.',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 29, 'name': 'GetAudioSources', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
+                'response': "" }}
             else:
                 return {'test_id': 29, 'name': 'GetAudioSources', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetCompatibleAudioDecoderConfigurations(self):
         try:
@@ -841,10 +871,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 30, 'name': 'GetCompatibleAudioDecoderConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 30, 'name': 'GetCompatibleAudioDecoderConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetCompatibleAudioOutputConfigurations(self):
         try:
@@ -861,10 +892,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 31, 'name': 'GetCompatibleAudioOutputConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 31, 'name': 'GetCompatibleAudioOutputConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetCompatibleAudioSourceConfigurations(self):
         try:
@@ -881,10 +913,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 32, 'name': 'GetCompatibleAudioSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 32, 'name': 'GetCompatibleAudioSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetCompatibleMetadataConfigurations(self):
         try:
@@ -901,10 +934,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 33, 'name': 'GetCompatibleMetadataConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 33, 'name': 'GetCompatibleMetadataConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetCompatibleVideoAnalyticsConfigurations(self):
         try:
@@ -921,10 +955,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 34, 'name': 'GetCompatibleVideoAnalyticsConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 34, 'name': 'GetCompatibleVideoAnalyticsConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetCompatibleVideoEncoderConfigurations(self):
         try:
@@ -941,10 +976,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 35, 'name': 'GetCompatibleVideoSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 35, 'name': 'GetCompatibleVideoSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetCompatibleVideoSourceConfigurations(self):
         try:
@@ -961,10 +997,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 36, 'name': 'GetCompatibleVideoSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 36, 'name': 'GetCompatibleVideoSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetGuaranteedNumberOfVideoEncoderInstances(self):
         try:
@@ -982,14 +1019,15 @@ class MediaTests:
             return {'test_id': 37, 'name': 'GetGuaranteedNumberOfVideoEncoderInstances', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'The DUT did send GetGuaranteedNumberOfVideoEncoderInstancesResponse message. The DUT scope list does not have one or more mandatory scope entry.',
-            }}
+            'response': ""}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 37, 'name': 'GetGuaranteedNumberOfVideoEncoderInstances', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 37, 'name': 'GetGuaranteedNumberOfVideoEncoderInstances', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetMetadataConfiguration(self):
         try:
@@ -1007,14 +1045,16 @@ class MediaTests:
             return {'test_id': 38, 'name': 'GetMetadataConfiguration', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'The DUT did send GetMetadataConfiguration message. The DUT scope list does not have one or more mandatory scope entry.',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 38, 'name': 'GetMetadataConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 38, 'name': 'GetMetadataConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e),
+                'response': "" }}
 
     def GetMetadataConfigurationOptions(self):
         try:
@@ -1032,14 +1072,15 @@ class MediaTests:
             return {'test_id': 39, 'name': 'GetMetadataConfigurationOptions', 'service': 'Media',
             'result': {'supported': False,
             'extension': 'The DUT did send GetMetadataConfiguration message. The DUT scope list does not have one or more mandatory scope entry.',
-            }}
+            'response': "" }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 39, 'name': 'GetMetadataConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 39, 'name': 'GetMetadataConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetMetadataConfigurations(self):
         try:
@@ -1055,10 +1096,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 40, 'name': 'GetMetadataConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 40, 'name': 'GetMetadataConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetOSDs(self):
         try:
@@ -1075,10 +1117,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 41, 'name': 'GetOSDs', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 41, 'name': 'GetOSDs', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetOSD(self):
         try:
@@ -1096,10 +1139,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 42, 'name': 'GetOSD', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 42, 'name': 'GetOSD', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetOSDOptions(self):
         try:
@@ -1116,10 +1160,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 43, 'name': 'GetOSDOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 43, 'name': 'GetOSDOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetProfile(self):
         try:
@@ -1136,10 +1181,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 44, 'name': 'GetProfile', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 44, 'name': 'GetProfile', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetServiceCapabilities(self):
         try:
@@ -1155,10 +1201,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 45, 'name': 'GetServiceCapabilities', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 45, 'name': 'GetServiceCapabilities', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetStreamUri(self):
         try:
@@ -1175,10 +1222,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 46, 'name': 'GetStreamUri', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 46, 'name': 'GetStreamUri', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetVideoAnalyticsConfiguration(self):
         try:
@@ -1195,10 +1243,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 47, 'name': 'GetVideoAnalyticsConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 47, 'name': 'GetVideoAnalyticsConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetVideoAnalyticsConfigurations(self):
         try:
@@ -1214,10 +1263,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 48, 'name': 'GetVideoAnalyticsConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 48, 'name': 'GetVideoAnalyticsConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetVideoEncoderConfiguration(self):
         try:
@@ -1234,10 +1284,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 49, 'name': 'GetVideoEncoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 49, 'name': 'GetVideoEncoderConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetVideoEncoderConfigurationOptions(self):
         try:
@@ -1254,10 +1305,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 50, 'name': 'GetVideoEncoderConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 50, 'name': 'GetVideoEncoderConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetVideoEncoderConfigurations(self):
         try:
@@ -1273,10 +1325,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 51, 'name': 'GetVideoEncoderConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 51, 'name': 'GetVideoEncoderConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetVideoSourceConfiguration(self):
         try:
@@ -1293,10 +1346,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 52, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 52, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetVideoSourceConfigurationOptions(self):
         try:
@@ -1313,10 +1367,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 53, 'name': 'GetVideoSourceConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 53, 'name': 'GetVideoSourceConfigurationOptions', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetVideoSourceConfigurations(self):
         try:
@@ -1332,10 +1387,11 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 54, 'name': 'GetVideoSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 54, 'name': 'GetVideoSourceConfigurations', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetVideoSources(self):
         try:
@@ -1351,7 +1407,8 @@ class MediaTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 55, 'name': 'GetVideoSources', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 55, 'name': 'GetVideoSources', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}

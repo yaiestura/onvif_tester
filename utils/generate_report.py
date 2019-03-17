@@ -1,90 +1,62 @@
 import io
+import datetime
 from reportlab.lib.enums import TA_JUSTIFY
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
+from reportlab.lib.units import cm
 from reportlab.platypus.tables import Table, TableStyle
 
-#ToDo:
-# import snapshot
-# import data from API
-# 
-# def generate_report():
-#     doc = SimpleDocTemplate("camera.pdf", pagesize=A4,
-#                         rightMargin=20, leftMargin=20,
-#                         topMargin=20, bottomMargin=20)
-#     Report = []
-#     logo = "cam.jpg"
+ 
+def generate_report(data):
 
-#     testsResults = [
-#     {
-#     "response": {
-#         "name": "GetServiceCapabilities",
-#         "result": {
-#         "extension": None,
-#         "response": "(Capabilities){\n   _WSPullPointSupport = True\n   _MaxPullPoints = 10\n   _MaxNotificationProducers = 10\n   _WSPausableSubscriptionManagerInterfaceSupport = False\n   _WSSubscriptionPolicySupport = True\n }",
-#         "supported": True
-#         },
-#         "service": "Events",
-#         "test_id": 2
-#     }
-#     },
-#     {
-#     "response": {
-#         "name": "GetVideoOutputs",
-#         "result": {
-#         "extension": "The DUT did not send GetVideoOutputsResponse message",
-#         "response": "[]",
-#         "supported": False
-#         },
-#         "service": "deviceio",
-#         "test_id": 7
-#     }
-#     },
-#     {
-#     "response": {
-#         "name": "GetServiceCapabilities",
-#         "result": {
-#         "extension": None,
-#         "response": "(Capabilities){\n   _AnalyticsModuleSupport = True\n   _RuleSupport = True\n   _CellBasedSceneDescriptionSupported = True\n }",
-#         "supported": True
-#         },
-#         "service": "Analytics",
-#         "test_id": 0
-#     }
-#     }
-#     ]
+    Report = []
+    ip = str(data['camInfo']['ip'])
+    port = str(data['camInfo']['port'])
+    testsResults = data['runnedTests']
+    img_url = '.' + data['camInfo']['snapshot_url']
+    url = './reports/' + ip + ':' + port + '.' + str(datetime.datetime.now().time()) + '.pdf'
 
-#     im = Image(logo, 4 * inch, 2 * inch)
-#     Report.append(im)
+    doc = SimpleDocTemplate(url, pagesize=A4,
+                        rightMargin=20, leftMargin=20,
+                        topMargin=20, bottomMargin=20)
 
-#     styles = getSampleStyleSheet()
-#     styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
-#     ptext = '<font size=12>%s</font>' % '192.168.15.42:80'
+    im = Image(img_url, 12.7 * cm, 9.525 * cm)
+    Report.append(im)
 
-#     Report.append(Paragraph(ptext, styles["Normal"]))
-#     Report.append(Spacer(1, 12))
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+    ptext = '<font size=14>%s</font>' % ip
 
-#     data = []
-#     for counter, item in enumerate(testsResults, 1):
-#         ptext = item["response"]["name"]
-#         rtext = item["response"]["result"]["response"]
-#         stext = item["response"]["service"]
-#         Report.append(Paragraph(stext, styles["Normal"]))
-#         Report.append(Spacer(1, 12))
-#         row1 = ("number", ptext)
-#         row2 = ("", rtext)
-#         data.append(row1)
-#         data.append(row2)
+    Report.append(Paragraph(ptext, styles["Normal"]))
+    Report.append(Spacer(1, 12))
 
-#     table = Table(data, hAlign='LEFT', colWidths=200)
-#     table.setStyle(TableStyle([
-#             ('ALIGN', (10, 0), (-1, 0), 'CENTER'),
-#             ('ALIGN', (0, 0), (0, -1), 'LEFT'),
-#             ('INNERGRID', (0, 0), (-1, -1), 0.50, colors.black),
-#             ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
-#         ]))
-#     Report.append(table)
-#     doc.build(Report)
+    for counter, item in enumerate(testsResults, 1):
+        ptext = 'Test: ' + str(item["data"]["name"])
+        rtext = 'Response: ' + str(item["data"]["result"]["response"])
+        etext = item["data"]["result"]["extension"]
+        Report.append(Paragraph(ptext, styles["Normal"]))
+        Report.append(Spacer(1, 12))
+        if ((etext != None)):
+            Report.append(Paragraph(etext, styles["Normal"]))
+            Report.append(Spacer(1, 12))
+        if ((item["data"]["result"]["response"]) or (len(item["data"]["result"]["response"]) != 0)):
+            Report.append(Paragraph(rtext, styles["Normal"]))
+            Report.append(Spacer(1, 12))
+        Report.append(Paragraph("<--------------------->", styles["Normal"]))
+        Report.append(Spacer(1, 12))
+        # row1 = ("number", ptext)
+        # row2 = ("", rtext)
+        # data.append(row1)
+        # data.append(row2)
+
+    # table = Table(data, hAlign='LEFT', colWidths=200)
+    # table.setStyle(TableStyle([
+    #         ('ALIGN', (10, 0), (-1, 0), 'CENTER'),
+    #         ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+    #         ('INNERGRID', (0, 0), (-1, -1), 0.50, colors.black),
+    #         ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+    #     ]))
+    # Report.append(table)
+    doc.build(Report)

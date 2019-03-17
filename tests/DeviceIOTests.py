@@ -23,10 +23,11 @@ class DeviceIOTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': "" }}
             else:
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': "" }}
 
     def GetAudioSourceConfiguration(self):
         try:
@@ -42,10 +43,11 @@ class DeviceIOTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': "" }}
             else:
                 return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioSourceConfigurationOptions(self):
         try:
@@ -61,10 +63,11 @@ class DeviceIOTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': "" }}
             else:
                 return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioSources(self):
         try:
@@ -80,10 +83,11 @@ class DeviceIOTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': "" }}
             else:
                 return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetDigitalInputs(self):
         try:
@@ -99,10 +103,11 @@ class DeviceIOTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': "" }}
             else:
                 return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetRelayOutputs(self):
         try:
@@ -118,10 +123,11 @@ class DeviceIOTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': ""}}
             else:
                 return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetSerialPorts(self):
         try:
@@ -137,10 +143,12 @@ class DeviceIOTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 6, 'name': 'GetSerialPorts', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': ""}}
             else:
                  return {'test_id': 6, 'name': 'GetSerialPorts', 'service': 'deviceio',
-                 'result': {'supported': False, 'extension': str(e)}}
+                 'result': {'supported': False, 'extension': str(e),
+				 'response': ""}}
 
     def GetVideoOutputs(self):
         try:
@@ -156,7 +164,8 @@ class DeviceIOTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 7, 'name': 'GetVideoOutputs', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': ""}}
             else:
                 return {'test_id': 7, 'name': 'GetVideoOutputs', 'service': 'deviceio',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}

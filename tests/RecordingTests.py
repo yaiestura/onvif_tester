@@ -20,7 +20,8 @@ class RecordingTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'Recording',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'Recording',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}

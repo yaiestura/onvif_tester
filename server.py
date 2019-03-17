@@ -4,6 +4,7 @@ from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests, Tests
 from flask_cors import CORS
 import json
 from pprint import pprint
+from utils.generate_report import * 
 
 
 from flask import (
@@ -51,9 +52,9 @@ def tests(*args, **kwargs):
 
 @app.route('/api/report', methods=['GET', 'POST'])
 def report():
-    tested_data = json.loads(request.data)
+    tested_data = json.loads(request.data.replace('\n', '\\n'))
     pprint(tested_data)
-    #generate_report(tested_data)
+    generate_report(tested_data)
     return jsonify(response={'url': '/path/to/report.pdf'})
 
 '''

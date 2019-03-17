@@ -23,10 +23,11 @@ class AnalyticsTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': "" }}
 
     def GetSupportedAnalyticsModules(self):
         try:
@@ -42,10 +43,11 @@ class AnalyticsTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 1, 'name': 'GetSupportedAnalyticsModules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 1, 'name': 'GetSupportedAnalyticsModules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAnalyticsModules(self):
         try:
@@ -61,10 +63,11 @@ class AnalyticsTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 2, 'name': 'GetAnalyticsModules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 2, 'name': 'GetAnalyticsModules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': "" }}
 
     def GetSupportedRules(self):
         try:
@@ -79,10 +82,11 @@ class AnalyticsTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 3, 'name': 'GetSupportedRules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 3, 'name': 'GetSupportedRules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetRules(self):
         try:
@@ -98,10 +102,12 @@ class AnalyticsTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 4, 'name': 'GetRules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
+                'response': "" }}
             else:
                 return {'test_id': 4, 'name': 'GetRules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e), 
+                'response': "" }}
 
     def DeleteRules(self):
         try:
@@ -117,10 +123,12 @@ class AnalyticsTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 4, 'name': 'GetRules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 4, 'name': 'GetRules', 'service': 'Analytics',
-                'result': {'supported': False, 'extension': str(e)}}
+                'result': {'supported': False, 'extension': str(e),
+                'response': "" }}
 
 #response = analytics.CreateAnalyticsModules({'ConfigurationToken': vactoken, 'AnalyticsModule': {'_Name': 'tt:FieldDetectorEngine', '_Type': 'tt:FieldDetectorEngine', 'Parameters': {'SimpleItem': {'_Name': 'Sensitivity', '_Type': 'xs:integer'}}}})
 #response = analytics_rules.DeleteRules({'ConfigurationToken': vactoken, 'RuleName': 'MyLineDetector4'})
