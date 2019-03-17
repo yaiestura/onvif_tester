@@ -2,6 +2,8 @@ import utils
 from core import Camera
 from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests, Tests
 from flask_cors import CORS
+import json
+from pprint import pprint
 
 
 from flask import (
@@ -46,11 +48,13 @@ def tests(*args, **kwargs):
     test = Tests(cam)
     return jsonify(test.avaliable_tests())
 
-@app.route('/api/report', methods=['GET'])
+
+@app.route('/api/report', methods=['GET', 'POST'])
 def report():
-    tested_data = request.data
-    print tested_data
+    tested_data = json.loads(request.data)
+    pprint(tested_data)
     #generate_report(tested_data)
+    return jsonify(response={'url': '/path/to/report.pdf'})
 
 '''
 Devices API
