@@ -14,68 +14,42 @@ class MediaTests:
             token2 = self.media.GetProfiles()[-1]._token
             if (token1 == token2):
                 delete = self.media.DeleteProfile({'ProfileToken': token2})
-                return {'test_id': 1, 'name': 'CreateProfile', 'service': 'Media',
+                return {'test_id': 2, 'name': 'CreateProfile', 'service': 'Media',
                 'result': {'supported': False,
                 'extension': 'The DUT did not create Media profile with Name - Test',
                 'response': str(create)}}
             else:
-                return {'test_id': 1, 'name': 'CreateProfile', 'service': 'Media',
+                return {'test_id': 2, 'name': 'CreateProfile', 'service': 'Media',
                 'result': {'supported': True, 'extension': 'The DUT created Media profile with Name - Test', 'response': str(create)}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
-                return {'test_id': 1, 'name': 'CreateProfile', 'service': 'Media',
+                return {'test_id': 2, 'name': 'CreateProfile', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
                 'response': "" }}
             else:
-                return {'test_id': 1, 'name': 'CreateProfile', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e),
-                'response': ""}}
+                return {'test_id': 2, 'name': 'CreateProfile', 'service': 'Media',
+                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetProfiles(self):
         try:
             media = self.cam.create_media_service()
             profiles = self.media.GetProfiles()
             if ((profiles is None) or (len(profiles) == 0)):
-                return {'test_id': 2, 'name': 'GetProfiles', 'service': 'Media',
+                return {'test_id': 3, 'name': 'GetProfiles', 'service': 'Media',
                 'result': {'supported': False,
                 'extension': 'The DUT did not returned GetProfilesResponse message',
                 'response': str(profiles)}}
             else:
-                return {'test_id': 2, 'name': 'GetSnapshotUri', 'service': 'Media',
+                return {'test_id': 3, 'name': 'GetProfiles', 'service': 'Media',
                 'result': {'supported': True, 'extension': None, 'response': str(profiles)}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
-                return {'test_id': 2, 'name': 'GetProfiles', 'service': 'Media',
+                return {'test_id': 3, 'name': 'GetProfiles', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
                 'response': "" }}
             else:
-                return {'test_id': 2, 'name': 'GetProfiles', 'service': 'Media',
+                return {'test_id': 3, 'name': 'GetProfiles', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e),'response': ""}}
-
-    def DeleteProfile(self):
-        try:
-            media = self.cam.create_media_service()
-            token = self.media.GetProfiles()[0]._token
-            token1 = self.media.GetProfiles()[-1]._token
-            self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
-            token2 = self.media.GetProfiles()[-1]._token
-            delete = self.media.DeleteProfile({'ProfileToken': token2})
-            if (token1 == token2):
-                return {'test_id': 4, 'name': 'GetSnapshotUri', 'service': 'Media',
-                'result': {'supported': False,
-                'extension': 'The DUT did not delete created Media Profile',
-                'response': str(delete)}}
-            else:
-                return {'test_id': 4, 'name': 'GetSnapshotUri', 'service': 'Media',
-                'result': {'supported': True, 'extension': None, 'response': str(delete)}}
-        except Exception as e:
-            if str(e) == 'Optional Action Not Implemented':
-                return {'test_id': 3, 'name': 'DeleteProfile', 'service': 'Media',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
-            else:
-                return {'test_id': 3, 'name': 'DeleteProfile', 'service': 'Media',
-                'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetSnapshotUri(self):
         try:
@@ -975,11 +949,11 @@ class MediaTests:
                 'result': {'supported': True, 'extension': None, 'response': str(sources)}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
-                return {'test_id': 35, 'name': 'GetCompatibleVideoSourceConfigurations', 'service': 'Media',
+                return {'test_id': 35, 'name': 'GetCompatibleVideoEncoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
                 'response': "" }}
             else:
-                return {'test_id': 35, 'name': 'GetCompatibleVideoSourceConfigurations', 'service': 'Media',
+                return {'test_id': 35, 'name': 'GetCompatibleVideoEncoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
     
     def GetCompatibleVideoSourceConfigurations(self):

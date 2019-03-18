@@ -52,10 +52,13 @@ def tests(*args, **kwargs):
 
 @app.route('/api/report', methods=['GET', 'POST'])
 def report():
-    tested_data = json.loads(request.data.replace('\n', '\\n'))
-    pprint(tested_data)
-    generate_report(tested_data)
-    return jsonify(response={'url': '/path/to/report.pdf'})
+    tested_data = json.loads(request.data)
+    url = generate_report(tested_data)
+    return jsonify(response=url)
+
+@app.route('/reports/<path:filename>')
+def return_report_file(filename):
+    return send_from_directory('reports', filename) 
 
 '''
 Devices API

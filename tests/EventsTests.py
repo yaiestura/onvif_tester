@@ -12,73 +12,100 @@ class EventsTests:
         self.event_service = self.cam.create_events_service()
 
     def GetEventProperties(self):
-        properties = self.event_service.GetEventProperties()
-        topic = str(properties.TopicNamespaceLocation[0])
-        status_code = requests.get(topic).status_code
-        if(len(properties) > 0):
-            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
-            'result': {'supported': True, 'extension': None, 'response': str(properties)}}
-        elif((len(properties) > 0) and (status_code != 200)):
-            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
-            'result': {'supported': True, 'extension': 'DUT does not return a valid topic namespace. Status Code != 200',
-			'response': str(properties)}}
-        elif((len(properties) > 0) and (len(properties.TopicExpressionDialect) < 2)):
-            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
-            'result': {'supported': True, 'extension': 'None or only one Mandatory TopicExpressionDialects are supported by the DUT',
-			'response': str(properties)}}
-        elif((len(properties) > 0) and (len(properties.TopicExpressionDialect) < 2) and (status_code != 200)):
-            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
-            'result': {'supported': True, 'extension': 'None or only one Mandatory TopicExpressionDialects are supported by the DUT. DUT does not return a valid topic namespace.',
-			'response': str(properties)}}
-        elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect) < 1)):
-            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
-            'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT. None or only one Mandatory TopicExpressionDialects are supported by the DUT.',
-			'response': str(properties)}}
-        elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect) < 1) and (status_code != 200)):
-            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
-            'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT. None or only one Mandatory TopicExpressionDialects are supported by the DUT. DUT does not return a valid topic namespace.',
-			'response': str(properties)}}
-        elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect) < 1) and (len(properties.TopicExpressionDialect) < 2)):
-            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
-            'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT',
-			'response': str(properties)}}
-        elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect)) < 1 and (len(properties.TopicExpressionDialect)) < 2 and (status_code != 200)):
-            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
-            'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT. DUT does not return a valid topic namespace.',
-			'response': str(properties)}}
-        else:
-            return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
-            'result': {'supported': False, 'extension': 'The DUT did not send a GetEventPropertiesResponse message',
-			'response': str(properties)}}
+        try:
+            properties = self.event_service.GetEventProperties()
+            topic = str(properties.TopicNamespaceLocation[0])
+            status_code = requests.get(topic).status_code
+            if(len(properties) > 0):
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': True, 'extension': None, 'response': str(properties)}}
+            elif((len(properties) > 0) and (status_code != 200)):
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': True, 'extension': 'DUT does not return a valid topic namespace. Status Code != 200',
+                'response': str(properties)}}
+            elif((len(properties) > 0) and (len(properties.TopicExpressionDialect) < 2)):
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': True, 'extension': 'None or only one Mandatory TopicExpressionDialects are supported by the DUT',
+                'response': str(properties)}}
+            elif((len(properties) > 0) and (len(properties.TopicExpressionDialect) < 2) and (status_code != 200)):
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': True, 'extension': 'None or only one Mandatory TopicExpressionDialects are supported by the DUT. DUT does not return a valid topic namespace.',
+                'response': str(properties)}}
+            elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect) < 1)):
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT. None or only one Mandatory TopicExpressionDialects are supported by the DUT.',
+                'response': str(properties)}}
+            elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect) < 1) and (status_code != 200)):
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT. None or only one Mandatory TopicExpressionDialects are supported by the DUT. DUT does not return a valid topic namespace.',
+                'response': str(properties)}}
+            elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect) < 1) and (len(properties.TopicExpressionDialect) < 2)):
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT',
+                'response': str(properties)}}
+            elif((len(properties) > 0) and (len(properties.MessageContentFilterDialect)) < 1 and (len(properties.TopicExpressionDialect)) < 2 and (status_code != 200)):
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': True, 'extension': 'Mandatory MessageContentFilterDialect is not supported by the DUT. DUT does not return a valid topic namespace.',
+                'response': str(properties)}}
+            else:
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': False, 'extension': 'The DUT did not send a GetEventPropertiesResponse message',
+                'response': str(properties)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': "" }}
+            else:
+                return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
+                'result': {'supported': False, 'extension': str(e), 'response': "" }}
 
     def CreatePullPointSubscription(self):
-        subs = self.event_service.CreatePullPointSubscription()
-        curr = subs.CurrentTime
-        term = subs.TerminationTime
-        delt = int((term - curr).total_seconds())
-        if(subs != []):
-            if (delt >= 10):
-                return {'test_id': 1, 'name': 'CreatePullPointSubscription', 'service': 'Events',
-                'result': {'supported': True, 'extension': 'Valid values for SubscriptionReference CurrentTime and TerminationTime are returned(TerminationTime >= CurrentTime + InitialTerminationTime)',
-				'response': str(subs)}}
+        try:
+            subs = self.event_service.CreatePullPointSubscription()
+            curr = subs.CurrentTime
+            term = subs.TerminationTime
+            delt = int((term - curr).total_seconds())
+            if(subs != []):
+                if (delt >= 10):
+                    return {'test_id': 1, 'name': 'CreatePullPointSubscription', 'service': 'Events',
+                    'result': {'supported': True, 'extension': 'Valid values for SubscriptionReference CurrentTime and TerminationTime are returned(TerminationTime >= CurrentTime + InitialTerminationTime)',
+                    'response': str(subs)}}
+                else:
+                    return {'test_id': 1, 'name': 'CreatePullPointSubscription', 'service': 'Events',
+                    'result': {'supported': False, 'extension': 'Returned response with TerminationTime < CurrentTime + InitialTerminationTime).', 'response': str(subs)}}
             else:
                 return {'test_id': 1, 'name': 'CreatePullPointSubscription', 'service': 'Events',
-                'result': {'supported': False, 'extension': 'Returned response with TerminationTime < CurrentTime + InitialTerminationTime).', 'response': str(subs)}}
-        else:
-            return {'test_id': 1, 'name': 'CreatePullPointSubscription', 'service': 'Events',
-            'result': {'supported': False, 'extension': 'The DUT did not send CreatePullPointSubscriptionResponse message',
-			'response': str(subs)}}
+                'result': {'supported': False, 'extension': 'The DUT did not send CreatePullPointSubscriptionResponse message',
+                'response': str(subs)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 1, 'name': 'CreatePullPointSubscription', 'service': 'Events',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': "" }}
+            else:
+                return {'test_id': 1, 'name': 'CreatePullPointSubscription', 'service': 'Events',
+                'result': {'supported': False, 'extension': str(e), 'response': "" }}
 			
 
     def GetServiceCapabilities(self):
-        capabilities = self.event_service.GetServiceCapabilities()
-        if (len(capabilities) > 0):
-            return {'test_id': 2, 'name': 'GetServiceCapabilities', 'service': 'Events',
-            'result': {'supported': True, 'extension': None, 'response': str(capabilities)}}
-        else:
-            return {'test_id': 2, 'name': 'GetServiceCapabilities', 'service': 'Events',
-            'result': {'supported': False, 'extension': 'The DUT did not send valid GetServiceCapabilitiesResponse message',
-			'response': str(capabilities)}}
+        try:
+            capabilities = self.event_service.GetServiceCapabilities()
+            if (len(capabilities) > 0):
+                return {'test_id': 2, 'name': 'GetServiceCapabilities', 'service': 'Events',
+                'result': {'supported': True, 'extension': None, 'response': str(capabilities)}}
+            else:
+                return {'test_id': 2, 'name': 'GetServiceCapabilities', 'service': 'Events',
+                'result': {'supported': False, 'extension': 'The DUT did not send valid GetServiceCapabilitiesResponse message',
+                'response': str(capabilities)}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'test_id': 2, 'name': 'GetServiceCapabilities', 'service': 'Events',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+				'response': "" }}
+            else:
+                return {'test_id': 2, 'name': 'GetServiceCapabilities', 'service': 'Events',
+                'result': {'supported': False, 'extension': str(e), 'response': "" }}
 
     # def PullMessages(self):
     #     self.cam.create_pullpoint_service()

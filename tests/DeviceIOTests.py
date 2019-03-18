@@ -5,8 +5,6 @@ class DeviceIOTests:
     def __init__(self, cam):
         self.cam = cam
         self.media = self.cam.create_media_service()
-        self.asctoken = self.media.GetProfiles()[0].AudioSourceConfiguration._token
-        self.vsctoken = self.media.GetProfiles()[0].VideoSourceConfiguration._token
         self.io = self.cam.create_deviceio_service()
 
     def GetServiceCapabilities(self):
@@ -31,7 +29,8 @@ class DeviceIOTests:
 
     def GetAudioSourceConfiguration(self):
         try:
-            response = self.io.GetAudioSourceConfiguration({'AudioSourceToken': self.asctoken})
+            asctoken = self.media.GetProfiles()[0].AudioSourceConfiguration._token
+            response = self.io.GetAudioSourceConfiguration({'AudioSourceToken': asctoken})
             if ((response is None) or (len(response) == 0)):
                 return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'The DUT did not send GetAudioSourceConfigurationResponse message',
@@ -51,7 +50,8 @@ class DeviceIOTests:
 
     def GetAudioSourceConfigurationOptions(self):
         try:
-            response = self.io.GetAudioSourceConfiguration({'AudioSourceToken': self.asctoken})
+            asctoken = self.media.GetProfiles()[0].AudioSourceConfiguration._token
+            response = self.io.GetAudioSourceConfiguration({'AudioSourceToken': asctoken})
             if ((response is None) or (len(response) == 0)):
                 return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'The DUT did not send GetAudioSourceConfigurationOptionsResponse message',

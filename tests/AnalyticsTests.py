@@ -113,20 +113,20 @@ class AnalyticsTests:
         try:
             rules = self.analytics_rules.DeleteRules({'ConfigurationToken': self.vactoken, 'RuleName': 'MyLineDetector4'})
             if ((rules is None) or (len(rules) == 0)):
-                return {'test_id': 4, 'name': 'GetRules', 'service': 'Analytics',
+                return {'test_id': 4, 'name': 'DeleteRules', 'service': 'Analytics',
                 'result': {'supported': False, 'extension': 'The DUT did not delete Rule MyLineDetector4',
                 'response': str(rules)}}
             else:
-                return {'test_id': 4, 'name': 'GetRules', 'service': 'Analytics',
+                return {'test_id': 4, 'name': 'DeleteRules', 'service': 'Analytics',
                 'result': {'supported': True, 'extension': None,
                 'response': str(rules)}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
-                return {'test_id': 4, 'name': 'GetRules', 'service': 'Analytics',
+                return {'test_id': 4, 'name': 'DeleteRules', 'service': 'Analytics',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
                 'response': "" }}
             else:
-                return {'test_id': 4, 'name': 'GetRules', 'service': 'Analytics',
+                return {'test_id': 4, 'name': 'DeleteRules', 'service': 'Analytics',
                 'result': {'supported': False, 'extension': str(e),
                 'response': "" }}
 
