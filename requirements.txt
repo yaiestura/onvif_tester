@@ -2,6 +2,7 @@ certifi==2018.11.29
 chardet==3.0.4
 Click==7.0
 Flask==1.0.2
+Flask-SQLAlchemy==2.3.2
 idna==2.8
 itsdangerous==1.1.0
 firebase-admin==2.16.0
@@ -10,7 +11,7 @@ MarkupSafe==1.1.1
 netifaces==0.10.9
 onvif==0.2.0
 requests==2.21.0
-reportlab==3.5.13 
+reportlab==3.5.13
 suds==0.4
 suds-passworddigest==0.1.2
 urllib3==1.24.1

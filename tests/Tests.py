@@ -6,19 +6,19 @@ class Tests(object):
     def __init__(self, cam):
         self.cam = cam
         self.test_types = {
-            'analytics': AnalyticsTests, 
-            'device': CoreTests, 
+            'analytics': AnalyticsTests,
+            'device': CoreTests,
             'deviceio': DeviceIOTests,
-            'events': EventsTests, 
-            'imaging': ImagingTests, 
+            'events': EventsTests,
+            'imaging': ImagingTests,
             'media': MediaTests,
-            'ptz': PTZTests, 
-            'pullpoint': PullpointTests, 
+            'ptz': PTZTests,
+            'pullpoint': PullpointTests,
             'recording': RecordingTests,
-            'replay': ReplayTests, 
-            'search': SearchTests 
+            'replay': ReplayTests,
+            'search': SearchTests
         }
-    
+
     def service_test(self, test_type, method_name):
 
         if test_type in self.test_types:
@@ -31,17 +31,16 @@ class Tests(object):
 
         except AttributeError:
             return dict(response = 'Sorry, method with name ' + method_name + ' does not exist.')
-        
+
         except Exception as e:
             return dict(response = 'ONVIFError, ' + method_name + ' method is not supported, ' + e)
-        
-        return dict(response = method())
 
+        return dict(response = method())
 
     def avaliable_tests(self):
         test_descriptions = []
         supported_test_types = self.cam.get_supported_services()
-      
+
         for test_type in supported_test_types:
             if test_type in self.test_types:
                 test = self.test_types[test_type]
@@ -51,5 +50,5 @@ class Tests(object):
                     'service': test_type,
                     'available_tests': listing
                 })
-        
+
         return dict(response=test_descriptions)

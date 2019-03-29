@@ -2,13 +2,14 @@ import utils
 from core import Camera
 from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests, Tests
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 import json
 from pprint import pprint
-from utils.generate_report import * 
+from utils.generate_report import *
 
 
 from flask import (
-    Flask, request, jsonify, 
+    Flask, request, jsonify,
     send_from_directory, Response, render_template)
 
 
@@ -17,6 +18,7 @@ app = Flask(__name__,
  template_folder="templates/build")
 
 app.config.from_object('config')
+db = SQLAlchemy(app)
 CORS(app)
 
 
@@ -32,7 +34,7 @@ def index():
     ])
 
 
-@app.route('/api/<test_type>_test/<method_name>', methods=['POST']) 
+@app.route('/api/<test_type>_test/<method_name>', methods=['POST'])
 @utils.cam_required
 def run_test(*args, **kwargs):
     cam = kwargs['ctx']['cam']
@@ -42,7 +44,7 @@ def run_test(*args, **kwargs):
     return jsonify(test.service_test(test_type, method_name))
 
 
-@app.route('/api/tests') 
+@app.route('/api/tests')
 @utils.cam_required
 def tests(*args, **kwargs):
     cam = kwargs['ctx']['cam']
@@ -58,7 +60,7 @@ def report():
 
 @app.route('/reports/<path:filename>')
 def return_report_file(filename):
-    return send_from_directory('reports', filename) 
+    return send_from_directory('reports', filename)
 
 '''
 Devices API
@@ -66,7 +68,7 @@ Devices API
 @app.route('/api/devices')
 def get_devices_list():
     return jsonify(utils.discovery())
-    
+
 
 @app.route('/api/device')
 @utils.cam_required

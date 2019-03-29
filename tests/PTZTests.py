@@ -18,7 +18,7 @@ class PTZTests:
                 return {'test_id': 1, 'name': 'GetCompatibleConfigurations', 'service': 'PTZ',
                 'result': {'supported': False,
                 'extension': 'The DUT did not send GetCompatibleConfigurationsResponse message',
-                'response': ''}}
+                'response': str(configs) }}
             else:
                 return {'test_id': 1, 'name': 'GetCompatibleConfigurations', 'service': 'PTZ',
                 'result': {'supported': True, 'extension': None, 'response': str(configs)}}
@@ -39,7 +39,7 @@ class PTZTests:
                 return {'test_id': 2, 'name': 'GetConfiguration', 'service': 'PTZ',
                 'result': {'supported': False,
                 'extension': 'The DUT did not send GetConfigurationResponse message',
-                'response': ''}}
+                'response': str(config) }}
             else:
                 return {'test_id': 2, 'name': 'GetConfiguration', 'service': 'PTZ',
                 'result': {'supported': True, 'extension': None, 'response': str(config)}}
@@ -60,7 +60,7 @@ class PTZTests:
                 return {'test_id': 3, 'name': 'GetConfigurationOptions', 'service': 'PTZ',
                 'result': {'supported': False,
                 'extension': 'The DUT did not send GetConfigurationOptionsResponse message',
-                'response': ''}}
+                'response': str(configs) }}
             else:
                 return {'test_id': 3, 'name': 'GetConfigurationOptions', 'service': 'PTZ',
                 'result': {'supported': True, 'extension': None, 'response': str(configs)}}
@@ -80,10 +80,10 @@ class PTZTests:
                 return {'test_id': 4, 'name': 'GetConfigurations', 'service': 'PTZ',
                 'result': {'supported': False,
                 'extension': 'The DUT did not send GetConfigurationsResponse message',
-                'response': ''}}
+                'response': str(configs) }}
             else:
                 return {'test_id': 4, 'name': 'GetConfigurations', 'service': 'PTZ',
-                'result': {'supported': True, 'extension': None, 'response': str(configs)}}
+                'result': {'supported': True, 'extension': None, 'response': str(configs) }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 4, 'name': 'GetConfigurations', 'service': 'PTZ',
@@ -100,10 +100,10 @@ class PTZTests:
                 return {'test_id': 5, 'name': 'GetNodes', 'service': 'PTZ',
                 'result': {'supported': False,
                 'extension': 'The DUT did not send GetNodesResponse message',
-                'response': ''}}
+                'response': str(nodes) }}
             else:
                 return {'test_id': 5, 'name': 'GetNodes', 'service': 'PTZ',
-                'result': {'supported': True, 'extension': None, 'response': str(nodes)}}
+                'result': {'supported': True, 'extension': None, 'response': str(nodes) }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 5, 'name': 'GetNodes', 'service': 'PTZ',
@@ -121,7 +121,7 @@ class PTZTests:
                 return {'test_id': 6, 'name': 'GetNode', 'service': 'PTZ',
                 'result': {'supported': False,
                 'extension': 'The DUT did not send GetNodeResponse message',
-                'response': ''}}
+                'response': str(node) }}
             else:
                 return {'test_id': 6, 'name': 'GetNode', 'service': 'PTZ',
                 'result': {'supported': True, 'extension': None, 'response': str(node)}}
@@ -201,7 +201,7 @@ class PTZTests:
                 return {'test_id': 8, 'name': 'GetPresets', 'service': 'PTZ',
                         'result': {'supported': False,
                                 'extension': 'The DUT did not send GetPresetsResponse message',
-                                'response': ''}}
+                                'response': str(presets) }}
             else:
                 return {'test_id': 8, 'name': 'GetPresets', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': None, 'response': str(presets)}}
@@ -223,10 +223,10 @@ class PTZTests:
                 return {'test_id': 9, 'name': 'CreatePresetTour', 'service': 'PTZ',
                         'result': {'supported': False,
                                 'extension': 'The DUT did not send CreatePresetTourResponse message',
-                                'response': ''}}
+                                'response': 'PresetTourToken: ' + str(tour) }}
             else:
                 return {'test_id': 9, 'name': 'CreatePresetTour', 'service': 'PTZ',
-                        'result': {'supported': True, 'extension': None, 'response': 'PresetTourToken: ' + str(tour)}}
+                        'result': {'supported': True, 'extension': None, 'response': 'PresetTourToken: ' + str(tour) }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 9, 'name': 'CreatePresetTour', 'service': 'PTZ',
@@ -246,7 +246,7 @@ class PTZTests:
                 return {'test_id': 10, 'name': 'GetPresetTour', 'service': 'PTZ',
                         'result': {'supported': False,
                                 'extension': 'The DUT did not send GetPresetTourResponse message',
-                                'response': ''}}
+                                'response': str(tour) }}
             else:
                 return {'test_id': 10, 'name': 'GetPresetTour', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': None, 'response': str(tour)}}
@@ -267,10 +267,10 @@ class PTZTests:
                 return {'test_id': 11, 'name': 'GetPresetTour', 'service': 'PTZ',
                         'result': {'supported': False,
                                 'extension': 'The DUT did not send GetPresetToursResponse message',
-                                'response': ''}}
+                                'response': str(tours) }}
             else:
                 return {'test_id': 11, 'name': 'GetPresetTours', 'service': 'PTZ',
-                        'result': {'supported': True, 'extension': None, 'response': str(tours)}}
+                        'result': {'supported': True, 'extension': None, 'response': str(tours) }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 11, 'name': 'GetPresetTours', 'service': 'PTZ',
@@ -290,10 +290,10 @@ class PTZTests:
                 return {'test_id': 12, 'name': 'GetPresetTourOptions', 'service': 'PTZ',
                         'result': {'supported': False,
                                 'extension': 'The DUT did not send GetPresetTourOptionsResponse message',
-                                'response': ''}}
+                                'response': str(tour) }}
             else:
                 return {'test_id': 12, 'name': 'GetPresetTourOptions', 'service': 'PTZ',
-                        'result': {'supported': True, 'extension': None, 'response': str(tour)}}
+                        'result': {'supported': True, 'extension': None, 'response': str(tour) }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 12, 'name': 'GetPresetTourOptions', 'service': 'PTZ',
@@ -309,15 +309,16 @@ class PTZTests:
             if ((capabilities is None) or (len(capabilities) == 0)):
                 return {'test_id': 13, 'name': 'GetServiceCapabilities', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': 'The DUT did not send GetServiceCapabilitiesResponse message',
-                'response': str(capabilities)}}
+                'response': str(capabilities) }}
             else:
                 return {'test_id': 13, 'name': 'GetServiceCapabilities', 'service': 'PTZ',
                 'result': {'supported': True, 'extension': None,
-                'response': str(capabilities), 'response': ""}}
+                'response': str(capabilities) }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 13, 'name': 'GetServiceCapabilities', 'service': 'PTZ',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented'}}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "" }}
             else:
                 return {'test_id': 13, 'name': 'GetServiceCapabilities', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -330,10 +331,10 @@ class PTZTests:
                 return {'test_id': 14, 'name': 'GetStatus', 'service': 'PTZ',
                         'result': {'supported': False,
                                 'extension': 'The DUT did not send GetStatusResponse message',
-                                'response': ''}}
+                                'response': str(status) }}
             else:
                 return {'test_id': 14, 'name': 'GetStatus', 'service': 'PTZ',
-                        'result': {'supported': True, 'extension': None, 'response': str(status)}}
+                        'result': {'supported': True, 'extension': None, 'response': str(status) }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 14, 'name': 'GetStatus', 'service': 'PTZ',
@@ -354,10 +355,10 @@ class PTZTests:
                 return {'test_id': 15, 'name': 'RemovePresetTour', 'service': 'PTZ',
                         'result': {'supported': False,
                                 'extension': 'The DUT did not removed RemovePresetTour',
-                                'response': ''}}
+                                'response': str(tour) }}
             else:
                 return {'test_id': 15, 'name': 'RemovePresetTour', 'service': 'PTZ',
-                        'result': {'supported': True, 'extension': None, 'response': str(tour)}}
+                        'result': {'supported': True, 'extension': None, 'response': str(tour) }}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 15, 'name': 'RemovePresetTour', 'service': 'PTZ',

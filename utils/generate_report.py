@@ -30,36 +30,46 @@ def generate_report(data):
     Report.append(im)
 
     styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
-    ptext = '<font size=14>%s</font>' % cam
+    styles.add(ParagraphStyle(name= "Justify ", alignment=TA_JUSTIFY))
+    ptext = "<font size=16>%s</font>" % cam
 
     Report.append(Paragraph(ptext, styles["Normal"]))
     Report.append(Spacer(1, 12))
-    Report.append(Paragraph(test_time, styles["Normal"]))
+    Report.append(Paragraph("<font size=12>%s</font>" % test_time, styles["Normal"]))
     Report.append(Spacer(1, 12))
 
     for counter, item in enumerate(testsResults, 1):
         if item["data"]["name"]:
-            ptext = str(counter) + '.Test: ' + str(item["data"]["name"])
+            ptext = str(counter) +  ".Test:  " + str(item["data"]["name"]) + "(" + str(item["data"]["service"]) + ")"
         else:
-            ptext = 'Test: ' + ''
+            ptext = "Test: " + "NameError"
+        if item["data"]["result"]["supported"]:
+            flag = item["data"]["result"]["supported"]
+            if (flag == False):
+                sutext = str(item["data"]["name"] + ' is not supported')
+            else:
+                sutext = str(item["data"]["name"] + ' is supported')
+        else:
+            sutext = None
         if item["data"]["result"]["response"]:
-            rtext = 'Response: ' + str(json.dumps(item["data"]["result"]["response"], sort_keys=True, indent=4))
+            rtext = "Response: " + str(json.dumps(item["data"]["result"]["response"], sort_keys=True, indent=4))
         else:
-            rtext = 'Response: ' + 'None'
+            rtext = "Response: " + "None"
         if item["data"]["result"]["extension"]:
-            etext = str(item["data"]["result"]["extension"])
+            etext = "Test Feature: " + str(item["data"]["result"]["extension"])
         else:
-            etext = 'None'
-        Report.append(Paragraph(ptext, styles["Normal"]))
-        Report.append(Spacer(1, 12))
+            etext = "Test Feature: " + "None"
+        Report.append(Paragraph("<font size=14>%s</font>" % ptext, styles["Heading5"]))
+        Report.append(Spacer(1, 8))
+        if (sutext is not None):
+            Report.append(Paragraph(sutext, styles["Normal"], bulletText=u'\u25cf'))
+            Report.append(Spacer(1, 8))
         if ((etext != None)):
-            Report.append(Paragraph(etext, styles["Normal"]))
-            Report.append(Spacer(1, 12))
+            Report.append(Paragraph(etext, styles["Normal"], bulletText=u'\u25cf'))
+            Report.append(Spacer(1, 8))
         if ((item["data"]["result"]["response"]) or (len(item["data"]["result"]["response"]) != 0)):
-            Report.append(Paragraph(rtext, styles["Normal"]))
-            Report.append(Spacer(1, 12))
-        Report.append(Paragraph("<--------------------->", styles["Normal"]))
+            Report.append(Paragraph(rtext, styles["Normal"], bulletText=u'\u25cf'))
+            Report.append(Spacer(1, 8))
         Report.append(Spacer(1, 12))
         # row1 = ("number", ptext)
         # row2 = ("", rtext)
