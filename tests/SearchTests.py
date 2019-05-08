@@ -21,7 +21,7 @@ class SearchTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'Search',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'Search',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}

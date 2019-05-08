@@ -55,7 +55,7 @@ class EventsTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': "" }}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 0, 'name': 'GetEventProperties', 'service': 'Events',
                 'result': {'supported': False, 'extension': str(e), 'response': "" }}
@@ -82,7 +82,7 @@ class EventsTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 1, 'name': 'CreatePullPointSubscription', 'service': 'Events',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': "" }}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 1, 'name': 'CreatePullPointSubscription', 'service': 'Events',
                 'result': {'supported': False, 'extension': str(e), 'response': "" }}
@@ -102,7 +102,7 @@ class EventsTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 2, 'name': 'GetServiceCapabilities', 'service': 'Events',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': "" }}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 2, 'name': 'GetServiceCapabilities', 'service': 'Events',
                 'result': {'supported': False, 'extension': str(e), 'response': "" }}

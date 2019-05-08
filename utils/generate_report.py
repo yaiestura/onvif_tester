@@ -10,7 +10,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.platypus.tables import Table, TableStyle
 
- 
+
 def generate_report(data):
 
     Report = []
@@ -71,18 +71,6 @@ def generate_report(data):
             Report.append(Paragraph(rtext, styles["Normal"], bulletText=u'\u25cf'))
             Report.append(Spacer(1, 8))
         Report.append(Spacer(1, 12))
-        # row1 = ("number", ptext)
-        # row2 = ("", rtext)
-        # data.append(row1)
-        # data.append(row2)
 
-    # table = Table(data, hAlign='LEFT', colWidths=200)
-    # table.setStyle(TableStyle([
-    #         ('ALIGN', (10, 0), (-1, 0), 'CENTER'),
-    #         ('ALIGN', (0, 0), (0, -1), 'LEFT'),
-    #         ('INNERGRID', (0, 0), (-1, -1), 0.50, colors.black),
-    #         ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
-    #     ]))
-    # Report.append(table)
     doc.build(Report)
     return url

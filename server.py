@@ -86,6 +86,13 @@ def get_snapshot(filename):
         app.config['SNAPSHOTS_STATIC_PATH'], filename)
 
 
+@app.route('/api/get_snapshots')
+@utils.cam_required
+def get_snapshots(*args, **kwargs):
+    cam = kwargs['ctx']['cam']
+    return jsonify(cam.get_snapshots_list())
+
+
 @app.route('/livestream')
 @utils.cam_required
 def livestream(*args, **kwargs):

@@ -21,7 +21,7 @@ class ReplayTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'Replay',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'Replay',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -41,7 +41,7 @@ class ReplayTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 1, 'name': 'GetReplayConfiguration', 'service': 'Replay',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 1, 'name': 'GetReplayConfiguration', 'service': 'Replay',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -69,7 +69,7 @@ class ReplayTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 2, 'name': 'SetReplayConfiguration', 'service': 'Replay',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': ""}}
+                'response': "", 'report': 'Optional Action Not Implemented'}}
             else:
                 return {'test_id': 2, 'name': 'SetReplayConfiguration', 'service': 'Replay',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}

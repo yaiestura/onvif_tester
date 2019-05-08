@@ -1,8 +1,9 @@
 import io
-import os  
+import os
+import re
 import time
 from onvif import ONVIFCamera
-import requests 
+import requests
 import rtsp
 from tests import Tests
 
@@ -33,6 +34,8 @@ class Camera(ONVIFCamera):
             'Hardware ID': device_info.HardwareId,
             'Supported Services': self.get_supported_services(),
             'avaliable_tests': self.get_available_tests(),
+            'private_snapshot_url': self.get_private_snapshot_url(),
+            'private_stream_url': self.get_private_stream_url(),
             'snapshot_url': self.get_public_snapshot_url(),
             'stream_url': self.get_public_stream_url(),
             'ip': self.ip,
@@ -61,7 +64,7 @@ class Camera(ONVIFCamera):
         obj = media_service.create_type('GetStreamUri')
         obj.ProfileToken = token
         obj.StreamSetup = {
-            'Stream': 'RTP-Unicast', 
+            'Stream': 'RTP-Unicast',
             'Transport': {'Protocol': 'RTSP'}
         }
 
@@ -93,7 +96,7 @@ class Camera(ONVIFCamera):
                     return "/" + filename
             except Exception as e:
                 print('get_public_snapshot_url: request error: ', e)
-                
+
 
         # try to get snapshot from stream
         private_stream_url = self.get_private_stream_url()
@@ -126,11 +129,20 @@ class Camera(ONVIFCamera):
 
     def get_supported_services(self):
         return list(map(lambda x: x.Namespace.split('/')[-2].lower(), self.devicemgmt.GetServices({'IncludeCapability': False})))
-   
+
 
     def get_available_tests(self):
         test = Tests(self)
         return test.avaliable_tests()['response']
 
-
-
+    def get_snapshots_list(self):
+        credentials = self.ip + ':' + str(self.port)
+        print credentials
+        snapshots = []
+        if os.path.isdir('snapshots'):
+            for snapshot in os.listdir("snapshots"):
+                if re.search(credentials, snapshot):
+                    print snapshot
+                    date = re.findall('_(.*)_(.*)\.jpg', snapshot)
+                    snapshots.append({'url': 'snapshots/' + snapshot, 'datetime': date[0][0] + ' ' + date[0][1], 'camera': credentials})
+        return snapshots

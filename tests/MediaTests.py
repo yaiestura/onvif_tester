@@ -1,5 +1,5 @@
 from onvif import ONVIFCamera, exceptions
-
+from time import sleep
 
 class MediaTests:
     def __init__(self, cam):
@@ -11,8 +11,10 @@ class MediaTests:
             token = self.media.GetProfiles()[0]._token
             token1 = self.media.GetProfiles()[-1]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
+            sleep(1)
             token2 = self.media.GetProfiles()[-1]._token
             if (token1 == token2):
+                sleep(1)
                 delete = self.media.DeleteProfile({'ProfileToken': token2})
                 return {'test_id': 2, 'name': 'CreateProfile', 'service': 'Media',
                 'result': {'supported': False,
@@ -25,7 +27,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 2, 'name': 'CreateProfile', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 2, 'name': 'CreateProfile', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -46,7 +48,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 3, 'name': 'GetProfiles', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 3, 'name': 'GetProfiles', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e),'response': ""}}
@@ -67,7 +69,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 4, 'name': 'GetSnapshotUri', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 4, 'name': 'GetSnapshotUri', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -77,10 +79,13 @@ class MediaTests:
         try:
             token = self.media.GetProfiles()[0]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
+            sleep(1)
             token = self.media.GetProfiles()[-1]._token
             audio_token = self.media.GetProfiles()[0].AudioDecoderConfiguration._token
             add_config = self.media.AddAudioDecoderConfiguration({'ProfileToken': token, 'ConfigurationToken': audio_token})
+            sleep(1)
             audio_token2 = self.media.GetProfiles()[-1].AudioDecoderConfiguration._token
+            sleep(1)
             delete = self.media.DeleteProfile({'ProfileToken': token})
             if (audio_token != audio_token2):
                 return {'test_id': 5, 'name': 'AddAudioDecoderConfiguration', 'service': 'Media',
@@ -99,7 +104,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 5, 'name': 'AddAudioDecoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 5, 'name': 'AddAudioDecoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -108,10 +113,13 @@ class MediaTests:
         try:
             token = self.media.GetProfiles()[0]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
+            sleep(1)
             token = self.media.GetProfiles()[-1]._token
             audio_token = self.media.GetProfiles()[0].AudioEncoderConfiguration._token
             add_config = self.media.AddAudioEncoderConfiguration({'ProfileToken': token, 'ConfigurationToken': audio_token})
+            sleep(1)
             audio_token2 = self.media.GetProfiles()[-1].AudioEncoderConfiguration._token
+            sleep(1)
             delete = self.media.DeleteProfile({'ProfileToken': token})
             if (audio_token != audio_token2):
                 return {'test_id': 6, 'name': 'AddAudioEncoderConfiguration', 'service': 'Media',
@@ -130,7 +138,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 6, 'name': 'AddAudioEncoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 6, 'name': 'AddAudioEncoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -139,10 +147,13 @@ class MediaTests:
         try:
             token = self.media.GetProfiles()[0]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
+            sleep(1)
             token = self.media.GetProfiles()[-1]._token
             audio_token = self.media.GetProfiles()[0].AudioOutputConfiguration._token
             add_config = self.media.AddAudioOutputConfiguration({'ProfileToken': token, 'ConfigurationToken': audio_token})
+            sleep(1)
             audio_token2 = self.media.GetProfiles()[-1].AudioOutputConfiguration._token
+            sleep(1)
             delete = self.media.DeleteProfile({'ProfileToken': token})
             if (audio_token != audio_token2):
                 return {'test_id': 7, 'name': 'AddAudioOutputConfiguration', 'service': 'Media',
@@ -161,7 +172,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 7, 'name': 'AddAudioOutputConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': ""}}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 7, 'name': 'AddAudioOutputConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -170,10 +181,13 @@ class MediaTests:
         try:
             token = self.media.GetProfiles()[0]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
+            sleep(1)
             token = self.media.GetProfiles()[-1]._token
             audio_token = self.media.GetProfiles()[0].AudioSourceConfiguration._token
             add_config = self.media.AddAudioSourceConfiguration({'ProfileToken': token, 'ConfigurationToken': audio_token})
+            sleep(1)
             audio_token2 = self.media.GetProfiles()[-1].AudioSourceConfiguration._token
+            sleep(1)
             delete = self.media.DeleteProfile({'ProfileToken': token})
             if (audio_token != audio_token2):
                 return {'test_id': 8, 'name': 'AddAudioSourceConfiguration', 'service': 'Media',
@@ -192,7 +206,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 8, 'name': 'AddAudioSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 8, 'name': 'AddAudioSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -201,10 +215,13 @@ class MediaTests:
         try:
             token = self.media.GetProfiles()[0]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
+            sleep(1)
             token = self.media.GetProfiles()[-1]._token
             metadata_token = self.media.GetMetadataConfigurations()[0]._token
             add_config = self.media.AddMetadataConfiguration({'ProfileToken': token, 'ConfigurationToken': metadata_token})
+            sleep(1)
             metadata_token2 = self.media.GetProfiles()[-1].MetadataConfiguration._token
+            sleep(1)
             delete = self.media.DeleteProfile({'ProfileToken': token})
             if (metadata_token != metadata_token2):
                 return {'test_id': 9, 'name': 'AddMetadataConfiguration', 'service': 'Media',
@@ -223,7 +240,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 9, 'name': 'AddMetadataConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 9, 'name': 'AddMetadataConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -232,10 +249,13 @@ class MediaTests:
         try:
             token = self.media.GetProfiles()[0]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
+            sleep(1)
             token = self.media.GetProfiles()[-1]._token
             ptz_token = self.media.GetProfiles()[0].PTZConfiguration._token
             add_config = self.media.AddPTZConfiguration({'ProfileToken': token, 'ConfigurationToken': ptz_token})
+            sleep(1)
             ptz_token2 = self.media.GetProfiles()[-1].PTZConfiguration._token
+            sleep(1)
             delete = self.media.DeleteProfile({'ProfileToken': token})
             if (ptz_token != ptz_token2):
                 return {'test_id': 10, 'name': 'AddPTZConfiguration', 'service': 'Media',
@@ -254,7 +274,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 10, 'name': 'AddPTZConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 10, 'name': 'AddPTZConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -263,10 +283,13 @@ class MediaTests:
         try:
             token = self.media.GetProfiles()[0]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
+            sleep(1)
             token = self.media.GetProfiles()[-1]._token
             vid_token = self.media.GetProfiles()[0].VideoAnalyticsConfiguration._token
             add_config = self.media.AddVideoAnalyticsConfiguration({'ProfileToken': token, 'ConfigurationToken': vid_token})
+            sleep(1)
             vid_token2 = self.media.GetProfiles()[-1].VideoAnalyticsConfiguration._token
+            sleep(1)
             delete = self.media.DeleteProfile({'ProfileToken': token})
             if (vid_token != vid_token2):
                 return {'test_id': 11, 'name': 'AddVideoAnalyticsConfiguration', 'service': 'Media',
@@ -285,7 +308,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 11, 'name': 'AddVideoAnalyticsConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 11, 'name': 'AddVideoAnalyticsConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -294,10 +317,13 @@ class MediaTests:
         try:
             token = self.media.GetProfiles()[0]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token})
+            sleep(1)
             token = self.media.GetProfiles()[-1]._token
             vid_token = self.media.GetProfiles()[0].VideoEncoderConfiguration._token
             add_config = self.media.AddVideoEncoderConfiguration({'ProfileToken': token, 'ConfigurationToken': vid_token})
+            sleep(1)
             vid_token2 = self.media.GetProfiles()[-1].VideoEncoderConfiguration._token
+            sleep(1)
             delete = self.media.DeleteProfile({'ProfileToken': token})
             if (vid_token != vid_token2):
                 return {'test_id': 12, 'name': 'AddVideoEncoderConfiguration', 'service': 'Media',
@@ -316,7 +342,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 12, 'name': 'AddVideoEncoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 12, 'name': 'AddVideoEncoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -325,10 +351,13 @@ class MediaTests:
         try:
             token0 = self.media.GetProfiles()[0]._token
             create = self.media.CreateProfile({'Name': 'Test', 'ProfileToken': token0})
+            sleep(1)
             token = self.media.GetProfiles()[-1]._token
             source_token = self.media.GetProfiles()[0].VideoSourceConfiguration._token
             addvid = self.media.AddVideoSourceConfiguration({'ProfileToken': token, 'ConfigurationToken': source_token})
+            sleep(1)
             source_token2 = self.media.GetProfiles()[-1].VideoSourceConfiguration._token
+            sleep(1)
             delete = self.media.DeleteProfile({'ProfileToken': token})
             if (source_token != source_token2):
                 return {'test_id': 13, 'name': 'AddVideoSourceConfiguration', 'service': 'Media',
@@ -347,7 +376,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 13, 'name': 'AddVideoSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 13, 'name': 'AddVideoSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -378,7 +407,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 14, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 14, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -409,7 +438,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 15, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 15, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -440,7 +469,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 16, 'name': 'GetAudioDecoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 16, 'name': 'GetAudioDecoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -472,7 +501,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 17, 'name': 'GetAudioDecoderConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 17, 'name': 'GetAudioDecoderConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -503,7 +532,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 18, 'name': 'GetAudioDecoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 18, 'name': 'GetAudioDecoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -534,24 +563,35 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 19, 'name': 'GetAudioEncoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 19, 'name': 'GetAudioEncoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetAudioEncoderConfigurationOptions(self):
         try:
+            def handleBrackets(string):
+                return str(string)[str(string).find('[') + 1:str(string).find(']')]
+
+            report = "Avaliable Audio encodings:\n"
+            aCodecs = []
             token = self.media.GetProfiles()[0]._token
             config_token = self.media.GetAudioEncoderConfigurations()[0]._token
             options = self.media.GetAudioEncoderConfigurationOptions({'ConfigurationToken': config_token, 'ProfileToken': token})
-            if ((config is None) or (len(config) == 0)):
+            if ((options is None) or (len(options) == 0)):
                 return {'test_id': 20, 'name': 'GetAudioEncoderConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False,
                 'extension': 'The DUT did not send GetAudioEncoderConfigurationOptionsResponse message',
-                'response': str(config)}}
+                'response': str(options), 'report': 'Device did not send GetAudioEncoderConfigurationOptionsResponse message'}}
             else:
+                for encoder in options.Options:
+                    aCodecs.append({'Encoding': encoder.Encoding, 'BitrateList': encoder.BitrateList.Items,
+                                    'SampleRateList': encoder.SampleRateList.Items})
+                for codec in aCodecs:
+                    report = report + codec['Encoding'] + ', Avaliable bitrate(kbps): {}\n'.format(handleBrackets(codec['BitrateList'])) + 'Avaliable sample rate(kHz): {}\n'.format(handleBrackets(codec['SampleRateList']))                
                 return {'test_id': 20, 'name': 'GetAudioEncoderConfigurationOptions', 'service': 'Media',
-                'result': {'supported': True, 'extension': None, 'response': str(config)}}
+                'result': {'supported': True, 'extension': None, 'response': str(options),
+                'report': report }}
         except AttributeError:
             return {'test_id': 20, 'name': 'GetAudioEncoderConfigurationOptions', 'service': 'Media',
             'result': {'supported': False,
@@ -566,7 +606,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 20, 'name': 'GetAudioEncoderConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 20, 'name': 'GetAudioEncoderConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -597,7 +637,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 21, 'name': 'GetAudioEncoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 21, 'name': 'GetAudioEncoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -628,7 +668,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 22, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 22, 'name': 'GetAudioOutputConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -660,7 +700,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 23, 'name': 'GetAudioOutputConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 23, 'name': 'GetAudioOutputConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -691,7 +731,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 24, 'name': 'GetAudioOutputConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 24, 'name': 'GetAudioOutputConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -722,7 +762,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 25, 'name': 'GetAudioOutputs', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 25, 'name': 'GetAudioOutputs', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -748,7 +788,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 26, 'name': 'GetAudioSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 26, 'name': 'GetAudioSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -774,7 +814,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 27, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 27, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -794,7 +834,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 28, 'name': 'GetAudioSourceConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 28, 'name': 'GetAudioSourceConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -825,7 +865,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 29, 'name': 'GetAudioSources', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 29, 'name': 'GetAudioSources', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -846,7 +886,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 30, 'name': 'GetCompatibleAudioDecoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 30, 'name': 'GetCompatibleAudioDecoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -867,7 +907,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 31, 'name': 'GetCompatibleAudioOutputConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 31, 'name': 'GetCompatibleAudioOutputConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -888,7 +928,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 32, 'name': 'GetCompatibleAudioSourceConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 32, 'name': 'GetCompatibleAudioSourceConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -909,7 +949,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 33, 'name': 'GetCompatibleMetadataConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 33, 'name': 'GetCompatibleMetadataConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -930,7 +970,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 34, 'name': 'GetCompatibleVideoAnalyticsConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 34, 'name': 'GetCompatibleVideoAnalyticsConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -951,7 +991,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 35, 'name': 'GetCompatibleVideoEncoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 35, 'name': 'GetCompatibleVideoEncoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -972,7 +1012,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 36, 'name': 'GetCompatibleVideoSourceConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 36, 'name': 'GetCompatibleVideoSourceConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -998,7 +1038,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 37, 'name': 'GetGuaranteedNumberOfVideoEncoderInstances', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 37, 'name': 'GetGuaranteedNumberOfVideoEncoderInstances', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1024,7 +1064,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 38, 'name': 'GetMetadataConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 38, 'name': 'GetMetadataConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e),
@@ -1051,7 +1091,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 39, 'name': 'GetMetadataConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 39, 'name': 'GetMetadataConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1071,7 +1111,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 40, 'name': 'GetMetadataConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 40, 'name': 'GetMetadataConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1092,7 +1132,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 41, 'name': 'GetOSDs', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 41, 'name': 'GetOSDs', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1114,7 +1154,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 42, 'name': 'GetOSD', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 42, 'name': 'GetOSD', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1123,7 +1163,7 @@ class MediaTests:
         try:
             source_token = self.media.GetProfiles()[0].VideoSourceConfiguration._token
             options = self.media.GetOSDOptions({'ConfigurationToken': source_token})
-            if ((options is None) or (len(options) == 0)):
+            if ((options is None) or (options == [])):
                 return {'test_id': 43, 'name': 'GetOSDOptions', 'service': 'Media',
                 'result': {'supported': False,
                 'extension': 'The DUT did not send GetOSDOptionsResponse message',
@@ -1135,7 +1175,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 43, 'name': 'GetOSDOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 43, 'name': 'GetOSDOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1156,7 +1196,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 44, 'name': 'GetProfile', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 44, 'name': 'GetProfile', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1176,7 +1216,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 45, 'name': 'GetServiceCapabilities', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 45, 'name': 'GetServiceCapabilities', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1197,7 +1237,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 46, 'name': 'GetStreamUri', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 46, 'name': 'GetStreamUri', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1218,7 +1258,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 47, 'name': 'GetVideoAnalyticsConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 47, 'name': 'GetVideoAnalyticsConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1238,7 +1278,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 48, 'name': 'GetVideoAnalyticsConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 48, 'name': 'GetVideoAnalyticsConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1259,7 +1299,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 49, 'name': 'GetVideoEncoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 49, 'name': 'GetVideoEncoderConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1280,7 +1320,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 50, 'name': 'GetVideoEncoderConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 50, 'name': 'GetVideoEncoderConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1300,7 +1340,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 51, 'name': 'GetVideoEncoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 51, 'name': 'GetVideoEncoderConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1321,7 +1361,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 52, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 52, 'name': 'GetVideoSourceConfiguration', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1342,7 +1382,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 53, 'name': 'GetVideoSourceConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 53, 'name': 'GetVideoSourceConfigurationOptions', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1362,7 +1402,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 54, 'name': 'GetVideoSourceConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 54, 'name': 'GetVideoSourceConfigurations', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -1382,7 +1422,7 @@ class MediaTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 55, 'name': 'GetVideoSources', 'service': 'Media',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': "" }}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 55, 'name': 'GetVideoSources', 'service': 'Media',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}

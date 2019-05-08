@@ -22,7 +22,7 @@ class DeviceIOTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': "" }}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 0, 'name': 'GetServiceCapabilities', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': str(e), 'response': "" }}
@@ -43,7 +43,7 @@ class DeviceIOTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': "" }}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 1, 'name': 'GetAudioSourceConfiguration', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -64,7 +64,7 @@ class DeviceIOTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': "" }}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 2, 'name': 'GetAudioSourceConfigurationOptions', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -84,7 +84,7 @@ class DeviceIOTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': "" }}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 3, 'name': 'GetAudioSources', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -104,7 +104,7 @@ class DeviceIOTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': "" }}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 4, 'name': 'GetDigitalInputs', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -124,7 +124,7 @@ class DeviceIOTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': ""}}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 5, 'name': 'GetRelayOutputs', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -144,7 +144,7 @@ class DeviceIOTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 6, 'name': 'GetSerialPorts', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': ""}}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                  return {'test_id': 6, 'name': 'GetSerialPorts', 'service': 'deviceio',
                  'result': {'supported': False, 'extension': str(e),
@@ -165,7 +165,7 @@ class DeviceIOTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 7, 'name': 'GetVideoOutputs', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-				'response': ""}}
+				'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 7, 'name': 'GetVideoOutputs', 'service': 'deviceio',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}

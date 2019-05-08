@@ -2,7 +2,7 @@ from onvif import ONVIFCamera
 
 
 class ImagingTests:
-    
+
     def __init__(self, cam):
         self.cam = cam
         self.media = self.cam.create_media_service()
@@ -24,11 +24,59 @@ class ImagingTests:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 0, 'name': 'GetImagingSettings', 'service': 'Imaging',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': ""}}
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 0, 'name': 'GetImagingSettings', 'service': 'Imaging',
                 'result': {'supported': False, 'extension': str(e),
                 'response': ""}}
+
+    # def ContinuousFocusMove(self):
+    #     options = self.imaging.GetMoveOptions({'VideoSourceToken': self.vstoken})
+    #     self.imaging.create_type('Move')
+    #     try:
+    #         options.Continuous
+    #     except AttributeError:
+    #         return {'test_id': 1, 'name': 'ContinuousFocusMove', 'service': 'Imaging',
+    #         'result': {'supported': False, 'extension': 'Continuous Focus Move is not supported.\\nNot listed in MoveOptions',
+    #         'response': "", 'report': 'Continuous Focus Move is not supported.\\nNot listed in MoveOptions' }}
+    #     max_speed = options.Continuous.Speed.Max
+
+    #     self.imaging.SetImagingSettings({'VideoSourceToken': self.vstoken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'MANUAL'}}})
+    #     self.imaging.Stop({'VideoSourceToken': self.vstoken})
+    #     x0 = self.imaging.GetStatus({'VideoSourceToken': self.vstoken}).FocusStatus20.Position
+    #     if x0 + (max_speed/2) < max_speed:
+    #         x1 = x0 + max_speed/2
+    #     else:
+    #         x1 = x0 - max_speed/2
+    #     try:
+    #         self.imaging.Move({'VideoSourceToken': self.vstoken, 'Focus': {'Continuous': {'Speed': x1}}})
+    #         sleep(1)
+    #         self.imaging.Stop({'VideoSourceToken': self.vstoken})
+    #         x2 = self.imaging.GetStatus({'VideoSourceToken': vstoken}).FocusStatus20.Position
+    #         # print 'x0 ', x0, ' x1 ', x1, ' x2 ', x2
+    #         if abs(x1 - x2) == 0.4 and not x0 == x2 == 0:
+    #             self.imaging.SetImagingSettings(
+    #                 {'VideoSourceToken': self.vstoken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'AUTO'}}})
+    #             return {'test_id': 1, 'name': 'ContinuousFocusMove', 'service': 'Imaging',
+    #             'result': {'supported': True, 'extension': 'Continuous Focus Move is supported',
+    #             'response': "", 'report': 'Continuous Focus Move is supported' }}
+    #         else:
+    #             self.imaging.SetImagingSettings(
+    #                 {'VideoSourceToken': self.vstoken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'AUTO'}}})
+    #             return {'test_id': 1, 'name': 'ContinuousFocusMove', 'service': 'Imaging',
+    #             'result': {'supported': False, 'extension': 'Continuous imaging may be supported, but it cannot be checked.\\nPotential error with coordinates from GetStatus()',
+    #             'response': "", 'report': 'Continuous imaging may be supported, but it cannot be checked.\\nPotential error with coordinates from GetStatus()' }}
+    #     except AttributeError:  # Catching error
+    #         self.imaging.SetImagingSettings(
+    #             {'VideoSourceToken': self.vstoken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'AUTO'}}})
+    #         return {'test_id': 1, 'name': 'ContinuousFocusMove', 'service': 'Imaging',
+    #         'result': {'supported': False, 'extension': 'Continuous Focus Move is not supported, AttributeError',
+    #         'response': "", 'report': 'Continuous Focus Move is not supported' }}
+    #     except Exception as e:
+    #         if str(e) == 'Optional Action Not Implemented':
+    #             return {'test_id': 1, 'name': 'ContinuousFocusMove', 'service': 'Imaging',
+    #             'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+    #             'response': "", 'report': 'Optional Action Not Implemented' }}
 
 #     def GetOptions(self):
 #         response = self.imaging.GetOptions({'VideoSourceToken': self.vstoken})

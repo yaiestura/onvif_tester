@@ -25,8 +25,8 @@ class PTZTests:
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 1, 'name': 'GetCompatibleConfigurations', 'service': 'PTZ',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
-                'response': "" }}
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "", 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'test_id': 1, 'name': 'GetCompatibleConfigurations', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
@@ -35,7 +35,7 @@ class PTZTests:
         try:
             ptz_token = self.media.GetProfiles()[0].PTZConfiguration._token
             config = self.ptz.GetConfiguration({'PTZConfigurationToken': ptz_token})
-            if ((config is None) or (len(config) == 0)):    
+            if ((config is None) or (len(config) == 0)):
                 return {'test_id': 2, 'name': 'GetConfiguration', 'service': 'PTZ',
                 'result': {'supported': False,
                 'extension': 'The DUT did not send GetConfigurationResponse message',
