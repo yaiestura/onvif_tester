@@ -1,3 +1,4 @@
+import time
 import utils
 from core import Camera
 from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests, Tests
@@ -91,6 +92,18 @@ def get_snapshot(filename):
 def get_snapshots(*args, **kwargs):
     cam = kwargs['ctx']['cam']
     return jsonify(cam.get_snapshots_list())
+
+
+@app.route('/api/current_snapshot')
+@utils.cam_required
+def get_current_snapshot(*args, **kwargs):
+    cam = kwargs['ctx']['cam']
+    return jsonify({
+        'camera': cam.ip + ':' + str(cam.port),
+        'datetime': time.strftime("%d-%m-%Y %H:%M:%S", time.localtime()),
+        'url': cam.get_public_snapshot_url()
+    })
+
 
 
 @app.route('/livestream')

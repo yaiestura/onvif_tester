@@ -144,5 +144,5 @@ class Camera(ONVIFCamera):
                 if re.search(credentials, snapshot):
                     print snapshot
                     date = re.findall('_(.*)_(.*)\.jpg', snapshot)
-                    snapshots.append({'url': 'snapshots/' + snapshot, 'datetime': date[0][0] + ' ' + date[0][1], 'camera': credentials})
+                    snapshots.append({'url': '/snapshots/' + snapshot, 'datetime': date[0][0] + ' ' + date[0][1], 'camera': credentials})
         return snapshots
