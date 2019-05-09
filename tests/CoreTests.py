@@ -47,19 +47,19 @@ class CoreTests:
         try:
             capabilities = self.cam.devicemgmt.GetCapabilities()
             if (len(capabilities) > 0):
-                return {'test_id': 1, 'name': 'Device Capabilities', 'service': 'Device',
+                return {'test_id': 1, 'name': 'GetCapabilities', 'service': 'Device',
                 'result': {'supported': True, 'extension': None, 'response': str(capabilities)}}
             else:
-                return {'test_id': 1, 'name': 'Device Capabilities', 'service': 'Device',
+                return {'test_id': 1, 'name': 'GetCapabilities', 'service': 'Device',
                 'result': {'supported': False, 'extension': 'The DUT did not send GetCapabilitiesResponse message',
                 'response': str(capabilities), 'report': 'Not Supported'}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
-                return {'test_id': 1, 'name': 'Device Capabilities', 'service': 'Device',
+                return {'test_id': 1, 'name': 'GetCapabilities', 'service': 'Device',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
-                return {'test_id': 1, 'name': 'Device Capabilities', 'service': 'Device',
+                return {'test_id': 1, 'name': 'GetCapabilities', 'service': 'Device',
                 'result': {'supported': False, 'extension': str(e), 'response': ''}}
 
     def GetDiscoveryMode(self):
@@ -72,7 +72,7 @@ class CoreTests:
             else:
                 return {'test_id': 2, 'name': 'GetDiscoveryMode', 'service': 'Device',
                 'result': {'supported': False, 'extension': 'The DUT did not send GetDiscoveryModeResponse message',
-                'response': str(request)}}
+                'response': str(request), 'report': 'Not Supported'}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
                 return {'test_id': 2, 'name': 'GetDiscoveryMode', 'service': 'Device',

@@ -105,7 +105,6 @@ def get_current_snapshot(*args, **kwargs):
     })
 
 
-
 @app.route('/livestream')
 @utils.cam_required
 def livestream(*args, **kwargs):

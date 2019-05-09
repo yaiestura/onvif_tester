@@ -146,3 +146,20 @@ class Camera(ONVIFCamera):
                     date = re.findall('_(.*)_(.*)\.jpg', snapshot)
                     snapshots.append({'url': '/snapshots/' + snapshot, 'datetime': date[0][0] + ' ' + date[0][1], 'camera': credentials})
         return snapshots
+
+    def returnpos(self, ptz, token):
+        try:
+            pos = ptz.GetStatus({"ProfileToken": token}).Position
+        except AttributeError:
+            return False
+        try:
+            pos.x_z = pos.Zoom._x
+        except AttributeError:
+                pos.x_z = False
+        try:
+            pos.x = pos.PanTilt._x
+            pos.y = pos.PanTilt._y
+        except AttributeError:
+            pos.x = False
+            pos.y = False
+        return pos
