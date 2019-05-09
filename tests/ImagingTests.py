@@ -31,7 +31,7 @@ class ImagingTests:
                 'result': {'supported': False, 'extension': str(e),
                 'response': ""}}
 
-    def AbsoluteImagingMove(self):
+    def AbsoluteImagingMoveInteractive(self):
         try:
             token = self.media.GetProfiles()[0]._token
             req_move = self.ptz.create_type('ContinuousMove')
@@ -61,7 +61,7 @@ class ImagingTests:
                 self.cam.right(req_move, req_stop, self.ptz, token)
                 self.cam.zoom_in(req_move, req_stop, self.ptz, token)
                 self.cam.zoom_out(req_move, req_stop, self.ptz, token)
-                return {'name': 'AbsoluteImagingMove', 'service': 'Imaging',
+                return {'name': 'AbsoluteImagingMoveInteractive', 'service': 'Imaging',
                 'result': {'supported': False, 'extension': 'Absolute Imaging Move is supported',
                 'response': "Absolute Imaging Move is supported", 'report': 'Absolute Imaging Move is supported'}}
             else:
@@ -71,16 +71,16 @@ class ImagingTests:
                 self.cam.right(req_move, req_stop, self.ptz, token)
                 self.cam.zoom_in(req_move, req_stop, self.ptz, token)
                 self.cam.zoom_out(req_move, req_stop, self.ptz, token)
-                return {'name': 'AbsoluteImagingMove', 'service': 'Imaging',
+                return {'name': 'AbsoluteImagingMoveInteractive', 'service': 'Imaging',
                 'result': {'supported': False, 'extension': 'Absolute Imaging Move may be supported, but it cannot be checked.Potential error with coordinates from GetStatus()',
                 'response': "Absolute Imaging Move may be supported, but it cannot be checked.Potential error with coordinates from GetStatus()", 'report': 'Absolute Imaging Move may be supported, but it cannot be checked.Potential error with coordinates from GetStatus()'}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
-                return {'name': 'AbsoluteImagingMove', 'service': 'Imaging',
+                return {'name': 'AbsoluteImagingMoveInteractive', 'service': 'Imaging',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
                 'response': "Optional Action Not Implemented",
                 'report': 'Optional Action Not Implemented' }}
             else:
-                return {'name': 'AbsoluteImagingMove', 'service': 'Imaging',
+                return {'name': 'AbsoluteImagingMoveInteractive', 'service': 'Imaging',
                 'result': {'supported': False, 'extension': str(e),
                 'response': "Not Supported", 'report': 'Not Supported'}}

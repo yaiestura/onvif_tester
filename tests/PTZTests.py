@@ -134,7 +134,7 @@ class PTZTests:
                 return {'name': 'GetNode', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
-    def AbsoluteMove(self):
+    def AbsoluteMoveInteractive(self):
         try:
             token = self.media.GetProfiles()[0]._token
             # ptz_token = self.media.GetProfiles() [0].PTZConfiguration._token
@@ -168,29 +168,29 @@ class PTZTests:
             dif3 = (round((x_z1-x_z), 6))
             if dif1 == 0.0 and dif2 == 0.0 and dif3 == 0.0:
                 result = 'AbsoluteMove is supported, current coordinates: ' + str(x) + ' ' + str(y) + ' ' + str(x_z)
-                return {'name': 'AbsoluteMove', 'service': 'PTZ',
+                return {'name': 'AbsoluteMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': None, 'response': str(result)}}
             elif dif1 == 0.0 and dif2 == 0.0 and dif3 != 0.0:
                 result = 'AbsoluteMove is supported, but Zoom does not work. Current coordinates: ' \
                            + str(x) + ' ' + str(y) + ' ' + str(x_z)
-                return {'name': 'AbsoluteMove', 'service': 'PTZ',
+                return {'name': 'AbsoluteMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': 'AbsoluteMove partly supported',
                                    'response': str(result)}}
             else:
-                return {'name': 'AbsoluteMove', 'service': 'PTZ',
+                return {'name': 'AbsoluteMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': False, 'extension': 'AbsoluteMove is not supported, '
                                                                     'camera does not move', 'response': ''}}
         except AttributeError:
-            return {'name': 'AbsoluteMove', 'service': 'PTZ',
+            return {'name': 'AbsoluteMoveInteractive', 'service': 'PTZ',
                     'result': {'supported': False, 'extension': 'AbsoluteMove is not supported, AttributeError ',
                                'response': ''}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
-                return {'name': 'AbsoluteMove', 'service': 'PTZ',
+                return {'name': 'AbsoluteMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
                 'response': "" }}
             else:
-                return {'name': 'AbsoluteMove', 'service': 'PTZ',
+                return {'name': 'AbsoluteMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
     def GetPresets(self):
@@ -369,7 +369,7 @@ class PTZTests:
                 return {'name': 'RemovePresetTour', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
-    def ContinuousMove(self):
+    def ContinuousMoveInteractive(self):
 
         try:
             token = self.media.GetProfiles()[0]._token
@@ -437,86 +437,86 @@ class PTZTests:
             pos = self.cam.returnpos(self.ptz, token)
             # print 'x ', pos.x, ' y ', pos   .y, ' z ', pos.x_z
             if pos is False:
-                return {'name': 'ContinuousMove', 'service': 'PTZ',
+                return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': 'Continuous Move is not supported',
                  'response': "Continuous Move is not supported", 'report': 'Continuous Move is not supported'}}
             elif pos.x is not False and pos.y is not False:
                 if round(left(req_move, req_stop, self.ptz, token), 1) + round(right(req_move, req_stop, self.ptz, token), 1) == 0:
                     if pos.x_z is False:
-                        return {'name': 'ContinuousMove', 'service': 'PTZ',
+                        return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': 'Continuous Move is partly supported, zoom does not work',
                         'response': 'Continuous Move is partly supported, zoom does not work, current coordinates: {}'.format(pos),
                         'report': 'Continuous Move is partly supported, zoom does not work, current coordinates: {}'.format(pos)}}
                     elif (round(zoom_in(req_move, req_stop, self.ptz, token), 1) + round(zoom_out(req_move, req_stop, self.ptz, token), 1)) == 0:
-                        return {'name': 'ContinuousMove', 'service': 'PTZ',
+                        return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': 'Continuous Move is supported',
                         'response': "Continuous Move is supported, current coordinates: {}".format(pos), 'report': 'Continuous Move is supported, current coordinates: {}'.format(pos)}}
                     elif (round(zoom_out(req_move, req_stop, self.ptz, token), 1) + round(zoom_in(req_move, req_stop, self.ptz, token), 1)) == 0:
-                        return {'name': 'ContinuousMove', 'service': 'PTZ',
+                        return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': 'Continuous Move is supported',
                         'response': "Continuous Move is supported, current coordinates: {}".format(pos),
                         'report': "Continuous Move is supported, current coordinates: {}".format(pos)}}
                     else:
-                        return {'name': 'ContinuousMove', 'service': 'PTZ',
+                        return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': 'Continuous Move is partly supported, zoom does not work',
                         'response': 'Continuous Move is partly supported, zoom does not work, current coordinates: {}'.format(pos),
                         'report': 'Continuous Move is partly supported, zoom does not work, current coordinates: {}'.format(pos)}}
                 elif round(right(req_move, req_stop, self.ptz, token), 1) + round(left(req_move, req_stop, self.ptz, token), 1) == 0:
                     if pos.x_z is False:
-                        return {'name': 'ContinuousMove', 'service': 'PTZ',
+                        return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': 'Continuous Move is partly supported, zoom does not work',
                         'response': 'Continuous Move is partly supported, zoom does not work, current coordinates: {}'.format(pos),
                         'report': 'Continuous Move is partly supported, zoom does not work, current coordinates: {}'.format(pos)}}
                     elif round(zoom_in(req_move, req_stop, self.ptz, token), 1) + round(zoom_out(req_move, req_stop, self.ptz, token), 1) == 0:
-                        return {'name': 'ContinuousMove', 'service': 'PTZ',
+                        return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': 'Continuous Move is supported',
                         'response': "Continuous Move is supported, current coordinates: {}".format(pos),
                         'report': "Continuous Move is supported, current coordinates: {}".format(pos)}}
                     elif round(zoom_out(req_move, req_stop, self.ptz, token), 1) + round(zoom_in(req_move, req_stop, self.ptz, token), 1) == 0:
-                        return {'name': 'ContinuousMove', 'service': 'PTZ',
+                        return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': True, 'extension': 'Continuous Move is supported',
                         'response': "Continuous Move is supported, current coordinates: {}".format(pos),
                         'report': "Continuous Move is supported, current coordinates: {}".format(pos)}}
                     else:
-                        return {'name': 'ContinuousMove', 'service': 'PTZ',
+                        return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                         'result': {'supported': False, 'extension': 'Continuous Move is not supported',
                         'response': "Continuous Move is not supported", 'report': 'Continuous Move is not supported'}}
                 else:
-                    return {'name': 'ContinuousMove', 'service': 'PTZ',
+                    return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                     'result': {'supported': False, 'extension': 'Continuous Move is not supported. Camera does not move',
                     'response': "Continuous Move is not supported. Camera does not move",
                     'report': 'Continuous Move is not supported. Camera does not move'}}
             elif pos.x is False and pos.y is False and pos.x_z >= 0:
                 if round(zoom_in(req_move, req_stop, ptz, token), 1) + round(zoom_out(req_move, req_stop, self.ptz, token), 1) == 0:
-                    return {'name': 'ContinuousMove', 'service': 'PTZ',
+                    return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                     'result': {'supported': True, 'extension': 'Continuous Move is partly supported, only zoom works',
                     'response': 'Continuous Move is partly supported, only zoom works, current coordinates: {}'.format(pos),
                     'report': 'Continuous Move is partly supported, only zoom works, current coordinates: {}'.format(pos)}}
                 elif round(zoom_out(req_move, req_stop, ptz, token), 1) + round(zoom_in(req_move, req_stop, self.ptz, token), 1) == 0:
-                    return {'name': 'ContinuousMove', 'service': 'PTZ',
+                    return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                     'result': {'supported': True, 'extension': 'Continuous Move is partly supported, only zoom works',
                     'response': 'Continuous Move is partly supported, only zoom works, current coordinates: {}'.format(pos),
                     'report': 'Continuous Move is partly supported, only zoom works, current coordinates: {}'.format(pos)}}
                 else:
-                    return {'name': 'ContinuousMove', 'service': 'PTZ',
+                    return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                     'result': {'supported': False, 'extension': 'Continuous Move is not supported',
                     'response': "Continuous Move is not supported", 'report': 'Continuous Move is not supported'}}
             else:
-                return {'name': 'ContinuousMove', 'service': 'PTZ',
+                return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': 'Continuous Move is not supported',
                  'response': "Continuous Move is not supported", 'report': 'Continuous Move is not supported'}}
 
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
-                return {'name': 'ContinuousMove', 'service': 'PTZ',
+                return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
                 'response': "Optional Action Not Implemented", 'report': 'Optional Action Not Implemented'}}
             else:
-                return {'name': 'ContinuousMove', 'service': 'PTZ',
+                return {'name': 'ContinuousMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e), 'response': "Continuous Move is not supported",
                 'report': 'Continuous Move is not supported'}}
 
-    def RelativeMove(self):
+    def RelativeMoveInteractive(self):
         try:
             token = self.media.GetProfiles()[0]._token
             rel_move = self.ptz.create_type('RelativeMove')
@@ -610,59 +610,59 @@ class PTZTests:
                     movz = False
 
             if movx and movz and movy:
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': True, 'extension': 'Relative Move is supported',
                 'response': 'Relative Move is supported',
                 'report': 'Relative Move is supported'}}
             elif movx and movy and not movz:
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': True,
                 'extension': 'Relative Move is supported partly, only PanTilt works',
                 'response': 'Relative Move is supported partly, only PanTilt works',
                 'report': 'Relative Move is supported partly, only PanTilt works'}}
             elif movx and movz and not movy:
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': True,
                 'extension': 'Relative Move is supported partly, only PanZoom works',
                 'response': 'Relative Move is supported partly, only PanZoom works',
                 'report': 'Relative Move is supported partly, only PanZoom works'}}
             elif movy and movz and not movx:
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': True,
                 'extension': 'Relative Move is supported partly, only TiltZoom works',
                 'response': 'Relative Move is supported partly, only TiltZoom works',
                 'report': 'Relative Move is supported partly, only TiltZoom works'}}
             elif movz and not movx and not movy:
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': True,
                 'extension': 'Relative Move is supported partly, only Zoom works',
                 'response': 'Relative Move is supported partly, only Zoom works',
                 'report': 'Relative Move is supported partly, only Zoom works'}}
             elif movy and not movx and not movz:
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': True,
                 'extension': 'Relative Move is supported partly, only Tilt works',
                 'response': 'Relative Move is supported partly, only Tilt works',
                 'report': 'Relative Move is supported partly, only Tilt works'}}
             elif movx and not movy and not movz:
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': True,
                 'extension': 'Relative Move is supported partly, only Pan works',
                 'response': 'Relative Move is supported partly, only Pan works',
                 'report': 'Relative Move is supported partly, only Pan works'}}
             else:
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': 'Relative Move is not supported',
                 'response': "Relative Move is not supported",
                 'report': 'Relative Move is not supported'}}
         except Exception as e:
             if str(e) == 'Optional Action Not Implemented':
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
                 'response': "Optional Action Not Implemented",
                 'report': 'Optional Action Not Implemented'}}
             else:
-                return {'name': 'RelativeMove', 'service': 'PTZ',
+                return {'name': 'RelativeMoveInteractive', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e),
                 'response': "Relative Move is not supported",
                 'report': 'Relative Move is not supported'}}
