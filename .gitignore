@@ -120,3 +120,5 @@ database/onviftester.json
 
 #Snapshots 
 snapshots/*
+streams/*
+reports/*

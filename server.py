@@ -1,4 +1,5 @@
 import time
+import os
 import utils
 from core import Camera
 from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests, Tests
@@ -10,7 +11,7 @@ from utils.generate_report import *
 
 
 from flask import (
-    Flask, request, jsonify,
+    Flask, request, jsonify, redirect,
     send_from_directory, Response, render_template)
 
 
@@ -110,8 +111,37 @@ def get_current_snapshot(*args, **kwargs):
 def livestream(*args, **kwargs):
     cam = kwargs['ctx']['cam']
     url = cam.get_private_stream_url()
-    return Response(utils.generate_stream(url),
-            mimetype='multipart/x-mixed-replace; boundary=frame')
+    playlist_name = ("%s%d.m3u8" % (cam.ip.replace('.', ''), cam.port))
+
+    print utils.stream.check_stream(cam.ip, cam.port)
+
+    if len(utils.stream.check_stream(cam.ip, cam.port)) <= 2:
+        utils.stream.start_stream(url, './streams', playlist_name)
+
+    # make sure the stream was created
+    while not os.path.exists(os.path.join('./streams', playlist_name)) or len(utils.stream.check_stream(cam.ip, cam.port)) <= 2:
+        time.sleep(1)
+
+    return redirect("/%s" % playlist_name, code=302)
+
+
+@app.route('/api/stop_stream')
+@utils.cam_required
+def kill_stream(*args, **kwargs):
+    cam = kwargs['ctx']['cam']
+    utils.stream.stop_stream(cam.ip, cam.port)
+    return 'ok'
+
+
+@app.route('/<name>.m3u8')
+def streaming_stuff1(name):
+    return send_from_directory('streams', name+'.m3u8')
+
+@app.route('/<name>.ts')
+def streaming_stuff2(name):
+    return send_from_directory('streams', name+'.ts')
+
+
 
 
 @app.route('/', defaults={'path': ''})
