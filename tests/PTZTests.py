@@ -134,7 +134,7 @@ class PTZTests:
                 return {'name': 'GetNode', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
-    def AbsoluteMove(self):
+    def AbsoluteMoveInteractive(self):
         try:
             token = self.media.GetProfiles()[0]._token
             # ptz_token = self.media.GetProfiles() [0].PTZConfiguration._token
@@ -369,7 +369,7 @@ class PTZTests:
                 return {'name': 'RemovePresetTour', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e), 'response': ""}}
 
-    def ContinuousMove(self):
+    def ContinuousMoveInteractive(self):
 
         try:
             token = self.media.GetProfiles()[0]._token

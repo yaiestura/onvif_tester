@@ -3,3 +3,4 @@ from generate_stream import generate_stream
 from http_status import Status as status
 from parse_cam_from_request import parse_cam_from_request
 from cam_required_decorator import cam_required_decorator as cam_required
+import stream
