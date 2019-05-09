@@ -113,14 +113,24 @@ def livestream(*args, **kwargs):
     url = cam.get_private_stream_url()
     playlist_name = ("%s%d.m3u8" % (cam.ip.replace('.', ''), cam.port))
 
-    if not os.path.exists(os.path.join('./streams', playlist_name)):
+    print utils.stream.check_stream(cam.ip, cam.port)
+
+    if len(utils.stream.check_stream(cam.ip, cam.port)) <= 2:
         utils.stream.start_stream(url, './streams', playlist_name)
 
     # make sure the stream was created
-    while not os.path.exists(os.path.join('./streams', playlist_name)):
+    while not os.path.exists(os.path.join('./streams', playlist_name)) or len(utils.stream.check_stream(cam.ip, cam.port)) <= 2:
         time.sleep(1)
 
     return redirect("/%s" % playlist_name, code=302)
+
+
+@app.route('/api/stop_stream')
+@utils.cam_required
+def kill_stream(*args, **kwargs):
+    cam = kwargs['ctx']['cam']
+    utils.stream.stop_stream(cam.ip, cam.port)
+    return 'ok'
 
 
 @app.route('/<name>.m3u8')
