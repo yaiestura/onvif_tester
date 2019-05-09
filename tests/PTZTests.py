@@ -515,3 +515,154 @@ class PTZTests:
                 return {'name': 'ContinuousMove', 'service': 'PTZ',
                 'result': {'supported': False, 'extension': str(e), 'response': "Continuous Move is not supported",
                 'report': 'Continuous Move is not supported'}}
+
+    def RelativeMove(self):
+        try:
+            token = self.media.GetProfiles()[0]._token
+            rel_move = self.ptz.create_type('RelativeMove')
+            rel_move.ProfileToken = token
+            req_stop = self.ptz.create_type('Stop')
+            req_stop.ProfileToken = token
+
+            node = self.ptz.GetNodes()[0]
+
+            def move_x(x, token, req_stop, rel_move, ptz):
+                ptz.Stop(req_stop)
+                pos1 = self.cam.returnpos(ptz, token).x
+                rel_move.Translation.PanTilt._x = x
+                rel_move.Translation.PanTilt._y = 0
+                rel_move.Translation.Zoom._x = 0
+                ptz.RelativeMove(rel_move)
+                sleep(1)
+                ptz.Stop(req_stop)
+                pos2 = self.cam.returnpos(ptz, token).x
+                # print 'Pan ' + str(pos1 - pos2)
+                return pos1 - pos2
+
+            def move_y(y, token, req_stop, rel_move, ptz):
+                ptz.Stop(req_stop)
+                pos1 = self.cam.returnpos(ptz, token).y
+                rel_move.Translation.PanTilt._x = 0
+                rel_move.Translation.PanTilt._y = y
+                rel_move.Translation.Zoom._x = 0
+                ptz.RelativeMove(rel_move)
+                sleep(1)
+                ptz.Stop(req_stop)
+                pos2 = self.cam.returnpos(ptz, token).y
+                # print 'Tilt ' + str(pos1 - pos2)
+                return pos1 - pos2
+
+            def move_z(z, token, req_stop, rel_move, ptz):
+                ptz.Stop(req_stop)
+                pos1 = self.cam.returnpos(ptz, token).x_z
+                rel_move.Translation.PanTilt._x = 0
+                rel_move.Translation.PanTilt._y = 0
+                rel_move.Translation.Zoom._x = z
+                ptz.RelativeMove(rel_move)
+                sleep(1)
+                ptz.Stop(req_stop)
+                pos2 = self.cam.returnpos(ptz, token).x_z
+                # print 'Zoom ' + str(pos1 - pos2)
+                return pos1 - pos2
+
+            d = 0.05
+            pos = self.cam.returnpos(self.ptz, token)
+            movx = movy = movz = False
+            if pos.x is not False:
+                try:
+                    mov1 = round(move_x(d, token, req_stop, rel_move, self.ptz), 2)
+                    mov2 = round(move_x(-d, token, req_stop, rel_move, self.ptz), 2)
+                    if mov1 + mov2 == 0 and not mov1 == mov2 == 0:
+                        movx = True
+                    else:
+                        mov3 = round(move_x(-d, token, req_stop, rel_move, self.ptz), 2)
+                        mov4 = round(move_x(d, token, req_stop, rel_move, self.ptz), 2)
+                        if mov3 + mov4 == 0 and not mov3 == mov4 == 0:
+                            movx = True
+                except exceptions.ONVIFError:
+                    movx = False
+            if pos.y is not False:
+                try:
+                    mov1 = round(move_y(d, token, req_stop, rel_move, self.ptz), 2)
+                    mov2 = round(move_y(-d, token, req_stop, rel_move, self.ptz), 2)
+                    if mov1 + mov2 == 0 and not mov1 == mov2 == 0:
+                        movy = True
+                    else:
+                        mov3 = round(move_y(-d, token, req_stop, rel_move, self.ptz), 2)
+                        mov4 = round(move_y(d, token, req_stop, rel_move, self.ptz), 2)
+                        if mov3 + mov4 == 0 and not mov3 == mov4 == 0:
+                            movy = True
+                except exceptions.ONVIFError:
+                    movy = False
+            if pos.x_z is not False:
+                try:
+                    mov1 = round(move_z(-0.2, token, req_stop, rel_move, self.ptz), 2)
+                    mov2 = round(move_z(0.2, token, req_stop, rel_move, self.ptz), 2)
+                    # print 'mov1 ' + str(mov1) + ' mov2 ' + str(mov2)
+                    if mov1 + mov2 == 0 and not mov1 == mov2 == 0:
+                        movz = True
+                    else:
+                        mov3 = round(move_z(0.2, token, req_stop, rel_move, self.ptz), 2)
+                        mov4 = round(move_z(-0.2, token, req_stop, rel_move, self.ptz), 2)
+                        if mov3 + mov4 == 0 and not mov3 == mov4 == 0:
+                            movz = True
+                except exceptions.ONVIFError:
+                    movz = False
+
+            if movx and movz and movy:
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': True, 'extension': 'Relative Move is supported',
+                'response': 'Relative Move is supported',
+                'report': 'Relative Move is supported'}}
+            elif movx and movy and not movz:
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': True,
+                'extension': 'Relative Move is supported partly, only PanTilt works',
+                'response': 'Relative Move is supported partly, only PanTilt works',
+                'report': 'Relative Move is supported partly, only PanTilt works'}}
+            elif movx and movz and not movy:
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': True,
+                'extension': 'Relative Move is supported partly, only PanZoom works',
+                'response': 'Relative Move is supported partly, only PanZoom works',
+                'report': 'Relative Move is supported partly, only PanZoom works'}}
+            elif movy and movz and not movx:
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': True,
+                'extension': 'Relative Move is supported partly, only TiltZoom works',
+                'response': 'Relative Move is supported partly, only TiltZoom works',
+                'report': 'Relative Move is supported partly, only TiltZoom works'}}
+            elif movz and not movx and not movy:
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': True,
+                'extension': 'Relative Move is supported partly, only Zoom works',
+                'response': 'Relative Move is supported partly, only Zoom works',
+                'report': 'Relative Move is supported partly, only Zoom works'}}
+            elif movy and not movx and not movz:
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': True,
+                'extension': 'Relative Move is supported partly, only Tilt works',
+                'response': 'Relative Move is supported partly, only Tilt works',
+                'report': 'Relative Move is supported partly, only Tilt works'}}
+            elif movx and not movy and not movz:
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': True,
+                'extension': 'Relative Move is supported partly, only Pan works',
+                'response': 'Relative Move is supported partly, only Pan works',
+                'report': 'Relative Move is supported partly, only Pan works'}}
+            else:
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': False, 'extension': 'Relative Move is not supported',
+                'response': "Relative Move is not supported",
+                'report': 'Relative Move is not supported'}}
+        except Exception as e:
+            if str(e) == 'Optional Action Not Implemented':
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'response': "Optional Action Not Implemented",
+                'report': 'Optional Action Not Implemented'}}
+            else:
+                return {'name': 'RelativeMove', 'service': 'PTZ',
+                'result': {'supported': False, 'extension': str(e),
+                'response': "Relative Move is not supported",
+                'report': 'Relative Move is not supported'}}

@@ -163,3 +163,48 @@ class Camera(ONVIFCamera):
             pos.x = False
             pos.y = False
         return pos
+
+    def left(req_move, req_stop, ptz, token):
+        sleep(0.3)
+        self.ptz.Stop(req_stop)
+        req_move.Velocity.Zoom._x = 0.0
+        req_move.Velocity.PanTilt._x = -0.5
+        req_move.Velocity.PanTilt._y = 0.0
+        self.ptz.ContinuousMove(req_move)
+        sleep(1)
+        self.ptz.Stop(req_stop)
+        sleep(0.3)
+
+
+    def right(req_move, req_stop, ptz, token):
+        sleep(0.3)
+        self.ptz.Stop(req_stop)
+        req_move.Velocity.Zoom._x = 0.0
+        req_move.Velocity.PanTilt._x = 0.5
+        req_move.Velocity.PanTilt._y = 0.0
+        self.ptz.ContinuousMove(req_move)
+        sleep(1)
+        self.ptz.Stop(req_stop)
+        sleep(0.3)
+
+    def zoom_in(req_move, req_stop, ptz, token):
+        sleep(0.3)
+        self.ptz.Stop(req_stop)
+        req_move.Velocity.PanTilt._x = 0.0
+        req_move.Velocity.PanTilt._y = 0.0
+        req_move.Velocity.Zoom._x = 0.1
+        self.ptz.ContinuousMove(req_move)
+        sleep(1)
+        self.ptz.Stop(req_stop)
+        sleep(0.3)
+
+    def zoom_out(req_move, req_stop, ptz, token):
+        sleep(0.3)
+        self.ptz.Stop(req_stop)
+        req_move.Velocity.PanTilt._x = 0.0
+        req_move.Velocity.PanTilt._y = 0.0
+        req_move.Velocity.Zoom._x = -0.1
+        self.ptz.ContinuousMove(req_move)
+        sleep(1)
+        self.ptz.Stop(req_stop)
+        sleep(0.3)
