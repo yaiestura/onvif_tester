@@ -122,3 +122,5 @@ database/onviftester.json
 snapshots/*
 streams/*
 reports/*
+
+database/app.db
