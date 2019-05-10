@@ -1,4 +1,5 @@
 import time
+import os
 import utils
 from core import Camera
 from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests, Tests
@@ -7,11 +8,27 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 from pprint import pprint
 from utils.generate_report import *
+from database import db, User
+
+import jinja2
 
 
 from flask import (
-    Flask, request, jsonify,
+    Flask, request, jsonify, redirect,
     send_from_directory, Response, render_template)
+
+from flask_login import LoginManager, login_user, logout_user, login_required
+
+
+from urlparse import urlparse, urljoin
+from flask import request, url_for, flash
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and \
+           ref_url.netloc == test_url.netloc
+
 
 
 app = Flask(__name__,
@@ -19,12 +36,86 @@ app = Flask(__name__,
  template_folder="templates/build")
 
 app.config.from_object('config')
-db = SQLAlchemy(app)
+db.init_app(app)
+app.app_context().push()
+db.create_all()
 CORS(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+my_loader = jinja2.ChoiceLoader([
+    app.jinja_loader,
+    jinja2.FileSystemLoader('./templates/'),
+])
+app.jinja_loader = my_loader
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter(User.id==int(user_id)).one_or_none()
+
+
+@app.route('/login',methods=['GET','POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    
+    email = request.form.get('email', None)
+    password = request.form.get('password', None)
+    remember_me = False
+
+    if 'remember_me' in request.form:
+        remember_me = True
+
+    registered_user = User.query.filter_by(email=email).first()
+    if registered_user is None:
+        flash('Username is invalid' , 'error')
+        return redirect(url_for('login'))
+
+    if not registered_user.check_password(password):
+        flash('Password is invalid','error')
+        return redirect(url_for('login'))
+
+    login_user(registered_user, remember = remember_me)
+    flash('Logged in successfully')
+    return redirect(request.args.get('next') or url_for('index'))
+
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index')) 
+
+
+
+@app.route('/register' , methods=['GET','POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
+
+    email = request.form.get('email')
+    password = request.form.get('password')
+    name = request.form.get('name')
+    surname = request.form.get('surname')
+    
+    user = User(email=email, name=name, surname=surname)
+    user.set_password(password)
+
+    db.session.add(user)
+    db.session.commit()
+    flash('User successfully registered')
+    return redirect(url_for('login'))
+
+
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect('/login?next=' + request.path)
 
 
 @app.route('/info')
-def index():
+def apiinfo():
     return jsonify(api_avaliable_routes=[
         '/api/<test_type>_test/<method_name>',
         '/api/tests',
@@ -110,13 +201,42 @@ def get_current_snapshot(*args, **kwargs):
 def livestream(*args, **kwargs):
     cam = kwargs['ctx']['cam']
     url = cam.get_private_stream_url()
-    return Response(utils.generate_stream(url),
-            mimetype='multipart/x-mixed-replace; boundary=frame')
+    playlist_name = ("%s%d.m3u8" % (cam.ip.replace('.', ''), cam.port))
+
+    print utils.stream.check_stream(cam.ip, cam.port)
+
+    if len(utils.stream.check_stream(cam.ip, cam.port)) <= 2:
+        utils.stream.start_stream(url, './streams', playlist_name)
+
+    # make sure the stream was created
+    while not os.path.exists(os.path.join('./streams', playlist_name)) or len(utils.stream.check_stream(cam.ip, cam.port)) <= 2:
+        time.sleep(1)
+
+    return redirect("/%s" % playlist_name, code=302)
+
+
+@app.route('/api/stop_stream')
+@utils.cam_required
+def kill_stream(*args, **kwargs):
+    cam = kwargs['ctx']['cam']
+    utils.stream.stop_stream(cam.ip, cam.port)
+    return 'ok'
+
+
+@app.route('/<name>.m3u8')
+def streaming_stuff1(name):
+    return send_from_directory('streams', name+'.m3u8')
+
+
+@app.route('/<name>.ts')
+def streaming_stuff2(name):
+    return send_from_directory('streams', name+'.ts')
 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def spa(path):
+@login_required
+def index(path):
     return render_template('index.html')
 
 
