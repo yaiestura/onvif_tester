@@ -25,7 +25,7 @@ def cam_required_decorator(fn):
             return fn(*args, **kwargs)
 
         return jsonify({
-            "error": error_msg, 
+            "error": error_msg,
             "params": [
                     {"param": "ip", "value": ip, "required": True},
                     {"param": "port", "value": port, "required": True},

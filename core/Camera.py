@@ -2,7 +2,10 @@ import io
 import os
 import re
 import time
-from onvif import ONVIFCamera
+from time import sleep
+import string
+from random import choice
+from onvif import ONVIFCamera, exceptions
 import requests
 import rtsp
 from tests import Tests
@@ -39,7 +42,9 @@ class Camera(ONVIFCamera):
             'snapshot_url': self.get_public_snapshot_url(),
             'stream_url': self.get_public_stream_url(),
             'ip': self.ip,
-            'port': self.port
+            'port': self.port,
+            'username': self.user,
+            'password': self.password
         }
 
 
@@ -208,3 +213,113 @@ class Camera(ONVIFCamera):
         sleep(1)
         self.ptz.Stop(req_stop)
         sleep(0.3)
+
+    def genpass(self, length=8, chars=string.ascii_letters + string.digits):
+        return ''.join([choice(chars) for k in range(length)])
+
+    def genchar(self, length=8, chars=string.ascii_letters):
+        return ''.join([choice(chars) for k in range(length)])
+
+    def gendigits(self, length=8, chars=string.digits):
+        return ''.join([choice(chars) for k in range(length)])
+
+    def genhardpass(self, length=8, chars=string.ascii_letters + string.digits + string.punctuation):
+        return ''.join([choice(chars) for k in range(length)])
+
+    def maxminpass(self, a):
+        i = 4
+        k = 1000
+        z = 0
+        while i < 50:
+            try:
+                name = self.genpass(7)
+                if a == 'chars':
+                    self.devicemgmt.CreateUsers({'User': {'Username': name, 'Password': self.genchar(i), 'UserLevel': 'User'}})
+                    sleep(0.3)
+                elif a == 'digits':
+                    self.devicemgmt.CreateUsers({'User': {'Username': name, 'Password': self.gendigits(i), 'UserLevel': 'User'}})
+                    sleep(0.3)
+                elif a == 'chars+digits':
+                    self.devicemgmt.CreateUsers({'User': {'Username': name, 'Password': self.genpass(i), 'UserLevel': 'User'}})
+                    sleep(0.3)
+                elif a == 'chars+digits+symbols':
+                    self.devicemgmt.CreateUsers({'User': {'Username': name, 'Password': self.genhardpass(i),'UserLevel': 'User'}})
+                    sleep(0.3)
+                if self.devicemgmt.GetUsers()[-1].Username == name:
+                    if i < k:
+                        k = i
+                    if i > z:
+                        z = i
+                    self.devicemgmt.DeleteUsers({'Username': name})
+                    sleep(0.5)
+                    i += 1
+                else:
+                    break
+            except exceptions.ONVIFError:
+                i += 1
+        if k != 1000 and z != 0:
+            return 'The range for password length is from ' + str(k) + ' to ' + str(z) + ' for ' + a
+        else:
+            return 'No user has been created. Password with ' + str(a) + ' does not work'
+
+    def maxminpass(self):
+        result = []
+        for m in ['chars', 'digits', 'chars+digits', 'chars+digits+symbols']:
+            result.append(self.test(m))
+        return result
+
+    def maxminuser(self):
+        i = 1
+        k = 100
+        z = 0
+        while i < 32:
+            try:
+                name = self.genpass(i)
+                self.devicemgmt.CreateUsers({'User': {'Username': name, 'Password': self.genpass(9), 'UserLevel': 'User'}})
+                sleep(0.3)
+                if self.devicemgmt.GetUsers()[-1].Username == name:
+                    if i < k:
+                        k = i
+                    if i > z:
+                        z = i
+                # print self.cam.devicemgmt.GetUsers()[-1].Username, name
+                self.devicemgmt.DeleteUsers({'Username': name})
+                sleep(0.5)
+                i += 1
+            except exceptions.ONVIFError:
+                i += 1
+        if k != 1000 and z != 0:
+            return 'The range for username length is from ' + str(k) + ' to ' + str(z)
+        else:
+            return 'No user has been created. Something is wrong'
+
+    def maxusers(self):
+        k = []
+        n, z, i, max1 = 1, 1, 1, 0
+        for item in self.devicemgmt.GetUsers():
+            max1 += 1
+        while i <= 100:
+            k += [self.genpass(8)]
+            i += 1
+        while n < i-1:
+            try:
+                self.devicemgmt.CreateUsers({'User': {'Username': k[n], 'Password': self.genpass(), 'UserLevel': 'User'}})
+                sleep(0.3)
+                if self.devicemgmt.GetUsers()[-1].Username == k[n]:
+                    n += 1
+                    max1 += 1
+                else:
+                    break
+            except exceptions.ONVIFError:
+                break
+        if n == i:
+            return 'No user has been created. Something is wrong'
+        # print self.cam.devicemgmt.GetUsers()
+        while z < n:
+            self.devicemgmt.DeleteUsers({'Username': k[z]})
+            sleep(0.5)
+            z += 1
+        if n != 1:
+            return 'Camera supports ' + str(max1) + ' max users'
+        else:
+            return 'No user has been created. Something is wrong'

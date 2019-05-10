@@ -1,6 +1,8 @@
 import io
 import os
+import re
 import datetime
+from datetime import datetime
 import json
 import sys
 from reportlab.lib import colors
@@ -9,8 +11,9 @@ from reportlab.lib.pagesizes import A4
 from reportlab.platypus import Image, Paragraph, Spacer, SimpleDocTemplate, Table, TableStyle, LongTable, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle as PS
 from reportlab.platypus.flowables import TopPadder
-from  reportlab.platypus.tableofcontents import TableOfContents
-from  reportlab.lib.units import cm, mm, inch
+from reportlab.platypus.tableofcontents import TableOfContents
+from reportlab.lib.units import cm, mm, inch
+from onvif import ONVIFCamera
 
 class PageNumCanvas(canvas.Canvas):
 
@@ -60,11 +63,18 @@ def generate_report(data):
 
     ip = str(data['camInfo']['ip'])
     port = str(data['camInfo']['port'])
-    cam = 'Device under Test: ' + ip + ':' + port
-    test_time = 'Report generated: ' + str(datetime.datetime.now())
+    cam = 'Device Under Test: ' + ip + ':' + port
+    mycam = ONVIFCamera(ip, int(port), str(data['camInfo']['username']), str(data['camInfo']['password']))
+    device_info = mycam.devicemgmt.GetDeviceInformation()
+    manufacturer = 'Manufacturer: {}\n'.format(device_info.Manufacturer)
+    model = 'Model: {}\n'.format(device_info.Model)
+    firmware = 'Firmware Version: {}\n'.format(device_info.FirmwareVersion)
+    serial = 'Serial Number: {}\n'.format(device_info.SerialNumber)
+    hardware = 'Hardware ID: {}\n'.format(device_info.HardwareId)
+    test_time = 'Report generated: ' + str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     testsResults = data['runnedTests']
     img_url = '.' + data['camInfo']['snapshot_url']
-    url = 'reports/' + ip + ':' + port + '.' + str(datetime.datetime.now().time()) + '.pdf'
+    url = 'reports/' + ip + ':' + port + '.' + str(datetime.now().strftime('%Y-%m-%d:%H:%M:%S')) + '.pdf'
 
     styles = getSampleStyleSheet()
     centered = PS(name = 'centered',
@@ -72,12 +82,6 @@ def generate_report(data):
         leading = 16,
         alignment = 1,
         spaceAfter = 10)
-
-    h1 = PS(
-        name = 'Heading1',
-        fontSize = 12,
-        leading = 14)
-
 
     bold = PS(
         name = 'bold',
@@ -94,8 +98,21 @@ def generate_report(data):
 
 
     h2 = PS(name = 'Heading2',
-        fontSize = 10,
-        leading = 12)
+        fontSize = 12,
+        leading = 14)
+
+    def define_nvt_class(cam):
+        types = []
+        profiles = []
+        scopes = cam.devicemgmt.GetScopes()
+        for item in scopes:
+            groupe = re.findall(r'onvif:\/\/www\.onvif\.org\/(.*)\/(.*)', item.ScopeItem)
+            if groupe[0][0] == 'type':
+                types.append(str(groupe[0][1]).capitalize())
+            if groupe[0][0] == 'Profile' or groupe[0][0] == 'profile':
+                profiles.append(str(groupe[0][1]).capitalize())
+        profiles_verdict = (", ".join(profiles)) if len(profiles) > 0 else 'Not Specified'
+        return 'Device Class: {}; Profiles: {}'.format((", ".join(types)), profiles_verdict)
 
     Report = []
 
@@ -110,11 +127,14 @@ def generate_report(data):
     Report.append(Spacer(1, 12))
     Report.append(Spacer(1, 12))
     Report.append(Paragraph(cam, centered))
-    Report.append(Paragraph('Class: video_encoder, ptz, audio_encoder', centered))
+    Report.append(Paragraph(define_nvt_class(mycam), centered))
     Report.append(Paragraph(test_time, centered))
     Report.append(Spacer(1, 12))
-    Report.append(Spacer(1, 12))
-    Report.append(Spacer(1, 12))
+    Report.append(Paragraph(manufacturer, centered))
+    Report.append(Paragraph(model, centered))
+    Report.append(Paragraph(serial, centered))
+    Report.append(Paragraph(firmware, centered))
+    Report.append(Paragraph(hardware, centered))
     logo = Image(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logo.png'))
     Report.append(TopPadder(logo))
     Report.append(PageBreak())
@@ -157,7 +177,7 @@ def generate_report(data):
                 except:
                     report = 'Supported'
 
-            data.append([response['data']['name'], report])
+            data.append([response['data']['name'], report.replace('\n', '<br/>')])
 
         data_proccessed = [[Paragraph(cell, styleN) for cell in row] for row in data]
 
@@ -169,49 +189,6 @@ def generate_report(data):
                             ('ALIGN', (0, 0), (-1, -0), 'CENTER')]))
         Report.append(table)
         Report.append(Spacer(1, 12))
-
-    # story.append(PageBreak())
-
-    # ptext = "<font size=16>%s</font>" % cam
-
-    # Report.append(Paragraph(ptext, styles["Normal"]))
-    # Report.append(Spacer(1, 12))
-    # Report.append(Paragraph("<font size=12>%s</font>" % test_time, styles["Normal"]))
-    # Report.append(Spacer(1, 12))
-
-    # for counter, item in enumerate(testsResults, 1):
-    #     if item["data"]["name"]:
-    #         ptext = str(counter) +  ".Test:  " + str(item["data"]["name"]) + "(" + str(item["data"]["service"]) + ")"
-    #     else:
-    #         ptext = "Test: " + "NameError"
-    #     if item["data"]["result"]["supported"]:
-    #         flag = item["data"]["result"]["supported"]
-    #         if (flag == False):
-    #             sutext = str(item["data"]["name"] + ' is not supported')
-    #         else:
-    #             sutext = str(item["data"]["name"] + ' is supported')
-    #     else:
-    #         sutext = None
-    #     if item["data"]["result"]["response"]:
-    #         rtext = "Response: " + str(json.dumps(item["data"]["result"]["response"], sort_keys=True, indent=4))
-    #     else:
-    #         rtext = "Response: " + "None"
-    #     if item["data"]["result"]["extension"]:
-    #         etext = "Test Feature: " + str(item["data"]["result"]["extension"])
-    #     else:
-    #         etext = "Test Feature: " + "None"
-    #     Report.append(Paragraph("<font size=14>%s</font>" % ptext, styles["Heading5"]))
-    #     Report.append(Spacer(1, 8))
-    #     if (sutext is not None):
-    #         Report.append(Paragraph(sutext, styles["Normal"], bulletText=u'\u25cf'))
-    #         Report.append(Spacer(1, 8))
-    #     if ((etext != None)):
-    #         Report.append(Paragraph(etext, styles["Normal"], bulletText=u'\u25cf'))
-    #         Report.append(Spacer(1, 8))
-    #     if ((item["data"]["result"]["response"]) or (len(item["data"]["result"]["response"]) != 0)):
-    #         Report.append(Paragraph(rtext, styles["Normal"], bulletText=u'\u25cf'))
-    #         Report.append(Spacer(1, 8))
-    #     Report.append(Spacer(1, 12))
 
     doc = MyDocTemplate(url, pagesize=A4, rightMargin=15*mm, leftMargin=15*mm, topMargin=15*mm, bottomMargin=15*mm)
     doc.multiBuild(Report, canvasmaker=PageNumCanvas)
