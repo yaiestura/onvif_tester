@@ -17,9 +17,9 @@ def discovery():
 
         res = re.findall(r'[0-9.]+|(?<=:)\d+', address)
         cam = {
-            'id': index+1,
             'ip': res[0],
             'port': int(res[1]) if len(res) > 1 else 80,
+            'online': True
         }
 
         #Exclude devices on local Server Network

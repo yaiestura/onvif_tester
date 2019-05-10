@@ -9,4 +9,6 @@ class TestResults(db.Model):
     user = db.relationship("User", backref="reports")
     created = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
     url = db.Column(db.String(256), nullable=False)
+    rawText = db.Column(db.Text, nullable=True)
+
 
