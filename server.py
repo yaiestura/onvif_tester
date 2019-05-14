@@ -16,13 +16,20 @@ import jinja2
 
 from flask import (
     Flask, request, jsonify, redirect,
-    send_from_directory, Response, render_template, g)
+    send_from_directory, Response, render_template, g, make_response)
 
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 
 from urlparse import urlparse, urljoin
 from flask import request, url_for, flash
+
+
+IS_PROD = '--prod' in sys.argv
+if IS_PROD:
+    CORS_VALUE = 'http://onvif.auditory.ru'
+else:
+    CORS_VALUE = 'http://localhost:3000'
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
@@ -262,12 +269,25 @@ def kill_stream(*args, **kwargs):
 
 @app.route('/<name>.m3u8')
 def streaming_stuff1(name):
-    return send_from_directory('streams', name+'.m3u8')
+    response = make_response(send_from_directory('streams', name+'.m3u8'))
+    response.headers['Access-Control-Allow-Origin'] = CORS_VALUE
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    # response.headers['Expires'] = 'Tue, 03 Jul 2001 06:00:00 GMT'
+    # response.headers['Last-Modified'] = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.localtime())
+    # response.headers['Cache-Control'] = 'max-age=0, no-cache, must-revalidate, proxy-revalidate'
+    return response
 
 
 @app.route('/<name>.ts')
 def streaming_stuff2(name):
-    return send_from_directory('streams', name+'.ts')
+    response = make_response(send_from_directory('streams', name+'.ts'))
+    response.headers['Access-Control-Allow-Origin'] = CORS_VALUE
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 
 @app.route('/', defaults={'path': ''})

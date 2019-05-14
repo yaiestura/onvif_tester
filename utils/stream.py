@@ -20,13 +20,13 @@ def start_stream(private_stream_url, output_dir, output_filename):
         '-hls_flags', 'delete_segments', 
         '-start_number', '0', 
         os.path.join(output_dir, output_filename),
-        '>/dev/null 2>&1'
+        '1>/dev/null 2>&1'
     ]
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    subprocess.Popen('rm '+os.path.join(output_dir, output_filename), shell=True)
+    # subprocess.Popen('rm '+os.path.join(output_dir, output_filename), shell=True)
     subprocess.Popen(' '.join(cmd), shell=True)
 
 
