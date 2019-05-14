@@ -20,6 +20,19 @@ class Camera(ONVIFCamera):
         self.port = port
         self.user = user
         self.password = password
+        self.test_types = [
+            'analytics',
+            'device',
+            'deviceio',
+            'events',
+            'imaging',
+            'media',
+            'ptz',
+            'pullpoint',
+            'recording',
+            'replay',
+            'search'
+        ]
 
 
     # TODO: make it json fomatted
@@ -133,7 +146,8 @@ class Camera(ONVIFCamera):
 
 
     def get_supported_services(self):
-        return list(map(lambda x: x.Namespace.split('/')[-2].lower(), self.devicemgmt.GetServices({'IncludeCapability': False})))
+        services = list(dict.fromkeys(map(lambda x: x.Namespace.split('/')[-2].lower(), self.devicemgmt.GetServices({'IncludeCapability': False}))))
+        return [item for item in services if item in self.test_types]
 
 
     def get_available_tests(self):
@@ -169,7 +183,7 @@ class Camera(ONVIFCamera):
             pos.y = False
         return pos
 
-    def left(req_move, req_stop, ptz, token):
+    def left(self, req_move, req_stop, ptz, token):
         sleep(0.3)
         self.ptz.Stop(req_stop)
         req_move.Velocity.Zoom._x = 0.0
@@ -181,7 +195,7 @@ class Camera(ONVIFCamera):
         sleep(0.3)
 
 
-    def right(req_move, req_stop, ptz, token):
+    def right(self, req_move, req_stop, ptz, token):
         sleep(0.3)
         self.ptz.Stop(req_stop)
         req_move.Velocity.Zoom._x = 0.0
@@ -192,7 +206,7 @@ class Camera(ONVIFCamera):
         self.ptz.Stop(req_stop)
         sleep(0.3)
 
-    def zoom_in(req_move, req_stop, ptz, token):
+    def zoom_in(self, req_move, req_stop, ptz, token):
         sleep(0.3)
         self.ptz.Stop(req_stop)
         req_move.Velocity.PanTilt._x = 0.0
@@ -203,7 +217,7 @@ class Camera(ONVIFCamera):
         self.ptz.Stop(req_stop)
         sleep(0.3)
 
-    def zoom_out(req_move, req_stop, ptz, token):
+    def zoom_out(self, req_move, req_stop, ptz, token):
         sleep(0.3)
         self.ptz.Stop(req_stop)
         req_move.Velocity.PanTilt._x = 0.0

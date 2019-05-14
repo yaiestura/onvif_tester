@@ -36,8 +36,10 @@ class CoreTests:
             'name': 'GetSupportedServices',
             'result': {
                 'supported': True,
+                'report_name': 'Supported ONVIF services',
                 'extension': None,
-                'response': services_status
+                'response': (', ').join([str(item).capitalize() for item in self.cam.get_supported_services()]),
+                'report': (', ').join([str(item).capitalize() for item in self.cam.get_supported_services()]),
             }
 
         }
@@ -45,41 +47,94 @@ class CoreTests:
     def GetCapabilities(self):
         try:
             capabilities = self.cam.devicemgmt.GetCapabilities()
-            if (len(capabilities) > 0):
+            try:
+                report = ''
+                network = capabilities.Device.Network
+                report += 'Device Network Capabilities:\n'
+                if hasattr(network, 'IPFilter'):
+                    ip_filter = 'IP filtering(ACL) is supported by the device\n' if network.IPFilter == True else 'IP filtering(ACL) is not supported by the device\n'
+                if hasattr(network, 'ZeroConfiguration'):
+                    zero = 'Zero Configuration settings are supported by the device\n' if network.ZeroConfiguration == True else 'Zero Configuration settings are not supported by the device\n'
+                if hasattr(network, 'IPVersion6'):
+                    ipv6 = 'IPv6 is supported by the device\n' if network.IPVersion6 == True else 'IPv6 is not supported by the device\n'
+                if hasattr(network, 'DynDNS'):
+                    dns = 'Dynamic DNS is supported by the device\n' if network.DynDNS == True else 'Dynamic DNS is not supported by the device\n'
+            except:
+                report += 'Device does not support System Capabilities:\n'
+            try:
+                system = capabilities.Device.System
+                if hasattr(system, 'DiscoveryResolve'):
+                    resolve = 'WS Discovery resolve requests are supported by the device\n' if system.DiscoveryResolve == True else 'WS Discovery resolve requests are not supported by the device\n'
+                if hasattr(system, 'DiscoveryBye'):
+                    bye = 'WS-Discovery Bye is supported by the device\n' if system.DiscoveryBye == True else 'WS-Discovery Bye is not supported by the device\n'
+                if hasattr(system, 'RemoteDiscovery'):
+                    remote = 'Remote Discovery is supported by the device\n' if system.RemoteDiscovery == True else 'Remote Discovery is not supported by the device\n'
+                if hasattr(system, 'SystemBackup'):
+                    backup = 'System Backup is supported by the device\n' if system.SystemBackup == True else 'SystemBackup is not supported by the device\n'
+                if hasattr(system, 'SystemLogging'):
+                    logging = 'System Logging is supported by the device\n' if system.SystemLogging == True else 'System Logging is not supported by the device\n'
+                if hasattr(system, 'FirmwareUpgrade'):
+                    upgrade = 'Firmware Upgrade is supported by the device\n' if system.FirmwareUpgrade == True else 'Firmware Upgrade is not supported by the device\n'
+            except:
+                report += 'Device does not support System Capabilities:\n'
+            report += ip_filter
+            report += zero
+            report += ipv6
+            report += dns
+            report += 'Device System Capabilities:\n'
+            report += resolve
+            report += bye
+            report += remote
+            report += backup
+            report += logging
+            report += upgrade
+            if ((len(capabilities) > 0) or (capabilities != [])):
                 return {'name': 'GetCapabilities', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(capabilities)}}
+                'result': {'supported': True, 'report_name': 'Device service capabilities',
+                'extension': None, 'response': str(capabilities),
+                'report': report[:-1]}}
             else:
                 return {'name': 'GetCapabilities', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetCapabilitiesResponse message',
+                'result': {'supported': False, 'report_name': 'Device service capabilities',
+                'extension': 'The DUT did not send GetCapabilitiesResponse message',
                 'response': str(capabilities), 'report': 'Not Supported'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetCapabilities', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False, 'report_name': 'Device service capabilities',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetCapabilities', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False, 'report_name': 'Device service capabilities',
+                'extension': str(e), 'response': '', 'report': 'Not Supported'}}
 
     def GetDiscoveryMode(self):
         try:
             request = self.cam.devicemgmt.GetDiscoveryMode()
             if (request):
                 return {'name': 'GetDiscoveryMode', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'This operation got the discovery mode of a device',
+                'result': {'supported': True,
+                'report_name': 'Discovery mode status',
+                'extension': 'This operation got the discovery mode of a device',
                 'response': str(request), 'report': 'Device currently is {}'.format(str(request)) }}
             else:
                 return {'name': 'GetDiscoveryMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetDiscoveryModeResponse message',
+                'result': {'supported': False,
+                'report_name': 'Discovery mode status',
+                'extension': 'The DUT did not send GetDiscoveryModeResponse message',
                 'response': str(request), 'report': 'Not Supported'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetDiscoveryMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Discovery mode status',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetDiscoveryMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False, 'report_name': 'Discovery mode status',
+                 'extension': str(e), 'response': ''}}
 
     def SetDiscoveryMode(self):
         try:
@@ -90,36 +145,48 @@ class CoreTests:
                 self.cam.devicemgmt.SetDiscoveryMode({'DiscoveryMode': get1})
                 if (get1 != get2 ):
                     return {'name': 'SetDiscoveryMode', 'service': 'Device',
-                    'result': {'supported': True, 'extension': 'Was Discoverable, Set NonDiscoverable, Left Discoverable',
-                    'response': str(set1)}}
+                    'result': {'supported': True,
+                    'report_name': 'Set Discovery mode support',
+                    'extension': 'Was Discoverable, Set NonDiscoverable, Left Discoverable',
+                    'response': str(set1),
+                    'report': 'Manual setting of Discovery Mode is supported\nWas Discoverable, Set NonDiscoverable, Left Discoverable'}}
                 else:
                     return {'name': 'SetDiscoveryMode', 'service': 'Device',
-                    'result': {'supported': False, 'extension': 'DiscoveryMode was Discoverable, the DUT did not SetDiscoveryMode as NonDiscoverable',
-                    'response': str(set1)}}
+                    'result': {'supported': False, 'report_name': 'Set Discovery mode support',
+                    'extension': 'DiscoveryMode was Discoverable, the DUT did not SetDiscoveryMode as NonDiscoverable',
+                    'response': str(set1),
+                    'report': 'Manual setting of Discovery Mode is not supported\nDiscovery Mode was Discoverable, the device did not Set DiscoveryMode as NonDiscoverable'}}
             elif (get1 == 'NonDiscoverable'):
                 set1 = self.cam.devicemgmt.SetDiscoveryMode({'DiscoveryMode': 'Discoverable'})
                 get2 = self.cam.devicemgmt.GetDiscoveryMode()
                 self.cam.devicemgmt.SetDiscoveryMode({'DiscoveryMode': get1})
                 if (get1 != get2):
                     return {'name': 'SetDiscoveryMode', 'service': 'Device',
-                    'result': {'supported': True, 'extension': 'Was NonDiscoverable, Set Discoverable, Left NonDiscoverable',
-                    'response': str(set1)}}
+                    'result': {'supported': True, 'report_name': 'Set Discovery mode support',
+                    'extension': 'Was NonDiscoverable, Set Discoverable, Left NonDiscoverable',
+                    'response': str(set1),
+                    'report':'Manual setting of Discovery Mode is supported\nWas NonDiscoverable, Set Discoverable, Left NonDiscoverable'}}
                 else:
                     return {'name': 'SetDiscoveryMode', 'service': 'Device',
-                    'result': {'supported': False, 'extension': 'DiscoveryMode was NonDiscoverable, the DUT did not SetDiscoveryMode as Discoverable',
-                    'response': str(set1)}}
+                    'result': {'supported': False, 'report_name': 'Set Discovery mode support',
+                    'extension': 'DiscoveryMode was NonDiscoverable, the DUT did not SetDiscoveryMode as Discoverable',
+                    'response': str(set1),
+                    'report': 'Manual setting of Discovery Mode is not supported\nDiscovery Mode was NonDiscoverable, the device did not Set DiscoveryMode as Discoverable'}}
             else:
                 return {'name': 'SetDiscoveryMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send SetDiscoveryModeResponse message',
-                'response': str(set1)}}
+                'result': {'supported': False, 'report_name': 'Set Discovery mode support',
+                 'extension': 'The DUT did not send SetDiscoveryModeResponse message',
+                'response': str(set1), 'report': 'Not Supported'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'SetDiscoveryMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False, 'report_name': 'Set Discovery mode support',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'SetDiscoveryMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False, 'report_name': 'Set Discovery mode support',
+                'extension': str(e), 'response': '', 'report': 'Not Supported'}}
 
     def GetScopes(self):
         try:
@@ -130,48 +197,77 @@ class CoreTests:
             report = "Device has {} scope items:\n".format(count+1) + report[:-1]
             if (len(scopes) > 0):
                 return {'name': 'GetScopes', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(scopes),
+                'result': {'supported': True,
+                'report_name': 'Device scopes',
+                'extension': None, 'response': str(scopes),
                 'report': report}}
             else:
                 return {'name': 'GetScopes', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetScopesResponse message. The DUT scope list does not have one or more mandatory scope entry.',
-                'response': str(scopes), 'report': 'The DUT did not send GetScopesResponse message\nThe DUT scope list does not have one or more mandatory scope entry.'}}
+                'result': {'supported': False,
+                'report_name': 'Device scopes',
+                'extension': 'Not Supported\nThe DUT did not send GetScopesResponse message. The DUT scope list does not have one or more mandatory scope entry.',
+                'response': str(scopes), 'report': 'The device did not send GetScopesResponse message\nThe DUT scope list does not have one or more mandatory scope entry.'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetScopes', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Device scopes',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetScopes', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Device scopes',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def AddScopes(self):
         try:
             item = "onvif://www.onvif.org/add/scope" + str(time.time())
             add = self.cam.devicemgmt.AddScopes({'ScopeItem': item})
             probe_match()
+            sleep(1)
             gett = self.cam.devicemgmt.GetScopes()
             if (gett != []):
                 gett = self.cam.devicemgmt.GetScopes()[-1].ScopeItem
             probe_match()
+            sleep(1)
             self.cam.devicemgmt.RemoveScopes({'ScopeItem': item})
+            sleep(1)
             if (item == gett and add is not None):
                 return {'name': 'AddScopes', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Added new Configurable Scope: {}'.format(item), 'response': str(add)}}
+                'result': {'supported': True,
+                'report_name': 'Add new Scope support',
+                'extension': 'Added new Configurable Scope: {}'.format(item), 'response': str(add),
+                'report': 'Successfully added new Configurable Scope: {}'.format(item),
+                'response': str(add) }}
             if (item == gett and add is None):
                 return {'name': 'AddScopes', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Added new Configurable Scope: {}, but DUT did not send a valid AddScopesResponse Message.'.format(item), 'response': str(add)}}
+                'result': {'supported': True,
+                'report_name': 'Add new Scope support',
+                'extension': 'Added new Configurable Scope: {}, but DUT did not send a valid AddScopesResponse Message.'.format(item),
+                'report': 'Successfully added new Configurable Scope: {}, but device did not send a valid AddScopesResponse Message.'.format(item),
+                'response': str(add)}}
             else:
                 return {'name': 'AddScopes', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not add new scope, {}'.format(item), 'response': str(add)}}
+                'result': {'supported': False,
+                'report_name': 'Add new Scope support',
+                'extension': 'The device did not add new scope, {}'.format(item),
+                'report': 'Not Supported\nThe device did not add new scope, {}'.format(item),
+                'response': str(add)}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'AddScopes', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Add new Scope support',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'AddScopes', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Add new Scope support',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def RemoveScopes(self):
         try:
@@ -181,26 +277,44 @@ class CoreTests:
             sleep(1)
             remove = self.cam.devicemgmt.RemoveScopes({'ScopeItem': item})
             probe_match()
+            sleep(1)
             gett = self.cam.devicemgmt.GetScopes()
             if (gett != []):
                 gett = self.cam.devicemgmt.GetScopes()[-1].ScopeItem
             if (item != gett and remove is not None):
                 return {'name': 'RemoveScopes', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Removed added Configurable Scope: {}'.format(item), 'response': str(remove)}}
+                'result': {'supported': True,
+                'report_name': 'Remove Scope support',
+                'extension': 'Removed added Configurable Scope: {}'.format(item),
+                'report': 'Successfully removed added configurable Scope: {}'.format(item), 
+                'response': str(remove)}}
             if (item != gett and remove is None):
                 return {'name': 'RemoveScopes', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Removed added Configurable Scope: {}, but DUT did not send a valid RemoveScopesResponse Message.'.format(item), 'response': str(remove)}}    
+                'result': {'supported': True,
+                'report_name': 'Remove Scope support',
+                'extension': 'Removed added configurable Scope: {}, but device did not send a valid RemoveScopesResponse Message.'.format(item),
+                'report': 'Successfully removed added configurable Scope: {}, but device did not send a valid RemoveScopesResponse Message.'.format(item),
+                'response': str(remove)}}    
             else:
                 return {'name': 'RemoveScopes', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not removed new scope, {}'.format(item), 'response': str(remove)}}
+                'result': {'supported': False,
+                'report_name': 'Remove Scope support',
+                'extension': 'The device did not remove added scope, {}'.format(item),
+                'report': 'Not Supported\nThe device did not remove added scope, {}'.format(item),
+                'response': str(remove)}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'RemoveScopes', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Remove Scope support',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented'}}
             else:
                 return {'name': 'RemoveScopes', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Remove Scope support',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def GetHostname(self):
         try:
@@ -208,19 +322,30 @@ class CoreTests:
             report = 'Hostname is obtained from DHCP' if hostname.FromDHCP else 'Hostname is obtained not from DHCP\n' + 'Hostname: {}'.format(hostname.Name)
             if (hostname):
                 return {'name': 'GetHostname', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(hostname), 'report': report}}
+                'result': {'supported': True, 'extension': None,
+                'response': str(hostname),
+                'report_name': 'Hostname',
+                'report': report}}
             else:
                 return {'name': 'GetHostname', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'DUT did not send GetHostnameResponse message.',
+                'result': {'supported': False,
+                'report_name': 'Hostname',
+                'extension': 'Not Supported or Invalid\nDevice did not send GetHostnameResponse message.',
+                'report': 'Not Supported or Invalid\nDevice did not send GetHostnameResponse message.',
                 'response': str(hostname)}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetHostname', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Hostname',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetHostname', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Hostname',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported or Invalid'}}
 
     def SetHostname(self):
         try:
@@ -231,18 +356,28 @@ class CoreTests:
             self.cam.devicemgmt.SetHostname({'Name': get1})
             if (get1 != get2):
                 return {'name': 'SetHostname', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'The DUT returned "Onvif_test1" as its Hostname after SetHostname.', 'response': str(get2)}}
+                'result': {'supported': True,
+                'report_name': 'Set hostname support',
+                'extension': 'The DUT returned "Onviftest1" as its Hostname after SetHostname.', 'response': str(get2)}}
             else:
                 return {'name': 'SetHostname', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not SetHostname to "Onvif_test1"', 'response': str(set1)}}
+                'result': {'supported': False,
+                'report_name': 'Set hostname support',
+                'extension': 'The DUT did not SetHostname to "Onviftest1"',
+                'report': 'Not Supported\nThe device did not SetHostname to "Onviftest1"',
+                'response': str(set1)}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'SetHostname', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
+                'result': {'supported': False,
+                'report_name': 'Set hostname support',
+                'extension': 'Optional Action Not Implemented', 
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'SetHostname', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Set hostname support', 'extension': str(e), 'response': '',
+                'report': 'Not Supported' }}
 
     def GetNetworkInterfaces(self):
         try:
@@ -261,20 +396,30 @@ class CoreTests:
                 interfaces.append(data)
             if (netifaces != []):
                 return {'name': 'GetNetworkInterfaces', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(netifaces),
+                'result': {'supported': True,
+                'report_name': 'Network interfaces',
+                'extension': None, 'response': str(netifaces),
                 'report': str(interfaces) }}
             else:
                 return {'name': 'GetNetworkInterfaces', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetNetworkInterfacesResponse message',
-                'response': str(netifaces)}}
+                'result': {'supported': False,
+                'report_name': 'Network interfaces',
+                'extension': 'The DUT did not send GetNetworkInterfacesResponse message',
+                'response': str(netifaces),
+                'report': 'Not Supported\nThe device did not send GetNetworkInterfacesResponse message'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetNetworkInterfaces', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Network interfaces',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetNetworkInterfaces', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Network interfaces',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def GetDNS(self):
         try:
@@ -282,8 +427,8 @@ class CoreTests:
             from_dhcp = "DNS configuration is obtained by using DHCP\n" if dns.FromDHCP == True else "DNS configuration is set manually\n"
             domain = "The domain to search if the Hostname is not fully qualified is: {}\n".format(dns.SearchDomain) if hasattr(dns, 'SearchDomain') else ''
             items = ""
-            if dns.FromDHCP:
-                for item in dns.FromDHCP:
+            if hasattr(dns, 'DNSFromDHCP'):
+                for item in dns.DNSFromDHCP:
                     try:
                         ipv4 = item.IPv4Address
                         items += 'IPv4Address is: {}\n'.format(ipv4)
@@ -314,21 +459,30 @@ class CoreTests:
             report = from_dhcp + domain + "DNS configuration is: {}\n".format(items)
             if (dns != []):
                 return {'name': 'GetDNS', 'service': 'Device',
-                        'result': {'supported': True, 'extension': None, 'response': str(dns),
-                                'report': report}}
+                        'result': {'supported': True,
+                        'report_name': 'DNS settings',
+                        'extension': None, 'response': str(dns),
+                        'report': report}}
             else:
                 return {'name': 'GetDNS', 'service': 'Device',
-                        'result': {'supported': False, 'extension': 'The DUT did not send GetDNSResponse message.',
-                                'response': str(dns), 'report': 'Device did not send GetDNSResponse message'}}
+                        'result': {'supported': False,
+                        'report_name': 'DNS settings',
+                        'extension': 'The DUT did not send GetDNSResponse message.',
+                        'response': str(dns),
+                        'report': 'Device did not send GetDNSResponse message'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetDNS', 'service': 'Device',
-                        'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                                'response': '', 'report': 'Optional Action Not Implemented'}}
+                        'result': {'supported': False,
+                        'report_name': 'DNS settings',
+                        'extension': 'Optional Action Not Implemented',
+                        'response': '', 'report': 'Optional Action Not Implemented'}}
             else:
                 return {'name': 'GetDNS', 'service': 'Device',
-                        'result': {'supported': False, 'extension': str(e), 'response': 'DNS Information is not supported',
-                        'report': 'DNS Information is not supported'}}
+                        'result': {'supported': False,
+                        'report_name': 'DNS settings',
+                        'extension': str(e), 'response': 'DNS Information is not supported',
+                        'report': 'Not Supported\nDNS Information is not supported'}}
 
     def GetNetworkProtocols(self):
         try:
@@ -340,20 +494,30 @@ class CoreTests:
                 result += '{}:{}, '.format(name, port)
             if (protocols != []):
                 return {'name': 'GetNetworkProtocols', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(protocols),
+                'result': {'supported': True,
+                'report_name': 'Network protocols',
+                'extension': None, 'response': str(protocols),
                 'report': result[:-2] }}
             else:
                 return {'name': 'GetNetworkProtocols', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetNetworkProtocolsResponse message',
+                'result': {'supported': False,
+                'report_name': 'Network protocols',
+                'extension': 'The DUT did not send GetNetworkProtocolsResponse message',
+                'report':'Not Supported\nThe device did not send GetNetworkProtocolsResponse message',
                 'response': str(protocols)}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetNetworkProtocols', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Network protocols',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetNetworkProtocols', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Network protocols',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def GetNetworkDefaultGateway(self):
         try:
@@ -378,20 +542,29 @@ class CoreTests:
             report = "Device Network Default Gateway\nIPv4: {}{}".format(ipv4, default_route) + (", IPv6: {}\n" if ipv6 != "" else "\n") + ipv4_numbers + '\n' + ("" if ipv6 == "" else ipv6_check)
             if (gateways != []):
                 return {'name': 'GetNetworkDefaultGateway', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(gateways),
+                'result': {'supported': True,
+                'report_name': 'Default gateway',
+                'extension': None, 'response': str(gateways),
                 'report': report }}
             else:
                 return {'name': 'GetNetworkDefaultGateway', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetNetworkDefaultGatewayResponse message',
-                'response': str(gateways), 'report': 'Device did not send GetNetworkDefaultGatewayResponse message'}}
+                'result': {'supported': False,
+                'report_name': 'Default gateway',
+                'extension': 'The DUT did not send GetNetworkDefaultGatewayResponse message',
+                'response': str(gateways), 'report': 'Not Supported\nThe device did not send GetNetworkDefaultGatewayResponse message'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetNetworkDefaultGateway', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Default gateway',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented'}}
             else:
                 return {'name': 'GetNetworkDefaultGateway', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Default gateway',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def SetNetworkDefaultGateway(self):
         try:
@@ -402,19 +575,31 @@ class CoreTests:
             set2 = self.cam.devicemgmt.SetNetworkDefaultGateway({'IPv4Address': default})
             if (get1 == new):
                 return {'name': 'SetNetworkDefaultGateway', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'The DUT set new NetworkDefaultGateway IPv4Address as {}'.format(new), 'response': str(set1)}}
+                'result': {'supported': True,
+                'report_name': 'Set Default gateway support',
+                'extension': 'The DUT set new Network DefaultGateway IPv4Address as {}'.format(new),
+                'report': 'The device set new Network DefaultGateway IPv4Address as {}'.format(new),
+                'response': str(set1)}}
             else:
                 return {'name': 'SetNetworkDefaultGateway', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not set new NetworkDefaultGateway',
+                'result': {'supported': False,
+                'report_name': 'Set Default gateway support',
+                'extension': 'The device did not set new Network DefaultGateway',
+                'report': 'Not Supported\nThe device did not set new Network DefaultGateway',
                 'response': str(set1)}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'SetNetworkDefaultGateway', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
+                'result': {'supported': False,
+                'report_name': 'Set Default gateway support',
+                'extension': 'Optional Action Not Implemented', 
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'SetNetworkDefaultGateway', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Set Default gateway support',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def GetDeviceInformation(self):
         try:
@@ -427,21 +612,29 @@ class CoreTests:
             report += 'The hardware ID of the device is: {}\n'.format(info.HardwareId)
             if (info != []):
                 return {'name': 'GetDeviceInformation', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(info),
+                'result': {'supported': True,
+                'report_name': 'Device information',
+                'extension': None, 'response': str(info),
                 'report': report}}
             else:
                 return {'name': 'GetDeviceInformation', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetDeviceInformationResponse message',
-                'response': str(info), 'report': 'The device did not send DeviceInformation message'}}
+                'result': {'supported': False,
+                'report_name': 'Device information',
+                'extension': 'The DUT did not send GetDeviceInformationResponse message',
+                'response': str(info), 'report': 'Not Supported\nThe device did not send DeviceInformation message'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetDeviceInformation', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
+                'result': {'supported': False,
+                'report_name': 'Device information',
+                'extension': 'Optional Action Not Implemented', 
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetDeviceInformation', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': 'The device did not send DeviceInformation message',
-                'report': 'The device did not send DeviceInformation message'}}
+                'result': {'supported': False,
+                'report_name': 'Device information',
+                'extension': str(e), 'response': 'The device did not send DeviceInformation message',
+                'report': 'Not Supported\nThe device did not send DeviceInformation message'}}
 
     def GetUsers(self):
         try:
@@ -453,21 +646,29 @@ class CoreTests:
             report += users_list[:-2]
             if (users != []):
                 return {'name': 'GetUsers', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(users),
+                'result': {'supported': True,
+                'report_name': 'Users on device',
+                'extension': None, 'response': str(users),
                 'report': report}}
             else:
                 return {'name': 'GetUsers', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetUsersResponse message.',
-                'response': str(users), 'report': 'Device can not retreive users'}}
+                'result': {'supported': False,
+                'report_name': 'Users on device',
+                'extension': 'The DUT did not send GetUsersResponse message.',
+                'response': str(users), 'report': 'Not Supported\nCould not obtain users from the device'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetUsers', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Users on device',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetUsers', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': 'Device can not retreive users',
-                'report': 'Device can not retreive users'}}
+                'result': {'supported': False,
+                'report_name': 'Users on device',
+                'extension': str(e), 'response': 'Device can not retreive users',
+                'report': 'Not Supported\nCould not obtain users from the device'}}
 
     def CreateUsers(self):
         try:
@@ -483,18 +684,31 @@ class CoreTests:
                 sleep(1)
                 delete = self.cam.devicemgmt.DeleteUsers({'Username':'lalalal'})
                 return {'name': 'CreateUsers', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'The DUT created an user with {}'.format('Username: lalalal'), 'response': str(set1)}}
+                'result': {'supported': True,
+                'report_name': 'Create new users',
+                'extension': 'The DUT created an user with {}'.format('username: lalalal'),
+                'report': 'The device created an user with {}'.format('username: lalalal'),
+                'response': str(set1)}}
             else:
                 return {'name': 'CreateUsers', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'The DUT could not create a new user', 'response': str(set1)}}
+                'result': {'supported': True,
+                'report_name': 'Create new users',
+                'extension': 'The DUT could not create a new user',
+                'report': 'Not Supported\nThe device could not create a new user',
+                'response': str(set1)}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'CreateUsers', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
+                'result': {'supported': False,
+                'report_name': 'Create new users',
+                'extension': 'Optional Action Not Implemented', 
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'CreateUsers', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Create new users',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def GetNTP(self):
         try:
@@ -513,41 +727,29 @@ class CoreTests:
             report = from_dhcp + "NTP {} is: {}".format(ntp_address[0], ntp_address[1])
             if (ntp != []):
                 return {'name': 'GetNTP', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(ntp),
+                'result': {'supported': True,
+                'report_name': 'NTP settings',
+                'extension': None, 'response': str(ntp),
                 'report': report }}
             else:
                 return {'name': 'GetNTP', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetNTPResponse message.',
-                'response': str(ntp), 'report': 'Device did not send GetNTPResponse message'}}
+                'result': {'supported': False,
+                'report_name': 'NTP settings',
+                'extension': 'The DUT did not send GetNTPResponse message.',
+                'response': str(ntp), 'report': 'Not Supported\nDevice did not send GetNTPResponse message'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetNTP', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
+                'result': {'supported': False,
+                'report_name': 'NTP settings',
+                'extension': 'Optional Action Not Implemented', 
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetNTP', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
-
-    def GetServices(self):
-        try:
-            services = self.cam.devicemgmt.GetServices({'IncludeCapability': False})
-            cap_services = self.cam.devicemgmt.GetServices({'IncludeCapability': True})
-            if (services != [] and cap_services != []):
-                return {'name': 'GetServices', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'The DUT send a valid response in both cases(IncludeCapability)',
-                'response': str(services)}}
-            else:
-                return {'name': 'GetServices', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetServicesResponse message',
-                'response': str(services)}}
-        except Exception as e:
-            if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
-                return {'name': 'GetServices', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
-                'response': '', 'report': 'Optional Action Not Implemented' }}
-            else:
-                return {'name': 'GetServices', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'NTP settings',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def GetSystemDateAndTime(self):
         try:
@@ -563,20 +765,29 @@ class CoreTests:
 
             if (time != []):
                 return {'name': 'GetSystemDateAndTime', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(time),
+                'result': {'supported': True,
+                'report_name': 'Date and Time settings',
+                'extension': None, 'response': str(time),
                 'report': report}}
             else:
                 return {'name': 'GetSystemDateAndTime', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetSystemDateAndTimeResponse message',
-                'response': str(time), 'report': 'Device did not send GetSystemDateAndTimeResponse message'}}
+                'result': {'supported': False,
+                'report_name': 'Date and Time settings',
+                'extension': 'The DUT did not send GetSystemDateAndTimeResponse message',
+                'response': str(time), 'report': 'Not Supported\nThe device did not send GetSystemDateAndTimeResponse message'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetSystemDateAndTime', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented', 
+                'result': {'supported': False,
+                'report_name': 'Date and Time settings',
+                'extension': 'Optional Action Not Implemented', 
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetSystemDateAndTime', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Date and Time settings',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def GetSystemUris(self):
         try:
@@ -605,20 +816,29 @@ class CoreTests:
 
             if ((len(uri) > 0 or uri != []) and str(uri) != "<empty>"):
                 return {'name': 'GetSystemUris', 'service': 'Device',
-                'result': {'supported': True, 'extension': None, 'response': str(uri),
+                'result': {'supported': True,
+                'report_name': 'System URIs',
+                'extension': None, 'response': str(uri),
                 'report': report}}
             else:
                 return {'name': 'GetSystemUris', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetSystemUrisResponse message',
-                'response': str(uri), 'report': "Device sent an empty SystemUri message"}}
+                'result': {'supported': False,
+                'report_name': 'System URIs',
+                'extension': 'The DUT did not send GetSystemUrisResponse message',
+                'response': str(uri), 'report': "Not Supported\nThe device sent an empty SystemUri message"}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetSystemUris', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'System URIs',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetSystemUris', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'System URIs',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def GetEndpointReference(self):
         try:
@@ -626,24 +846,36 @@ class CoreTests:
             if (endpoint != [] or len(endpoint) == 0):
                 if (endpoint.GUID is None):
                     return {'name': 'GetEndpointReference', 'service': 'Device',
-                    'result': {'supported': True, 'extension': None, 'response': str(endpoint),
+                    'result': {'supported': True,
+                    'report_name': 'Device endpoint reference address',
+                    'extension': None, 'response': str(endpoint),
                     'report': 'Endpoint Reference address is not valid or null'}}
                 else:
                     return {'name': 'GetEndpointReference', 'service': 'Device',
-                    'result': {'supported': True, 'extension': None, 'response': str(endpoint),
+                    'result': {'supported': True,
+                    'report_name': 'Device endpoint reference address',
+                    'extension': None, 'response': str(endpoint),
                     'report': 'Endpoint Reference address is {}'.format(str(endpoint))}}
             else:
                 return {'name': 'GetEndpointReference', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send GetEndpointReferenceResponse message',
-                'response': str(endpoint)}}
+                'result': {'supported': False,
+                'report_name': 'Device endpoint reference address',
+                'extension': 'The DUT did not send GetEndpointReferenceResponse message',
+                'response': str(endpoint),
+                'report': 'Not Supported'}}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetEndpointReference', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Device endpoint reference address',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented'}}
             else:
                 return {'name': 'GetEndpointReference', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Device endpoint reference address',
+                'extension': str(e), 'response': '',
+                'report': 'Not Supported'}}
 
     def GetClientCertificateMode(self):
         try:
@@ -654,20 +886,28 @@ class CoreTests:
                 report = 'Client certificates are required by device TLS client authentication'
             if ((enabled is None) or (len(enabled) == 0)):
                 return {'name': 'GetClientCertificateMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send a valid response in both cases(IncludeCapability)',
-                'response': str(services)}}
+                'result': {'supported': False,
+                'report_name': 'Status of TLS client authentication certificates',
+                'extension': 'The DUT did not send a valid response',
+                'response': str(services), 'report': 'Not Supported'}}
             else:
                 return {'name': 'GetClientCertificateMode', 'service': 'Device',
-                'result': {'supported': True, 'extension': '','response': str(services),
+                'result': {'supported': True,
+                'report_name': 'Status of TLS client authentication certificates',
+                'extension': '','response': str(services),
                 'report': report }}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetClientCertificateMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Status of TLS client authentication certificates',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetClientCertificateMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': ''}}
+                'result': {'supported': False,
+                'report_name': 'Status of TLS client authentication certificates',
+                'extension': str(e), 'response': '', 'report': 'Not Supported'}}
 
     def GetDot11Capabilities(self):
         try:
@@ -707,20 +947,29 @@ class CoreTests:
 
             if ((dot11 is None) or (dot11 == [])):
                 return {'name': 'GetDot11Capabilities', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send a valid response GetDot11CapabilitiesResponseMessage',
+                'result': {'supported': False,
+                'report_name': 'IEEE802.11 capabilities',
+                'extension': 'The DUT did not send a valid response GetDot11CapabilitiesResponseMessage',
+                'report': 'Not Supported\nThe device did not send a valid response GetDot11CapabilitiesResponseMessage',
                 'response': str(dot11)}}
             else:
                 return {'name': 'GetDot11Capabilities', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Wireless IEEE802.11 standart capabilities:',
+                'result': {'supported': True,
+                'report_name': 'IEEE802.11 capabilities',
+                'extension': 'Wireless IEEE802.11 standart capabilities:',
                 'response': str(dot11), 'report': report }}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetDot11Capabilities', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'IEEE802.11 capabilities',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetDot11Capabilities', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': '',
+                'result': {'supported': False,
+                'report_name': 'IEEE802.11 capabilities',
+                'extension': str(e), 'response': '',
                 'report': 'Not Supported'}}
 
     def GetDot1XConfigurations(self):
@@ -752,20 +1001,29 @@ class CoreTests:
 
             if ((dot1x is None) or (dot1x == [])):
                 return {'name': 'GetDot1XConfigurations', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send a valid response GetDot1XConfigurationsResponseMessage',
+                'result': {'supported': False,
+                'report_name': 'IEEE 802.1X configurations',
+                'extension': 'The DUT did not send a valid response GetDot1XConfigurationsResponseMessage',
+                'report': 'The device did not send a valid response GetDot1XConfigurationsResponseMessage',
                 'response': str(dot11)}}
             else:
                 return {'name': 'GetDot1XConfigurations', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'IEEE 802.1X configuration capabilities:',
+                'result': {'supported': True,
+                'report_name': 'IEEE 802.1X configurations',
+                'extension': 'IEEE 802.1X configuration capabilities:',
                 'response': str(dot11), 'report': report }}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetDot1XConfigurations', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'IEEE 802.1X configurations',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetDot1XConfigurations', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': '',
+                'result': {'supported': False,
+                'report_name': 'IEEE 802.1X configurations',
+                'extension': str(e), 'response': '',
                 'report': 'Not Supported'}}
 
     def GetDPAddresses(self):
@@ -807,20 +1065,29 @@ class CoreTests:
 
             if ((dp is None) or (dp == [])):
                 return {'name': 'GetDPAddresses', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send a valid response GetDPAddressesResponseMessage',
+                'result': {'supported': False,
+                'report_name': 'Remote DP address(es)',
+                'extension': 'The DUT did not send a valid response GetDPAddressesResponseMessage',
+                'report': 'Not Supported\nThe device did not send a valid response GetDPAddressesResponseMessage',
                 'response': str(dp), 'report': 'Not Supported'}}
             else:
                 return {'name': 'GetDPAddresses', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Remote DP address(es) configured on device:',
+                'result': {'supported': True,
+                'report_name': 'Remote DP address(es)',
+                'extension': 'Remote DP address(es) configured on device:',
                 'response': str(dp), 'report': report }}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetDPAddresses', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Remote DP address(es)',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetDPAddresses', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': '',
+                'result': {'supported': False,
+                'report_name': 'Remote DP address(es)',
+                'extension': str(e), 'response': '',
                 'report': 'Not Supported'}}
 
     def GetGeoLocation(self):
@@ -829,20 +1096,28 @@ class CoreTests:
             location = self.cam.devicemgmt.GetGeoLocation()
             if ((location is None) or (location == [])):
                 return {'name': 'GetGeoLocation', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send a valid response GetGeoLocationResponseMessage',
+                'result': {'supported': False,
+                'report_name': 'Device GeoLocation',
+                'extension': 'The DUT did not send a valid response GetGeoLocationResponseMessage',
                 'response': str(location), 'report': 'GeoLocation configuration is not supported by device'}}
             else:
                 return {'name': 'GetGeoLocation', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Remote DP address(es) configured on device:',
+                'result': {'supported': True,
+                'report_name': 'Device GeoLocation',
+                'extension': 'Remote DP address(es) configured on device:',
                 'response': str(location), 'report': 'Device supports GeoLocation configuration' }}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetGeoLocation', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Device GeoLocation',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetGeoLocation', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': '',
+                'result': {'supported': False,
+                'report_name': 'Device GeoLocation',
+                'extension': str(e), 'response': '',
                 'report': 'GeoLocation configuration is not supported by device'}}
 
     def GetRemoteDiscoveryMode(self):
@@ -854,20 +1129,28 @@ class CoreTests:
 
             if ((not remote_discovery) or (remote_discovery is None) or (remote_discovery == [])):
                 return {'name': 'GetRemoteDiscoveryMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send a valid response GetRemoteDiscoveryModeResponseMessage',
+                'result': {'supported': False,
+                'report_name': 'Remote Discovery mode',
+                'extension': 'The DUT did not send a valid response GetRemoteDiscoveryModeResponseMessage',
                 'response': str(remote_discovery), 'report': 'Remote discovery mode is not supported by the device'}}
             else:
                 return {'name': 'GetRemoteDiscoveryMode', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Remote Discovery mode of a device:',
+                'result': {'supported': True,
+                'report_name': 'Remote Discovery mode',
+                'extension': 'Remote Discovery mode of a device:',
                 'response': str(remote_discovery), 'report': report }}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetRemoteDiscoveryMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Remote Discovery mode',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetRemoteDiscoveryMode', 'service': 'Device',
-                'result': {'supported': False, 'extension': str(e), 'response': '',
+                'result': {'supported': False,
+                'report_name': 'Remote Discovery mode',
+                'extension': str(e), 'response': '',
                 'report': 'Remote discovery mode is not supported by the device'}}
 
     def SendAuxiliaryCommand(self):
@@ -876,17 +1159,24 @@ class CoreTests:
             sleep(1)
             resend =  self.cam.devicemgmt.SendAuxiliaryCommand({'AuxiliaryCommand': 'tt:Wiper|Off'})
             return {'name': 'SendAuxiliaryCommand', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Auxiliary Commands are supported by the device',
-                'response': 'Auxiliary Commands are supported by the device', 'report': 'Auxiliary Commands are supported by the device' }}
+                'result': {'supported': True,
+                'report_name': 'Auxiliary commands',
+                'extension': 'Auxiliary Commands are supported by the device',
+                'response': 'Auxiliary Commands are supported by the device',
+                'report': 'Auxiliary Commands are supported by the device' }}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'SendAuxiliaryCommand', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Auxiliary commands',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'SendAuxiliaryCommand', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Auxiliary Commands are not supported by the device',
-                 'response': 'Auxiliary Commands are not supported by the device',
+                'result': {'supported': False,
+                'report_name': 'Auxiliary commands',
+                'extension': 'Auxiliary Commands are not supported by the device',
+                'response': 'Auxiliary Commands are not supported by the device',
                 'report': 'Auxiliary Commands are not supported by the device'}}
 
     def GetIPAddressFilter(self):
@@ -934,20 +1224,28 @@ class CoreTests:
                 report += 'Device does no support Deletion of Access Control List rules. Device did not remove Deny set Rule'
             if ((not get1) or (get1 is None) or (get1 == [])):
                 return {'name': 'GetIPAddressFilter', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send a valid response GetIPAddressFilterResponseMessage',
+                'result': {'supported': False,
+                'report_name': 'IP address filter(ACL)',
+                'extension': 'The DUT did not send a valid response GetIPAddressFilterResponseMessage',
                 'response': str(remote_user), 'report': 'Device does not support Access Control List based on IP filtering rules (denied or allowed)'}}
             else:
                 return {'name': 'GetIPAddressFilter', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Device supports Access Control List:',
+                'result': {'supported': True,
+                'report_name': 'IP address filter(ACL)',
+                'extension': 'Device supports Access Control List:',
                 'response': str(get1) + '\n' + str(get2), 'report': report }}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetIPAddressFilter', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'IP address filter(ACL)',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetIPAddressFilter', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Device does not support Access Control List based on IP filtering rules (denied or allowed)',
+                'result': {'supported': False,
+                'report_name': 'IP address filter(ACL)',
+                'extension': 'Device does not support Access Control List based on IP filtering rules (denied or allowed)',
                 'response': 'Device does not support Access Control List based on IP filtering rules (denied or allowed)',
                 'report': 'Device does not support Access Control List based on IP filtering rules (denied or allowed)'}}
 
@@ -973,19 +1271,27 @@ class CoreTests:
             set2 = self.cam.devicemgmt.SetZeroConfiguration({'InterfaceToken': interface, 'Enabled': get1.Enabled})
             if ((not get1) or (get1 is None) or (get1 == [])):
                 return {'name': 'GetZeroConfiguration', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'The DUT did not send a valid response GetZeroConfigurationResponseMessage',
+                'result': {'supported': False,
+                'report_name': 'Zero configuration',
+                'extension': 'The DUT did not send a valid response GetZeroConfigurationResponseMessage',
                 'response': str(remote_user), 'report': 'Device does not support Zero Configuration'}}
             else:
                 return {'name': 'GetZeroConfiguration', 'service': 'Device',
-                'result': {'supported': True, 'extension': 'Device supports Zero Configuration:',
+                'result': {'supported': True,
+                'report_name': 'Zero configuration',
+                'extension': 'Device supports Zero Configuration:',
                 'response': str(get1) + '\n' + str(get2), 'report': report }}
         except Exception as e:
             if ((str(e) == 'Optional Action Not Implemented') or (str(e) == 'This optional method is not implemented')):
                 return {'name': 'GetZeroConfiguration', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Optional Action Not Implemented',
+                'result': {'supported': False,
+                'report_name': 'Zero configuration',
+                'extension': 'Optional Action Not Implemented',
                 'response': '', 'report': 'Optional Action Not Implemented' }}
             else:
                 return {'name': 'GetZeroConfiguration', 'service': 'Device',
-                'result': {'supported': False, 'extension': 'Device does not support Zero Configuration',
+                'result': {'supported': False,
+                'report_name': 'Zero configuration',
+                'extension': 'Device does not support Zero Configuration',
                 'response': 'Device does not support Zero Configuration',
                 'report': 'Device does not support Zero Configuration'}}

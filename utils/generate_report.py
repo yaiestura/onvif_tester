@@ -75,31 +75,31 @@ def generate_report(data):
     testsResults = data['runnedTests']
     img_url = '.' + data['camInfo']['snapshot_url']
     url = 'reports/' + ip + ':' + port + '.' + str(datetime.now().strftime('%Y-%m-%d:%H:%M:%S')) + '.pdf'
+    print_cam_response = data['printResponses']
 
     styles = getSampleStyleSheet()
-    centered = PS(name = 'centered',
-        fontSize = 14,
-        leading = 16,
-        alignment = 1,
-        spaceAfter = 10)
+    centered = PS(name='centered',
+        fontSize=14,
+        leading=16,
+        alignment=1,
+        spaceAfter=10)
 
     bold = PS(
-        name = 'bold',
+        name='bold',
         fontName='Helvetica-Bold',
         fontSize=14,
-        leading=16 )
+        leading=16)
 
-    centered_bold = PS(name = 'centered_bold',
-        fontSize = 14,
+    centered_bold = PS(name='centered_bold',
+        fontSize=14,
         fontName='Helvetica-Bold',
-        leading = 16,
-        alignment = 1,
-        spaceAfter = 10)
+        leading=16,
+        alignment=1,
+        spaceAfter=10)
 
-
-    h2 = PS(name = 'Heading2',
-        fontSize = 12,
-        leading = 14)
+    h2 = PS(name='Heading2',
+        fontSize=12,
+        leading=14)
 
     def define_nvt_class(cam):
         types = []
@@ -177,7 +177,7 @@ def generate_report(data):
                 except:
                     report = 'Supported'
 
-            data.append([response['data']['name'], report.replace('\n', '<br/>')])
+            data.append([response['data']['result']['report_name'], report.replace('\n', '<br/>')])
 
         data_proccessed = [[Paragraph(cell, styleN) for cell in row] for row in data]
 
@@ -189,6 +189,46 @@ def generate_report(data):
                             ('ALIGN', (0, 0), (-1, -0), 'CENTER')]))
         Report.append(table)
         Report.append(Spacer(1, 12))
+
+    def printResponses(testsResults):
+
+        for item in testsResults.keys():
+
+            doHeading('{} Service Responses'.format(item.capitalize()), h2)
+            Report.append(Spacer(1, 12))
+
+            for response in testsResults[item]:
+                if response["data"]["name"]:
+                    ptext = "Test:  " + str(response["data"]["name"])
+                else:
+                    ptext = "Test: " + "NameError"
+                if response["data"]["result"]["supported"]:
+                    flag = response["data"]["result"]["supported"]
+                    if (flag == False):
+                        sutext = str(response["data"]["name"] + ' is not supported')
+                    else:
+                        sutext = str(response["data"]["name"] + ' is supported')
+                else:
+                    sutext = str(response["data"]["result"]["report"])
+                if response["data"]["result"]["response"]:
+                    rtext = "Response: " + str(json.dumps(response["data"]["result"]["response"].replace('\n', '<br/>').replace('\"', '').replace(' ', '    '),
+                    sort_keys=True, indent=4))
+                else:
+                    rtext = "Response: " + "None"
+                Report.append(Paragraph(ptext, h2))
+                Report.append(Spacer(1, 8))
+                if (sutext is not None):
+                    Report.append(Paragraph("<font size=10>%s</font>" % ptext, styles["Normal"], bulletText=u'\u25cf'))
+                    Report.append(Spacer(1, 8))
+                if ((response["data"]["result"]["response"]) or (len(response["data"]["result"]["response"]) != 0)):
+                    Report.append(Paragraph("<font size=10>%s</font>" % rtext, styles["Normal"], bulletText=u'\u25cf'))
+                    Report.append(Spacer(1, 8))
+                Report.append(Spacer(1, 12))
+
+    if(print_cam_response == True):
+        Report.append(PageBreak())
+        printResponses(testsResults)
+        Report.append(PageBreak())
 
     doc = MyDocTemplate(url, pagesize=A4, rightMargin=15*mm, leftMargin=15*mm, topMargin=15*mm, bottomMargin=15*mm)
     doc.multiBuild(Report, canvasmaker=PageNumCanvas)
