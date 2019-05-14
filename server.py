@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 from pprint import pprint
 from utils.generate_report import *
-from database import db, User
+from database import db, User, TestResults, Device
 
 import jinja2
 
@@ -17,7 +17,7 @@ from flask import (
     Flask, request, jsonify, redirect,
     send_from_directory, Response, render_template)
 
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user, g
 
 
 from urlparse import urlparse, urljoin
@@ -101,7 +101,7 @@ def register():
     password = request.form.get('password')
     name = request.form.get('name')
     surname = request.form.get('surname')
-    
+
     user = User(email=email, name=name, surname=surname)
     user.set_password(password)
 
@@ -115,6 +115,10 @@ def register():
 def unauthorized_callback():
     return redirect('/login?next=' + request.path)
 
+
+@app.before_request
+def before_request():
+    g.user = current_user
 
 @app.route('/info')
 def apiinfo():
@@ -150,7 +154,21 @@ def tests(*args, **kwargs):
 def report():
     tested_data = json.loads(request.data)
     url = generate_report(tested_data)
+
+    ip = str(tested_data['camInfo']['ip'])
+    port = str(tested_data['camInfo']['port'])
+
+    device = Device.query.filter(Device.ip==ip, Device.port==port).first()
+    if device is None:
+        device = Device(ip=ip, port=port, type='device', name='%s:%s'%(ip, port))
+        db.session.add(device)
+
+    dbreport = TestResults(device=device, user=g.user, url=url, raw=json.dumps(tested_data))
+    db.session.add(dbreport)
+    db.session.commit()
+
     return jsonify(response=url)
+
 
 @app.route('/reports/<path:filename>')
 def return_report_file(filename):
@@ -161,14 +179,30 @@ Devices API
 '''
 @app.route('/api/devices')
 def get_devices_list():
-    return jsonify(utils.discovery())
+    cameras = utils.discovery()
+    saved_cameras = list(map(lambda d: dict(ip=d.ip, port=d.port, online=False), Device.query.all()))
+    ips = [c['ip'] for c in cameras]
+    for sc in saved_cameras:
+        if sc['ip'] not in ips:
+            cameras.append(sc)
+
+    cameras.sort(key=lambda x: x['ip'])
+    for i in range(len(cameras)):
+        cameras[i]['id'] = i+1
+
+    return jsonify(cameras)
 
 
 @app.route('/api/device')
 @utils.cam_required
 def get_device_info(*args, **kwargs):
     cam = kwargs['ctx']['cam']
-    return jsonify(cam.get_device_info())
+    ip = cam.ip
+    port = str(cam.port)
+
+
+    device_info = cam.get_device_info()
+    return jsonify(device_info)
 
 
 '''
