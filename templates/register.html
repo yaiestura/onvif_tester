@@ -9,8 +9,7 @@
     </div>
   {% endif %}
   {% endwith %}
-
-
+<!-- 
 <form action="/register" method="post" class="form-horizontal">
     <h2>Signup to ONVIF Tester</h2>
       <input type="text" id="email" name="email" class="input-xlarge"
@@ -26,6 +25,52 @@
         placeholder="Enter surname" required>
 
       <button type="submit" class="btn btn-success">Signup</button>
+  </form> -->
 
+<!-- templates/signup.html -->
 
-  </form>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Sign Up</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}. Go to <a href="{{ url_for('login') }}">login page</a>.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form method="POST" action="/register">
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" id="password" type="email"
+                     name="email" placeholder="Enter email" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" id="name" type="text" 
+                    name="name" placeholder="Enter name" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                  <input class="input is-large" id="surname" type="text" 
+                  name="surname" placeholder="Enter surname" autofocus="">
+              </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" id="password" 
+                    name="password" placeholder="Enter password">
+                </div>
+            </div>
+            <button type="submit" class="button is-block is-info is-large is-fullwidth">Signup</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

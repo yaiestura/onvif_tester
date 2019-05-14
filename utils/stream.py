@@ -47,4 +47,3 @@ def check_stream(ip, port):
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
     out, err = process.communicate()
     return list(filter(lambda x: len(x)>0, out.split('\n')))
-
