@@ -1,5 +1,6 @@
 import time
 import os
+import sys
 import utils
 from core import Camera
 from tests import CoreTests, EventsTests, AnalyticsTests, ImagingTests, Tests
@@ -275,4 +276,7 @@ def index(path):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    if '--prod' in sys.argv:
+        app.run('10.0.3.91', 5000, debug=True)
+    else:
+        app.run(debug=True)
