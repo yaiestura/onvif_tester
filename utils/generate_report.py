@@ -75,7 +75,7 @@ def generate_report(data):
     testsResults = data['runnedTests']
     img_url = '.' + data['camInfo']['snapshot_url']
     url = 'reports/' + ip + ':' + port + '.' + str(datetime.now().strftime('%Y-%m-%d:%H:%M:%S')) + '.pdf'
-    print_cam_response = data['printResponses']
+    # print_cam_response = data['printResponses']
 
     styles = getSampleStyleSheet()
     centered = PS(name='centered',
@@ -225,10 +225,10 @@ def generate_report(data):
                     Report.append(Spacer(1, 8))
                 Report.append(Spacer(1, 12))
 
-    if(print_cam_response == True):
-        Report.append(PageBreak())
-        printResponses(testsResults)
-        Report.append(PageBreak())
+    # if(print_cam_response == True):
+        # Report.append(PageBreak())
+        # printResponses(testsResults)
+        # Report.append(PageBreak())
 
     doc = MyDocTemplate(url, pagesize=A4, rightMargin=15*mm, leftMargin=15*mm, topMargin=15*mm, bottomMargin=15*mm)
     doc.multiBuild(Report, canvasmaker=PageNumCanvas)
