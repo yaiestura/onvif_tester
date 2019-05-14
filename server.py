@@ -171,7 +171,7 @@ def report():
         device = Device(ip=ip, port=port, type='device', name='%s:%s'%(ip, port))
         db.session.add(device)
 
-    dbreport = TestResults(device=device, user=g.user, url=url, raw=json.dumps(tested_data))
+    dbreport = TestResults(device=device, user=g.user, url=url, rawText=json.dumps(tested_data))
     db.session.add(dbreport)
     db.session.commit()
 
