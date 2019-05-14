@@ -1,16 +1,5 @@
 {% extends "base.html" %}
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div class="alert">
-        <ul class="flashes">
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    </div>
-  {% endif %}
-  {% endwith %}
-<!-- 
+<!--
 <form action="/login" method="post" class="form-horizontal">
     <h2>Signin to ONVIF Tester</h2>
           <input type="text" id="email" name="email" class="input-xlarge"
@@ -28,6 +17,17 @@
   <!-- templates/login.html -->
 
 {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert">
+        <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+  {% endif %}
+  {% endwith %}
 <div class="column is-4 is-offset-4">
     <h3 class="title">Signin to ONVIF Tester</h3>
     <div class="box">
