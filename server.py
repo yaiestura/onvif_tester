@@ -15,9 +15,9 @@ import jinja2
 
 from flask import (
     Flask, request, jsonify, redirect,
-    send_from_directory, Response, render_template)
+    send_from_directory, Response, render_template, g)
 
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user, g
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 
 from urlparse import urlparse, urljoin
