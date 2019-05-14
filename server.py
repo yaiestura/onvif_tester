@@ -181,7 +181,7 @@ def report():
 @app.route('/api/reports')
 @login_required
 def return_report_files_list():
-    results = TestResults.query.filter(User==g.user).all()
+    results = TestResults.query.filter(User.id==int(g.user.get_id())).all()
     return jsonify([r.get_json() for r in results])
 
 
