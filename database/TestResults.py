@@ -14,8 +14,8 @@ class TestResults(db.Model):
     def get_json(self):
         return {
             'id': self.id,
-            'user': self.user.get_json(),
-            'device': self.device.get_json(),
+            'user': None if self.user is None else self.user.get_json(),
+            'device': None if self.device is None else self.device.get_json(),
             'created': self.created,
             'url': self.url,
             'rawText': self.rawText
