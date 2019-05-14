@@ -15,6 +15,7 @@ def start_stream(private_stream_url, output_dir, output_filename):
         '-fflags', 'flush_packets', 
         '-tune', 'zerolatency', 
         '-hls_time', '1', 
+        '-hls_allow_cache', '0',
         '-hls_list_size', '3', 
         '-hls_wrap', '4', 
         '-hls_flags', 'delete_segments', 
