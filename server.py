@@ -178,6 +178,14 @@ def report():
     return jsonify(response=url)
 
 
+@app.route('/api/reports')
+@login_required
+def return_report_files_list():
+    results = TestResults.query.filter(User==g.user).all()
+    return jsonify([r.get_json() for r in results])
+
+
+
 @app.route('/reports/<path:filename>')
 def return_report_file(filename):
     return send_from_directory('reports', filename)

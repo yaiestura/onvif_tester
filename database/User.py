@@ -23,5 +23,15 @@ class User(db.Model, UserMixin):
     def check_password(self , password):
         return check_password_hash(self.password , password)
 
+    def get_json(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'name': self.name,
+            'surname': self.surname,
+            'image_url': self.image_url,
+            'register_date': self.register_date
+        }
+
     def __repr__(self):
         return "User(%d)" % id

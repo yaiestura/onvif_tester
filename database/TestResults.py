@@ -11,4 +11,14 @@ class TestResults(db.Model):
     url = db.Column(db.String(256), nullable=False)
     rawText = db.Column(db.Text, nullable=True)
 
+    def get_json(self):
+        return {
+            'id': self.id,
+            'user': self.user.get_json(),
+            'device': self.device.get_json(),
+            'created': self.created,
+            'url': self.url,
+            'rawText': self.rawText
+        }
+
 

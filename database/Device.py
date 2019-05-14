@@ -9,3 +9,12 @@ class Device(db.Model):
     login = db.Column(db.String(60), nullable=False, default='admin')
     password = db.Column(db.String(30), nullable=False, default='Supervisor')
     deviceinfo = db.Column(db.Text, nullable=True)
+
+    def get_json(self):
+        return {
+            'id': self.id,
+            'type': self.type,
+            'name': self.name,
+            'ip': self.ip,
+            'port': self.port
+        }
