@@ -256,7 +256,7 @@ def livestream(*args, **kwargs):
 @utils.cam_required
 def kill_stream(*args, **kwargs):
     cam = kwargs['ctx']['cam']
-    utils.stream.stop_stream(cam.ip, cam.port)
+    # utils.stream.stop_stream(cam.ip, cam.port)
     return 'ok'
 
 
