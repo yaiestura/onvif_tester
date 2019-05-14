@@ -123,3 +123,5 @@ streams/*
 reports/*
 
 database/app.db
+
+*.db
