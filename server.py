@@ -185,6 +185,12 @@ def return_report_files_list():
     return jsonify([r.get_json() for r in results])
 
 
+@app.route('/api/user')
+@login_required
+def return_user():
+    return jsonify(g.user.get_json())
+
+
 
 @app.route('/reports/<path:filename>')
 def return_report_file(filename):
