@@ -2,6 +2,30 @@
 
 You can watch or download project PDF presentation (in russian) here: [project presentation](presentation.pdf).
 
+## Table of Contents:
+
+- [ONVIF Compliance Tester](#onvif-compliance-tester)
+  * [1. Introduction](#1-introduction)
+    + [1.1 Scope](#11-scope)
+    + [1.2 Brief description of main features](#12-brief-description-of-main-features)
+  * [2. Description](#2-description)
+    + [2.1 Input data:](#21-input-data)
+    + [2.2 Output data:](#22-output-data)
+  * [3. Use-Case](#3-use-case)
+    + [3.1 Authorization](#31-authorization)
+    + [3.2 Device Discovery and Dashboard](#32-device-discovery-and-dashboard)
+      - [3.2.1 Information Tab](#321-information-tab)
+      - [3.2.2 Stream Tab](#322-stream-tab)
+      - [3.2.3 Database tab](#323-database-tab)
+    + [3.3 Device Testing](#33-device-testing)
+    + [3.4 Web-Report](#34-web-report)
+  * [4. Installation](#4-installation)
+  * [5. Implementation](#5-implementation)
+    + [5.1 Architecture](#51-architecture)
+  * [6. Emergency situations and bugs](#6-emergency-situations-and-bugs)
+  * [7. Future work](#7-future-work)
+  * [8. Contributors and authors ✨](#8-contributors-and-authors)
+
 ## 1. Introduction
 
 The main problem that existed at the moment is the impossibility of conducting quick testing of IP-video equipment and determining the capabilities of the devices.
@@ -214,7 +238,7 @@ The project makes it easy to interact with cameras by showing the capabilities o
 
 In the future, it can be used to confirm non-compliance of devices with the standard and a good reason for complaints to the manufacturer.
 
-## 8. Contributors and authors ✨
+## 8. Contributors and authors
 
 <table>
   <tr>
