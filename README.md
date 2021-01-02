@@ -1,9 +1,15 @@
 # ONVIF Compliance Tester
 
+You can watch or download project PDF presentation (in russian) here: [project presentation](presentation.pdf).
 
 ## 1. Introduction
 
 The main problem that existed at the moment is the impossibility of conducting quick testing of IP-video equipment and determining the capabilities of the devices.
+
+Exsisting and famous application for ONVIF devices(solution) is written in C# and **only for Windows** systems - **ONVIF Device Manager**: for detection, viewing RTSP stream, basic equipment setup, PTZ control, Imaging.
+
+![ONVIF Device Manager](readme/device_manager.png)
+
 
 This problem has existed since the appearance of IP cameras and other related devices in the public domain. Even very expensive equipment does not always meet the declared standards, and, in particular, [the ONVIF standart](https://www.onvif.org/). 
 
@@ -44,6 +50,14 @@ The main objectives of the project were:
 2. Authorization - username, password
 3. OpenVPN network where devices are located
 4. Input audio (AAC, G.711, G.726) and video RTSP streams from devices
+
+- Example of ONVIF SOAP-query to IP-camera:
+
+  ![ONVIF Schema](readme/onvif_schema.png)
+
+- HTTP request, via the ONVIF Python library - a convenient, concise solution that requires improvement:
+
+  ![ONVIF Schema](readme/onvif_auth.png)
 
 ### 2.2 Output data:
 
